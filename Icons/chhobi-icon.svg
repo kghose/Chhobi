@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="135"
+   height="135"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   version="1.0"
+   sodipodi:docname="chhobi-icon.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   inkscape:export-filename="/Users/kghose/Pictures/Chhobi/Icons/chhobi-icon2.png"
+   inkscape:export-xdpi="170.66667"
+   inkscape:export-ydpi="170.66667">
+  <defs
+     id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="3.6203868"
+     inkscape:cx="36.811003"
+     inkscape:cy="71.953781"
+     inkscape:document-units="mm"
+     inkscape:current-layer="g3234"
+     showgrid="false"
+     units="mm"
+     inkscape:window-width="1280"
+     inkscape:window-height="752"
+     inkscape:window-x="0"
+     inkscape:window-y="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g3234"
+       transform="translate(3.8669902,6.6291261)">
+      <g
+         id="g2385"
+         transform="matrix(1.0275735,0,0,1.0275735,-6.7976149,-6.3514883)">
+        <rect
+           transform="scale(1,-1)"
+           style="opacity:1;fill:#0000ca;fill-opacity:1;stroke:none;stroke-width:9;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect3156"
+           width="49.064083"
+           height="46.708561"
+           x="75.457268"
+           y="-57.36327"
+           ry="11.305021" />
+        <rect
+           transform="scale(1,-1)"
+           style="opacity:1;fill:#ffff00;fill-opacity:1;stroke:none;stroke-width:9;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect3154"
+           width="49.064083"
+           height="46.708561"
+           x="7.2325225"
+           y="-114.90399"
+           ry="11.305021" />
+        <rect
+           transform="scale(1,-1)"
+           style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:9;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect2382"
+           width="73.980812"
+           height="70.429062"
+           x="59.943314"
+           y="-130.17386"
+           ry="17.046167" />
+        <rect
+           transform="scale(1,-1)"
+           style="opacity:1;fill:#00bd00;fill-opacity:1;stroke:none;stroke-width:9;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect3232"
+           width="68.399033"
+           height="65.115257"
+           x="3.6986229"
+           y="-65.418465"
+           ry="15.760053" />
+        <path
+           style="font-size:144px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Arial;-inkscape-font-specification:Arial"
+           d="M 29.973239,31.634483 L 29.973239,23.759483 L 115.40293,23.759483 L 115.40293,31.634483 L 50.504489,31.634483 C 50.598219,34.587685 52.145092,37.212682 55.145114,39.509483 C 58.191961,41.759553 61.684145,42.884552 65.621677,42.884483 C 66.93414,42.884552 69.301325,42.556427 72.723239,41.900108 C 76.145068,41.290803 79.168503,40.986116 81.793552,40.986046 C 88.262244,40.986116 93.934113,43.329864 98.809177,48.017296 C 103.73098,52.657979 106.19192,58.329849 106.19199,65.032921 C 106.19192,72.907959 102.5591,79.77514 95.293552,85.634483 C 88.074744,91.447003 79.707565,95.290749 70.191989,97.165733 C 77.645067,99.74387 85.051309,103.04855 92.410739,107.0798 C 99.770045,111.11105 107.10598,115.89229 114.41856,121.42355 L 112.66074,124.58761 C 101.78567,117.55635 90.863804,112.11886 79.895114,108.27511 C 68.9732,104.38449 58.004461,102.04074 46.988864,101.24386 L 40.449802,87.181358 C 44.527912,88.681381 49.637282,89.43138 55.777927,89.431358 C 62.996644,89.43138 70.098199,88.001694 77.082614,85.142296 C 84.066935,82.28295 89.574742,78.486079 93.606052,73.751671 C 97.637234,69.017338 99.652857,64.16578 99.652927,59.196983 C 99.652857,55.775164 98.809108,53.220479 97.121677,51.532921 C 95.480986,49.798607 93.020051,48.931421 89.738864,48.931358 C 89.31693,48.931421 88.707556,48.978296 87.910739,49.071983 C 88.051306,50.009545 88.121619,50.853294 88.121677,51.603233 C 88.121619,56.243913 86.387246,60.884534 82.918552,65.525108 C 79.449752,70.118899 75.066944,73.728271 69.770114,76.353233 C 64.52008,78.978266 59.738835,80.290764 55.426364,80.290733 C 50.879469,80.290764 47.481034,79.095453 45.231052,76.704796 C 42.981039,74.314208 41.85604,70.704836 41.856052,65.876671 L 41.856052,31.634483 L 29.973239,31.634483 M 50.856052,39.228233 L 50.856052,65.384483 C 50.856031,67.259527 51.324781,68.665776 52.262302,69.603233 C 53.199779,70.540774 54.606027,71.009524 56.481052,71.009483 C 63.090394,71.009524 69.207575,68.665776 74.832614,63.978233 C 80.504439,59.290785 83.340374,55.470477 83.340427,52.517296 C 83.340374,51.251731 82.754437,50.618919 81.582614,50.618858 L 78.137302,51.040733 C 75.840381,51.322043 73.707571,51.462668 71.738864,51.462608 C 67.426327,51.462668 63.512268,50.454857 59.996677,48.439171 C 56.5279,46.376736 53.481028,43.306426 50.856052,39.228233"
+           id="text2391" />
+      </g>
+    </g>
+  </g>
+</svg>
