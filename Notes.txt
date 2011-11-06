@@ -1,0 +1,17 @@
+mainwindow -
+
+Instantiates the UI (mainwindow.ui) and does general coordinating
+
+lighttable -
+
+Inherits QGraphicsScene. Thumbnails (as QGraphicsItems) can be added or removed.
+lighttable takes care of arranging the thumbnails in a grid when thumbnails are
+added, when the QGraphicsView is resized or when thumbnails are removed. Takes
+care of the usual selection and scrolling etc.
+
+thumbnail -
+
+Inherits QGraphicsItem. Displays the thumbnail and carries the photo metadata
+information that can be displayed on hovering and edited on clicking.
+
+

@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/Images">
+        <file>Icons/chhobi-icon.png</file>
+        <file>Icons/chiti.png</file>
+    </qresource>
+</RCC>
