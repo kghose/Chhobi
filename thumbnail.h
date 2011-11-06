@@ -22,10 +22,21 @@
 
 #include <QtGui>
 
+enum ThumbnailCaptionState {HIDDEN, SHOWN, HIDING};
+struct ThumbnailCaption
+{
+    QString caption;
+    ThumbnailCaptionState state;
+    int x_offset, y_offset, width, height;
+    void paint(QPainter *painter);
+    QRectF boundingRect() const;
+};
+
 class Thumbnail : public QGraphicsItem
 {
-    unsigned int thumbnail_size, margin, tile_size;
+    unsigned int tile_size, margin, thumbnail_size;
     QPixmap pm;
+    ThumbnailCaption tc;
 
 public:
     explicit Thumbnail();
@@ -34,10 +45,13 @@ public:
                const QStyleOptionGraphicsItem *option,
                QWidget *widget);
 
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
+    void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+
+
 signals:
 
 public slots:
-
 };
 
 #endif // THUMBNAIL_H
