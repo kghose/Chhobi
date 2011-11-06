@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     setup();
+    setup_connections();
     test();
 }
 
@@ -27,8 +28,14 @@ void MainWindow::setup()
     holding_table = new LightTable();
     ui->QGV_holdtable->setScene(holding_table);
     ui->QGV_holdtable->installEventFilter(this);
-
 }
+
+void MainWindow::setup_connections()
+{
+    //QObject::connect(ui->QPB_edit_ok, SIGNAL(clicked()),
+    //        this, SLOT(save_photo_edits()));
+}
+
 
 /*
  * Didn't want to subclass QGraphicsView just to reimplement the resize
@@ -49,4 +56,9 @@ void MainWindow::test()
 {
     for(int n=0; n < 10; n++)
         light_table->add(new Thumbnail());
+}
+
+void MainWindow::save_photo_edits()
+{
+    ui->stackedWidget->setCurrentIndex(0);
 }

@@ -21,147 +21,261 @@
     <item>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
-       <widget class="QGraphicsView" name="QGV_timeline">
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>100</height>
-         </size>
+       <widget class="QStackedWidget" name="stackedWidget">
+        <property name="currentIndex">
+         <number>1</number>
         </property>
+        <widget class="QWidget" name="page_3">
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QGraphicsView" name="QGV_timeline">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>100</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGraphicsView" name="QGV_lighttable">
+            <property name="backgroundBrush">
+             <brush brushstyle="NoBrush">
+              <color alpha="255">
+               <red>0</red>
+               <green>0</green>
+               <blue>0</blue>
+              </color>
+             </brush>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+            </property>
+            <property name="dragMode">
+             <enum>QGraphicsView::RubberBandDrag</enum>
+            </property>
+            <property name="rubberBandSelectionMode">
+             <enum>Qt::ContainsItemShape</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetNoConstraint</enum>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QGraphicsView" name="QGV_holdtable">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>100</height>
+               </size>
+              </property>
+              <property name="dragMode">
+               <enum>QGraphicsView::RubberBandDrag</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QFrame" name="frame">
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>100</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>100</width>
+                <height>100</height>
+               </size>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Raised</enum>
+              </property>
+              <widget class="QProgressBar" name="progressBar">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>20</y>
+                 <width>100</width>
+                 <height>21</height>
+                </rect>
+               </property>
+               <property name="toolTip">
+                <string extracomment="Progress in creating copies"/>
+               </property>
+               <property name="autoFillBackground">
+                <bool>false</bool>
+               </property>
+               <property name="maximum">
+                <number>116</number>
+               </property>
+               <property name="value">
+                <number>0</number>
+               </property>
+               <property name="textVisible">
+                <bool>true</bool>
+               </property>
+              </widget>
+              <widget class="QLineEdit" name="lineEdit">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>101</width>
+                 <height>20</height>
+                </rect>
+               </property>
+               <property name="toolTip">
+                <string extracomment="Maximum dimension of copies"/>
+               </property>
+               <property name="maxLength">
+                <number>10</number>
+               </property>
+              </widget>
+              <widget class="QPushButton" name="pushButton">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>40</y>
+                 <width>100</width>
+                 <height>60</height>
+                </rect>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>100</width>
+                 <height>60</height>
+                </size>
+               </property>
+               <property name="toolTip">
+                <string extracomment="Press to create copies"/>
+               </property>
+               <property name="text">
+                <string>Go</string>
+               </property>
+              </widget>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="page_4">
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QFrame" name="frame_3">
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <item>
+              <widget class="QPushButton" name="pushButton_2">
+               <property name="maximumSize">
+                <size>
+                 <width>20</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>&lt;</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_3">
+               <property name="maximumSize">
+                <size>
+                 <width>20</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>&gt;</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="frame_2">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>75</height>
+             </size>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Raised</enum>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_2">
+             <item row="0" column="0">
+              <widget class="QLineEdit" name="lineEdit_2">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>30</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>50</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0" colspan="2">
+              <widget class="QLabel" name="label_2">
+               <property name="text">
+                <string>TextLabel</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QPushButton" name="QPB_edit_cancel">
+               <property name="text">
+                <string>Cancel</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QGraphicsView" name="QGV_lighttable">
-        <property name="backgroundBrush">
-         <brush brushstyle="NoBrush">
-          <color alpha="255">
-           <red>0</red>
-           <green>0</green>
-           <blue>0</blue>
-          </color>
-         </brush>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-        </property>
-        <property name="dragMode">
-         <enum>QGraphicsView::RubberBandDrag</enum>
-        </property>
-        <property name="rubberBandSelectionMode">
-         <enum>Qt::ContainsItemShape</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <property name="sizeConstraint">
-         <enum>QLayout::SetNoConstraint</enum>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QGraphicsView" name="QGV_holdtable">
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>100</height>
-           </size>
-          </property>
-          <property name="dragMode">
-           <enum>QGraphicsView::RubberBandDrag</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QFrame" name="frame">
-          <property name="minimumSize">
-           <size>
-            <width>100</width>
-            <height>100</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>100</width>
-            <height>100</height>
-           </size>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::StyledPanel</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
-          </property>
-          <widget class="QProgressBar" name="progressBar">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>20</y>
-             <width>100</width>
-             <height>21</height>
-            </rect>
-           </property>
-           <property name="toolTip">
-            <string extracomment="Progress in creating copies"/>
-           </property>
-           <property name="autoFillBackground">
-            <bool>false</bool>
-           </property>
-           <property name="maximum">
-            <number>116</number>
-           </property>
-           <property name="value">
-            <number>0</number>
-           </property>
-           <property name="textVisible">
-            <bool>true</bool>
-           </property>
-          </widget>
-          <widget class="QLineEdit" name="lineEdit">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>101</width>
-             <height>20</height>
-            </rect>
-           </property>
-           <property name="toolTip">
-            <string extracomment="Maximum dimension of copies"/>
-           </property>
-           <property name="maxLength">
-            <number>10</number>
-           </property>
-          </widget>
-          <widget class="QPushButton" name="pushButton">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>40</y>
-             <width>100</width>
-             <height>60</height>
-            </rect>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>60</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string extracomment="Press to create copies"/>
-           </property>
-           <property name="text">
-            <string>Go</string>
-           </property>
-          </widget>
-         </widget>
-        </item>
-       </layout>
       </item>
      </layout>
     </item>

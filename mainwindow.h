@@ -27,8 +27,12 @@ private:
     LightTable *holding_table;
 
     void setup();
-    void resize(int w, int h);
+    void setup_connections();
     void test();
+
+public slots:
+    void save_photo_edits();
+
 };
 
 #endif // MAINWINDOW_H
