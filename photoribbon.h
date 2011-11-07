@@ -57,6 +57,10 @@ class PhotoRibbon : public QGraphicsScene
 public:
     explicit PhotoRibbon(QObject *parent = 0);
     void set_ids(QList<unsigned int> ids);
+    void add_ids(QList<unsigned int> ids);
+    QList<unsigned int> get_all_ids();
+    QList<unsigned int> get_selected_ids();
+
 
 signals:
     void preview_id(unsigned int);//Emitted whenever we choose a tile

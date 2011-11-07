@@ -48,6 +48,7 @@ private:
 
 public slots:
     void set_preview_photo(unsigned int id);
+    void ribbon_selection_changed();
 };
 
 #endif // MAINWINDOW_H

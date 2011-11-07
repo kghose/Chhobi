@@ -56,8 +56,10 @@ PhotoRibbon::PhotoRibbon(QObject *parent) :
     setBackgroundBrush(Qt::black);
 }
 
+//Replace the current list with this one
 void PhotoRibbon::set_ids(QList<unsigned int> ids)
 {
+    clear();//memory leak or not?
     QList<unsigned int>::iterator i;
     int x = 0;
     for (i = ids.begin(); i != ids.end(); ++i) {
@@ -72,6 +74,27 @@ void PhotoRibbon::set_ids(QList<unsigned int> ids)
     }
 }
 
+//Add stuff to the current list (only if they are not already present)
+void PhotoRibbon::add_ids(QList<unsigned int> new_ids)
+{
+    QList<unsigned int> old_ids = get_all_ids();
+    QList<unsigned int>::iterator i_old;
+    QList<unsigned int>::iterator i_new;
+
+    int x = tile_width * old_ids.count();
+    for (i_new = new_ids.begin(); i_new != new_ids.end(); ++i_new) {
+        if(!old_ids.contains(*i_new)){
+            RibbonTile *rt = new RibbonTile(tile_width);
+            rt->set_id(*i_new);
+            rt->setPos(x,0);
+            addItem((QGraphicsItem *)rt);
+            QObject::connect(rt, SIGNAL(preview(RibbonTile *)),
+                    this, SLOT(set_preview_tile(RibbonTile *)));
+            x += tile_width;
+        }
+    }
+}
+
 void PhotoRibbon::set_preview_tile(RibbonTile *prt)
 {
     if(preview_tile != NULL)
@@ -79,4 +102,27 @@ void PhotoRibbon::set_preview_tile(RibbonTile *prt)
     preview_tile = prt;
     preview_tile->set_preview();
     emit preview_id(preview_tile->get_id());
+}
+
+QList<unsigned int> PhotoRibbon::get_all_ids()
+{
+    QList<QGraphicsItem *> all_tiles = items();
+    QList<QGraphicsItem *>::iterator i;
+    QList<unsigned int> all_ids;
+    for (i = all_tiles.begin(); i != all_tiles.end(); ++i) {
+        all_ids.append(((RibbonTile*) *i)->get_id());
+    }
+    return all_ids;
+}
+
+
+QList<unsigned int> PhotoRibbon::get_selected_ids()
+{
+    QList<QGraphicsItem *> selected_tiles = selectedItems();
+    QList<QGraphicsItem *>::iterator i;
+    QList<unsigned int> selected_ids;
+    for (i = selected_tiles.begin(); i != selected_tiles.end(); ++i) {
+        selected_ids.append(((RibbonTile*) *i)->get_id());
+    }
+    return selected_ids;
 }

@@ -17,11 +17,10 @@
  * 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+#include <QDesktopServices>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include "lighttable.h"
-#include "thumbnail.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -51,6 +50,12 @@ void MainWindow::setup_connections()
 {
     QObject::connect(ribbon, SIGNAL(preview_id(unsigned int)),
             this, SLOT(set_preview_photo(unsigned int)));
+    QObject::connect(ribbon, SIGNAL(selectionChanged()),
+            this, SLOT(ribbon_selection_changed()));
+
+    QObject::connect(hold_ribbon, SIGNAL(preview_id(unsigned int)),
+            this, SLOT(set_preview_photo(unsigned int)));
+
 }
 
 void MainWindow::set_preview_photo(unsigned int id)
@@ -62,10 +67,17 @@ void MainWindow::set_preview_photo(unsigned int id)
        Qt::KeepAspectRatio));
 }
 
+//Call this when we select items in the ribbon, which means we want to put them
+//in the holding ribbon
+void MainWindow::ribbon_selection_changed()
+{
+    hold_ribbon->add_ids(ribbon->get_selected_ids());
+}
+
 void MainWindow::test()
 {
     QList<unsigned int> ids;
-    for(int n=0; n < 10000; n++)
+    for(int n=0; n < 30000; n++)
         ids.append(n+1);
     ribbon->set_ids(ids);
 }
