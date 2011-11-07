@@ -40,6 +40,7 @@ public:
     void set_ids(QList<unsigned int> ids);
 
 signals:
+    void preview_id(unsigned int);//Emitted whenever we choose a tile
 
 public slots:
     void set_preview_tile(RibbonTile *);

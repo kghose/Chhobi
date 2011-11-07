@@ -45,7 +45,7 @@
              <enum>QGraphicsView::RubberBandDrag</enum>
             </property>
             <property name="rubberBandSelectionMode">
-             <enum>Qt::IntersectsItemShape</enum>
+             <enum>Qt::ContainsItemBoundingRect</enum>
             </property>
            </widget>
           </item>

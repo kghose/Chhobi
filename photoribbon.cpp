@@ -18,8 +18,10 @@ void RibbonTile::paint(QPainter *painter,
         setBrush(Qt::blue);
     else
         setBrush(Qt::gray);
-
-    QGraphicsRectItem::paint(painter, option, widget);
+    //we'll do our own painting of the selection indicator thank you.
+    QStyleOptionGraphicsItem myoption = (*option);
+    myoption.state &= !QStyle::State_Selected;
+    QGraphicsRectItem::paint(painter, &myoption, widget);
 }
 
 void RibbonTile::hoverEnterEvent(QGraphicsSceneHoverEvent * event)
@@ -57,4 +59,5 @@ void PhotoRibbon::set_preview_tile(RibbonTile *prt)
         preview_tile->unset_preview();
     preview_tile = prt;
     preview_tile->set_preview();
+    emit preview_id(preview_tile->get_id());
 }
