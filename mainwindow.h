@@ -22,6 +22,7 @@
 
 #include <QMainWindow>
 #include "photoribbon.h"
+#include "photo.h"
 
 namespace Ui {
     class MainWindow;
@@ -39,12 +40,14 @@ private:
     Ui::MainWindow *ui;
 
     PhotoRibbon *ribbon, *hold_ribbon;
+    Photo preview;
 
     void setup();
     void setup_connections();
     void test();
 
 public slots:
+    void set_preview_photo(unsigned int id);
 };
 
 #endif // MAINWINDOW_H

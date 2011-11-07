@@ -49,8 +49,17 @@ void MainWindow::setup()
 
 void MainWindow::setup_connections()
 {
-    //QObject::connect(ui->QPB_edit_ok, SIGNAL(clicked()),
-    //        this, SLOT(save_photo_edits()));
+    QObject::connect(ribbon, SIGNAL(preview_id(unsigned int)),
+            this, SLOT(set_preview_photo(unsigned int)));
+}
+
+void MainWindow::set_preview_photo(unsigned int id)
+{
+    preview.set_photo(id);
+    ui->QL_preview->setPixmap(preview.get_photo().scaled(
+       ui->QL_preview->width(),
+       ui->QL_preview->height(),
+       Qt::KeepAspectRatio));
 }
 
 void MainWindow::test()
