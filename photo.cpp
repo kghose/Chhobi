@@ -17,46 +17,8 @@
  * 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "photo.h"
 
-#include "lighttable.h"
-#include "thumbnail.h"
-
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+Photo::Photo()
 {
-    ui->setupUi(this);
-    setup();
-    setup_connections();
-    test();
-}
-
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
-
-void MainWindow::setup()
-{
-    ribbon = new PhotoRibbon();
-    ui->QGV_timeline->setScene(ribbon);
-
-    hold_ribbon = new PhotoRibbon();
-    ui->QGV_hold->setScene(hold_ribbon);
-}
-
-void MainWindow::setup_connections()
-{
-    //QObject::connect(ui->QPB_edit_ok, SIGNAL(clicked()),
-    //        this, SLOT(save_photo_edits()));
-}
-
-void MainWindow::test()
-{
-    QList<unsigned int> ids;
-    for(int n=0; n < 10000; n++)
-        ids.append(n+1);
-    ribbon->set_ids(ids);
 }

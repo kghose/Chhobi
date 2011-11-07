@@ -16,12 +16,14 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     lighttable.cpp \
     thumbnail.cpp \
-    photoribbon.cpp
+    photoribbon.cpp \
+    photo.cpp
 
 HEADERS  += mainwindow.h \
     lighttable.h \
     thumbnail.h \
-    photoribbon.h
+    photoribbon.h \
+    photo.h
 
 FORMS    += mainwindow.ui
 
@@ -30,6 +32,8 @@ OTHER_FILES += \
 
 RESOURCES += \
     resources.qrc
+
+
 
 
 
