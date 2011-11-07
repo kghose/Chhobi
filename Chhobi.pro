@@ -15,11 +15,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     lighttable.cpp \
-    thumbnail.cpp
+    thumbnail.cpp \
+    photoribbon.cpp
 
 HEADERS  += mainwindow.h \
     lighttable.h \
-    thumbnail.h
+    thumbnail.h \
+    photoribbon.h
 
 FORMS    += mainwindow.ui
 
@@ -28,6 +30,8 @@ OTHER_FILES += \
 
 RESOURCES += \
     resources.qrc
+
+
 
 
 

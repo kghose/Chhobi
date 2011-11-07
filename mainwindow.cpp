@@ -21,6 +21,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::setup()
 {
+    ribbon = new PhotoRibbon();
+    ui->QGV_timeline->setScene(ribbon);
+
     light_table = new LightTable();
     ui->QGV_lighttable->setScene(light_table);
     ui->QGV_lighttable->installEventFilter(this);
@@ -54,8 +57,12 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
 
 void MainWindow::test()
 {
-    for(int n=0; n < 10; n++)
-        light_table->add(new Thumbnail());
+    //for(int n=0; n < 10; n++)
+    //    light_table->add(new Thumbnail());
+    QList<unsigned int> ids;
+    for(int n=0; n < 10000; n++)
+        ids.append(n+1);
+    ribbon->set_ids(ids);
 }
 
 void MainWindow::save_photo_edits()

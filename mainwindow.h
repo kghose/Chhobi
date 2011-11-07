@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "lighttable.h"
+#include "photoribbon.h"
 
 namespace Ui {
     class MainWindow;
@@ -19,6 +20,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+    PhotoRibbon *ribbon;
 
     //we place all the current photos/videos on this
     LightTable *light_table;

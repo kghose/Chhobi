@@ -23,7 +23,7 @@
       <item row="0" column="0">
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="page_3">
          <layout class="QVBoxLayout" name="verticalLayout">
@@ -34,6 +34,12 @@
               <width>16777215</width>
               <height>100</height>
              </size>
+            </property>
+            <property name="dragMode">
+             <enum>QGraphicsView::RubberBandDrag</enum>
+            </property>
+            <property name="rubberBandSelectionMode">
+             <enum>Qt::IntersectsItemShape</enum>
             </property>
            </widget>
           </item>
