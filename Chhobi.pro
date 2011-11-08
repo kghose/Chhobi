@@ -6,7 +6,9 @@
 
 ICON = Icons/chhobi.icns
 
-QT       += core gui
+QT += core gui sql
+LIBS += -L/usr/local/lib/ -lexiv2
+
 
 TARGET = Chhobi
 TEMPLATE = app
@@ -24,10 +26,12 @@ HEADERS  += mainwindow.h \
 FORMS    += mainwindow.ui
 
 OTHER_FILES += \
-    Notes.txt
+    Readme.md
 
 RESOURCES += \
     resources.qrc
+
+
 
 
 
