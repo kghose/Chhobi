@@ -37,6 +37,11 @@ QPixmap Photo::get_photo()
     return preview;
 }
 
+QUrl Photo::get_photo_url()
+{
+    return QUrl("file://" + absolute_file_path);
+}
+
 void Photo::save_metadata()
 {
     ;

@@ -18,6 +18,7 @@
  */
 
 #include <QDesktopServices>
+#include <QUrl>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -56,6 +57,8 @@ void MainWindow::setup_connections()
     QObject::connect(hold_ribbon, SIGNAL(preview_id(unsigned int)),
             this, SLOT(set_preview_photo(unsigned int)));
 
+//    QObject::connect(ui->QL_view, SIGNAL(clicked()),
+//            this, SLOT(show_preview_external()));
 }
 
 void MainWindow::set_preview_photo(unsigned int id)
@@ -67,11 +70,30 @@ void MainWindow::set_preview_photo(unsigned int id)
        Qt::KeepAspectRatio));
 }
 
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    QSize scaledSize = preview.get_photo().size();
+    scaledSize.scale(ui->QL_preview->size(), Qt::KeepAspectRatio);
+    if (ui->QL_preview->pixmap() && scaledSize != ui->QL_preview->pixmap()->size())
+    {
+        ui->QL_preview->setPixmap(preview.get_photo().scaled(ui->QL_preview->size(),
+                                                              Qt::KeepAspectRatio,
+                                                              Qt::SmoothTransformation));
+    }
+    QMainWindow::resizeEvent(event);
+}
+
 //Call this when we select items in the ribbon, which means we want to put them
 //in the holding ribbon
 void MainWindow::ribbon_selection_changed()
 {
     hold_ribbon->add_ids(ribbon->get_selected_ids());
+}
+
+//Open the preview photo in a proper external viewer
+void MainWindow::show_preview_external()
+{
+    QDesktopServices::openUrl(preview.get_photo_url());
 }
 
 void MainWindow::test()

@@ -35,6 +35,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void resizeEvent(QResizeEvent * /* event */);
 
 private:
     Ui::MainWindow *ui;
@@ -44,11 +45,13 @@ private:
 
     void setup();
     void setup_connections();
+
     void test();
 
 public slots:
     void set_preview_photo(unsigned int id);
     void ribbon_selection_changed();
+    void show_preview_external();
 };
 
 #endif // MAINWINDOW_H

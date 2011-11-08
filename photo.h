@@ -22,6 +22,7 @@
 
 #include <QString>
 #include <QPixmap>
+#include <QUrl>
 class Photo
 {
     unsigned int unique_id;
@@ -32,6 +33,7 @@ public:
     Photo();
     void set_photo(unsigned int id); //fetch the photo and metadata
     QPixmap get_photo();  //return the oreview pixmap
+    QUrl get_photo_url(); //return absolute file path
     void save_metadata(); //save any changes to the metadata
 };
 
