@@ -64,10 +64,8 @@ void MainWindow::setup_connections()
 void MainWindow::set_preview_photo(unsigned int id)
 {
     preview.set_photo(id);
-    ui->QL_preview->setPixmap(preview.get_photo().scaled(
-       ui->QL_preview->width(),
-       ui->QL_preview->height(),
-       Qt::KeepAspectRatio));
+    ui->QL_preview->setPixmap(preview.get_photo().scaled(ui->QL_preview->size(),
+                                                          Qt::KeepAspectRatio));
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
@@ -75,11 +73,8 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     QSize scaledSize = preview.get_photo().size();
     scaledSize.scale(ui->QL_preview->size(), Qt::KeepAspectRatio);
     if (ui->QL_preview->pixmap() && scaledSize != ui->QL_preview->pixmap()->size())
-    {
         ui->QL_preview->setPixmap(preview.get_photo().scaled(ui->QL_preview->size(),
-                                                              Qt::KeepAspectRatio,
-                                                              Qt::SmoothTransformation));
-    }
+                                                              Qt::KeepAspectRatio));
     QMainWindow::resizeEvent(event);
 }
 
