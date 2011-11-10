@@ -58,6 +58,8 @@ void MainWindow::setup_connections()
     QObject::connect(hold_ribbon, SIGNAL(preview_id(unsigned int)),
             this, SLOT(set_preview_photo(unsigned int)));
 
+    QObject::connect(ui->captionEdit, SIGNAL(textEdited(QString)),
+            this, SLOT(photo_caption_changed()));
     QObject::connect(ui->captionEdit, SIGNAL(returnPressed()),
             this, SLOT(save_photo_meta_data()));
 }
@@ -101,6 +103,11 @@ void MainWindow::ribbon_selection_changed()
     hold_ribbon->add_ids(ribbon->get_selected_ids());
 }
 
+void MainWindow::photo_caption_changed()
+{
+    ui->captionEdit->setStyleSheet("background: lightgreen");
+}
+
 //For now, save the metadata right away
 void MainWindow::save_photo_meta_data()
 {
@@ -108,6 +115,7 @@ void MainWindow::save_photo_meta_data()
     pmd.caption = ui->captionEdit->text();
     preview.set_meta_data(pmd);
     save_metadata(preview.get_absolute_file_path(), preview.get_metadata());
+    ui->captionEdit->setStyleSheet("");
 }
 
 //Open the preview photo in a proper external viewer

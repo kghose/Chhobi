@@ -53,6 +53,7 @@ public slots:
     void set_preview_photo(unsigned int id);
     void ribbon_selection_changed();
     void show_preview_external();
+    void photo_caption_changed();
     void save_photo_meta_data();
 };
 
