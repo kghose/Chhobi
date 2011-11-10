@@ -17,11 +17,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     photoribbon.cpp \
-    photo.cpp
+    photo.cpp \
+    exivmanager.cpp
 
 HEADERS  += mainwindow.h \
     photoribbon.h \
-    photo.h
+    photo.h \
+    exivmanager.h
 
 FORMS    += mainwindow.ui
 
@@ -30,6 +32,8 @@ OTHER_FILES += \
 
 RESOURCES += \
     resources.qrc
+
+
 
 
 

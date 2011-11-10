@@ -21,7 +21,7 @@
 #include <QUrl>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include "exivmanager.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -64,8 +64,11 @@ void MainWindow::setup_connections()
 void MainWindow::set_preview_photo(unsigned int id)
 {
     preview.set_photo(id);
+    preview.set_meta_data(load_metadata(preview.get_absolute_file_path()));
     ui->QL_preview->setPixmap(preview.get_photo().scaled(ui->QL_preview->size(),
                                                           Qt::KeepAspectRatio));
+    ui->captionEdit->setText(preview.get_metadata().caption);
+    ui->dateTimeEdit->setDateTime(preview.get_metadata().photo_date);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)

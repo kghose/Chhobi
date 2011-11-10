@@ -19,6 +19,16 @@
 
 #include "photo.h"
 
+QString Rational::pretty_print()
+{
+    QString the_string;
+    if(numerator > denominator)
+        the_string = QString::number(float(numerator)/float(denominator));
+    else
+        the_string = "1/" + QString::number(float(denominator)/float(numerator));
+    return the_string;
+}
+
 Photo::Photo()
 {
 }
@@ -32,17 +42,7 @@ void Photo::set_photo(unsigned int id)
     preview.load(absolute_file_path);
 }
 
-QPixmap Photo::get_photo()
-{
-    return preview;
-}
-
 QUrl Photo::get_photo_url()
 {
     return QUrl("file://" + absolute_file_path);
-}
-
-void Photo::save_metadata()
-{
-    ;
 }
