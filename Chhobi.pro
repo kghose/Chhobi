@@ -23,7 +23,8 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     photoribbon.h \
     photo.h \
-    exivmanager.h
+    exivmanager.h \
+    imagerotate.h
 
 FORMS    += mainwindow.ui
 
@@ -32,6 +33,7 @@ OTHER_FILES += \
 
 RESOURCES += \
     resources.qrc
+
 
 
 

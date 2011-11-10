@@ -22,6 +22,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "exivmanager.h"
+#include "imagerotate.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -57,14 +58,26 @@ void MainWindow::setup_connections()
     QObject::connect(hold_ribbon, SIGNAL(preview_id(unsigned int)),
             this, SLOT(set_preview_photo(unsigned int)));
 
-//    QObject::connect(ui->QL_view, SIGNAL(clicked()),
-//            this, SLOT(show_preview_external()));
+    QObject::connect(ui->captionEdit, SIGNAL(returnPressed()),
+            this, SLOT(save_photo_meta_data()));
+}
+
+void MainWindow::load_preview_photo(QString absolute_file_name)
+{
+    preview.set_meta_data(load_metadata(absolute_file_name));
+    QImage pmI(absolute_file_name);
+    preview.set_pixmap(QPixmap::fromImage(
+          rotate(preview.get_metadata().rotation_angle, pmI.scaled(ui->QL_preview->size(),Qt::KeepAspectRatio))));
 }
 
 void MainWindow::set_preview_photo(unsigned int id)
 {
+    int fno = 5661;
+    QString absolute_file_name = QString("/Users/kghose/Source/Sandbox/2011-10-16/DSC_")
+            + QString::number(fno+id) + QString(".JPG");
     preview.set_photo(id);
-    preview.set_meta_data(load_metadata(preview.get_absolute_file_path()));
+    load_preview_photo(absolute_file_name);
+
     ui->QL_preview->setPixmap(preview.get_photo().scaled(ui->QL_preview->size(),
                                                           Qt::KeepAspectRatio));
     ui->captionEdit->setText(preview.get_metadata().caption);
@@ -86,6 +99,15 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 void MainWindow::ribbon_selection_changed()
 {
     hold_ribbon->add_ids(ribbon->get_selected_ids());
+}
+
+//For now, save the metadata right away
+void MainWindow::save_photo_meta_data()
+{
+    PhotoMetaData pmd = preview.get_metadata();
+    pmd.caption = ui->captionEdit->text();
+    preview.set_meta_data(pmd);
+    save_metadata(preview.get_absolute_file_path(), preview.get_metadata());
 }
 
 //Open the preview photo in a proper external viewer

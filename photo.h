@@ -32,11 +32,15 @@ struct Rational
 
 struct PhotoMetaData
 {
+    //Housekeeping
+    bool changed;
+
     //Read/write properties
     QString caption;//photo caption 2000 characters max
     QDateTime photo_date;     //Date/Time Original
     int rotation_angle; //In degrees counterclockwise, read off the camera exif data
     QStringList keywords; //keywords associated with the photo
+
 
     //Read only properties
     int iso;

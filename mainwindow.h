@@ -46,12 +46,14 @@ private:
     void setup();
     void setup_connections();
 
+    void load_preview_photo(QString absolute_file_name);
     void test();
 
 public slots:
     void set_preview_photo(unsigned int id);
     void ribbon_selection_changed();
     void show_preview_external();
+    void save_photo_meta_data();
 };
 
 #endif // MAINWINDOW_H
