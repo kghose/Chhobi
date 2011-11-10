@@ -51,7 +51,7 @@ void RibbonTile::hoverEnterEvent(QGraphicsSceneHoverEvent * event)
 PhotoRibbon::PhotoRibbon(QObject *parent) :
     QGraphicsScene(parent)
 {
-    tile_width = 10;
+    tile_width = 30;
     preview_tile = NULL;
     setBackgroundBrush(Qt::black);
 }
