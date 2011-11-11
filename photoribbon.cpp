@@ -22,7 +22,7 @@
 RibbonTile::RibbonTile(unsigned int tile_width) : QGraphicsRectItem()
 {
     state = NORMAL;
-    setRect(0,0,.75*tile_width,tile_width);
+    setRect(0,0,.85*tile_width,.25*tile_width);//Dashes are better usability
     setFlag(QGraphicsItem::ItemIsSelectable);//Vital for rubberband selection
     setAcceptHoverEvents(true);//This is how we preview
 }
