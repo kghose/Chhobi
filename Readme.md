@@ -66,6 +66,17 @@ Instantiates the UI (mainwindow.ui) and does general coordinating
 
 Coding notes
 ============
+1. To print the lens information using the helper functions from easyaccess.hpp
+do:
+
+`lens_model = exifData[Exiv2::lensName(exifData)->key()].print(&exifData).c_str()`
+
+where exifData is an instance of `Exiv2::ExifData`
+
+If print is not passed the whole exifdata, then it just prints the id code,
+which is just a number.
+
+
 
 
 
