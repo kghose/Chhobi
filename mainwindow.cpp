@@ -54,12 +54,14 @@ void MainWindow::setup_connections()
             this, SLOT(set_preview_photo(unsigned int)));
     QObject::connect(ribbon, SIGNAL(selectionChanged()),
             this, SLOT(ribbon_selection_changed()));
-
     QObject::connect(hold_ribbon, SIGNAL(preview_id(unsigned int)),
             this, SLOT(set_preview_photo(unsigned int)));
 
     QObject::connect(ui->captionEdit, SIGNAL(textEdited(QString)),
             this, SLOT(photo_caption_changed()));
+    QObject::connect(ui->dateTimeEdit, SIGNAL(editingFinished()),
+            this, SLOT(photo_date_changed()));
+
     QObject::connect(ui->captionEdit, SIGNAL(returnPressed()),
             this, SLOT(save_photo_meta_data()));
 }
@@ -68,8 +70,12 @@ void MainWindow::load_preview_photo(QString absolute_file_name)
 {
     preview.set_meta_data(load_metadata(absolute_file_name));
     QImage pmI(absolute_file_name);
+    if(pmI.isNull())
+        pmI.load(":/Images/Icons/chhobi-icon.png");
+
     preview.set_pixmap(QPixmap::fromImage(
           rotate(preview.get_metadata().rotation_angle, pmI.scaled(ui->QL_preview->size(),Qt::KeepAspectRatio))));
+
 }
 
 void MainWindow::set_preview_photo(unsigned int id)
@@ -84,7 +90,36 @@ void MainWindow::set_preview_photo(unsigned int id)
                                                           Qt::KeepAspectRatio));
     ui->captionEdit->setText(preview.get_metadata().caption);
     ui->dateTimeEdit->setDateTime(preview.get_metadata().photo_date);
+
+    set_metadata_table(preview.get_metadata());
 }
+
+/*void MainWindow::set_metadata_table(PhotoMetaData pmd)
+{
+    ui->QTW_metadata->setItem(0,0,new QTableWidgetItem("Exposure"));
+    ui->QTW_metadata->setItem(0,1,new QTableWidgetItem(pmd.exposure_time.pretty_print() + "s"));
+    ui->QTW_metadata->setItem(1,0,new QTableWidgetItem("f-stop"));
+    ui->QTW_metadata->setItem(1,1,new QTableWidgetItem(pmd.fnumber.pretty_print()));
+    ui->QTW_metadata->setItem(2,0,new QTableWidgetItem("ISO"));
+    ui->QTW_metadata->setItem(2,1,new QTableWidgetItem(QString::number(pmd.iso)));
+    ui->QTW_metadata->setItem(3,0,new QTableWidgetItem("Focal len"));
+    ui->QTW_metadata->setItem(3,1,new QTableWidgetItem(pmd.focal_length.pretty_print() + "mm"));
+    ui->QTW_metadata->setItem(4,0,new QTableWidgetItem("Camera"));
+    ui->QTW_metadata->setItem(4,1,new QTableWidgetItem(pmd.camera_model));
+    ui->QTW_metadata->setItem(5,0,new QTableWidgetItem("Lens"));
+    ui->QTW_metadata->setItem(5,1,new QTableWidgetItem(pmd.lens_model));
+}*/
+
+void MainWindow::set_metadata_table(PhotoMetaData pmd)
+{
+    ui->QTW_metadata->setItem(0,0,new QTableWidgetItem(pmd.exposure_time.pretty_print() + "s"));
+    ui->QTW_metadata->setItem(1,0,new QTableWidgetItem("f" + pmd.fnumber.pretty_print()));
+    ui->QTW_metadata->setItem(2,0,new QTableWidgetItem(QString::number(pmd.iso) + " iso"));
+    ui->QTW_metadata->setItem(3,0,new QTableWidgetItem(pmd.focal_length.pretty_print() + "mm"));
+    ui->QTW_metadata->setItem(4,0,new QTableWidgetItem(pmd.camera_model));
+    ui->QTW_metadata->setItem(5,0,new QTableWidgetItem(pmd.lens_model));
+}
+
 
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
@@ -108,14 +143,21 @@ void MainWindow::photo_caption_changed()
     ui->captionEdit->setStyleSheet("background: lightgreen");
 }
 
+void MainWindow::photo_date_changed()
+{
+    ui->dateTimeEdit->setStyleSheet("background: lightgreen");
+}
+
 //For now, save the metadata right away
 void MainWindow::save_photo_meta_data()
 {
     PhotoMetaData pmd = preview.get_metadata();
     pmd.caption = ui->captionEdit->text();
+    pmd.photo_date = ui->dateTimeEdit->dateTime();
     preview.set_meta_data(pmd);
     save_metadata(preview.get_absolute_file_path(), preview.get_metadata());
     ui->captionEdit->setStyleSheet("");
+    ui->dateTimeEdit->setStyleSheet("");
 }
 
 //Open the preview photo in a proper external viewer

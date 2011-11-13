@@ -47,6 +47,8 @@ private:
     void setup_connections();
 
     void load_preview_photo(QString absolute_file_name);
+    void set_metadata_table(PhotoMetaData pmd);
+
     void test();
 
 public slots:
@@ -54,6 +56,7 @@ public slots:
     void ribbon_selection_changed();
     void show_preview_external();
     void photo_caption_changed();
+    void photo_date_changed();
     void save_photo_meta_data();
 };
 

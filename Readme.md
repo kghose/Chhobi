@@ -23,14 +23,20 @@ which is to browse and organize large libraries of pictures.
 Usage
 =====
 The main browsing interface is the Ribbon, which represents each picture as a
-small tile. Hovering the mouse over the time causes the picture and it's
-associated metadata to appear in the preview pane. The caption and keywords can
-be edited in the preview pane. Clicking on a tile, or selecting a bunch of tiles
-adds them to the holding table. The tiles represent a set of pictures that can
-be processed in different ways. The set can be added to a new or existing
-collection or the pictures in the set can be copied into a new folder (resized)
-if asked for, and the copies can be dropped into a mail program or other
-application.
+small tile. Hovering the mouse over the tile causes the picture and it's
+associated metadata to appear in the preview pane. Using the mousewheel (or the
+up and down cursors) will "zoom" in or out on the ribbon. This will not only
+change the size of the photo tiles, but it will also change what date
+information is displayed on the time line in the ribbon. At the furthest zoom,
+only years are displayed, as the zoom increases months, days and then hours are
+displayed on the timeline.
+
+The caption, date and keywords can be edited in the preview pane. Clicking on a
+tile, or selecting a bunch of tiles adds them to the holding table. The tiles on
+the holding table represent a set of pictures that can be processed in different
+ways. The set can be added to a new or existing collection or the pictures in
+the set can be copied into a new folder (resized) if asked for, and the copies
+can be dropped into a mail program or other external application.
 
 
 License (GPL)

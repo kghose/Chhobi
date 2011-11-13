@@ -45,7 +45,7 @@ struct PhotoMetaData
     //Read only properties
     int iso;
     Rational exposure_time, fnumber, focal_length;
-    QString camera_model;
+    QString camera_model, lens_model;
 };
 
 class Photo

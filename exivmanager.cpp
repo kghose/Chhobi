@@ -2,6 +2,7 @@
 
 #include <exiv2/image.hpp> //needed for exif operations
 #include <exiv2/exif.hpp>
+#include <exiv2/easyaccess.hpp> //for lensName and other convenience functions
 #include <cassert> //Needed for assert
 
 PhotoMetaData load_metadata(QString absolute_filename)
@@ -151,6 +152,7 @@ PhotoMetaData load_metadata(QString absolute_filename)
     pmd.focal_length.denominator = focal_len_rat.second;
 
     pmd.camera_model = QString(exifData["Exif.Image.Model"].toString().c_str());
+    pmd.lens_model = exifData[Exiv2::lensName(exifData)->key()].print(&exifData).c_str();
 
     if(resave) {
         save_metadata(absolute_filename, pmd);
