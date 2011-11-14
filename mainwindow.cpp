@@ -174,11 +174,16 @@ void MainWindow::photo_date_changed()
 
 void MainWindow::photo_keywords_changed(int row, int col)
 {
-    if(row==preview.get_metadata().keywords.count()) {
-        ui->QTW_keywords->setRowCount(row+2);
-        ui->QTW_keywords->setCurrentCell(row+1,0);
-    } else if(ui->QTW_keywords->item(row,col)->text()=="") {
-        //work on deleting keywords
+    bool empty_row = false, last_row = false;
+    if(ui->QTW_keywords->item(row,col)->text()=="") empty_row = true;
+    if(row==preview.get_metadata().keywords.count()) last_row = true;
+    if(last_row) {
+        if(!empty_row) {
+            ui->QTW_keywords->setRowCount(row+2);
+            ui->QTW_keywords->setCurrentCell(row+1,0);
+        }
+    } else if(empty_row) {
+        ui->QTW_keywords->removeRow(row);
     }
     PhotoMetaData pmd = preview.get_metadata();
     pmd.keywords.clear();
