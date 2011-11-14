@@ -96,22 +96,6 @@ void MainWindow::set_preview_photo(unsigned int id)
     set_keywords_table(preview.get_metadata());
 }
 
-/*void MainWindow::set_metadata_table(PhotoMetaData pmd)
-{
-    ui->QTW_metadata->setItem(0,0,new QTableWidgetItem("Exposure"));
-    ui->QTW_metadata->setItem(0,1,new QTableWidgetItem(pmd.exposure_time.pretty_print() + "s"));
-    ui->QTW_metadata->setItem(1,0,new QTableWidgetItem("f-stop"));
-    ui->QTW_metadata->setItem(1,1,new QTableWidgetItem(pmd.fnumber.pretty_print()));
-    ui->QTW_metadata->setItem(2,0,new QTableWidgetItem("ISO"));
-    ui->QTW_metadata->setItem(2,1,new QTableWidgetItem(QString::number(pmd.iso)));
-    ui->QTW_metadata->setItem(3,0,new QTableWidgetItem("Focal len"));
-    ui->QTW_metadata->setItem(3,1,new QTableWidgetItem(pmd.focal_length.pretty_print() + "mm"));
-    ui->QTW_metadata->setItem(4,0,new QTableWidgetItem("Camera"));
-    ui->QTW_metadata->setItem(4,1,new QTableWidgetItem(pmd.camera_model));
-    ui->QTW_metadata->setItem(5,0,new QTableWidgetItem("Lens"));
-    ui->QTW_metadata->setItem(5,1,new QTableWidgetItem(pmd.lens_model));
-}*/
-
 void MainWindow::set_metadata_table(PhotoMetaData pmd)
 {
     QString metadata_string =
@@ -122,14 +106,6 @@ void MainWindow::set_metadata_table(PhotoMetaData pmd)
             pmd.camera_model + "\n" +
             pmd.lens_model;
     ui->QPTE_metadata->setPlainText(metadata_string);
-    /*
-    ui->QTW_metadata->setItem(0,0,new QTableWidgetItem(pmd.exposure_time.pretty_print() + "s"));
-    ui->QTW_metadata->setItem(1,0,new QTableWidgetItem("f" + pmd.fnumber.pretty_print()));
-    ui->QTW_metadata->setItem(2,0,new QTableWidgetItem(QString::number(pmd.iso) + " iso"));
-    ui->QTW_metadata->setItem(3,0,new QTableWidgetItem(pmd.focal_length.pretty_print() + "mm"));
-    ui->QTW_metadata->setItem(4,0,new QTableWidgetItem(pmd.camera_model));
-    ui->QTW_metadata->setItem(5,0,new QTableWidgetItem(pmd.lens_model));
-    */
 }
 
 void MainWindow::set_keywords_table(PhotoMetaData pmd)
