@@ -61,7 +61,8 @@ void MainWindow::setup_connections()
             this, SLOT(photo_caption_changed()));
     QObject::connect(ui->dateTimeEdit, SIGNAL(editingFinished()),
             this, SLOT(photo_date_changed()));
-
+    QObject::connect(ui->QTW_keywords, SIGNAL(cellChanged (int, int)),
+            this, SLOT(photo_keywords_changed(int, int)));
     QObject::connect(ui->captionEdit, SIGNAL(returnPressed()),
             this, SLOT(save_photo_meta_data()));
 }
@@ -92,6 +93,7 @@ void MainWindow::set_preview_photo(unsigned int id)
     ui->dateTimeEdit->setDateTime(preview.get_metadata().photo_date);
 
     set_metadata_table(preview.get_metadata());
+    set_keywords_table(preview.get_metadata());
 }
 
 /*void MainWindow::set_metadata_table(PhotoMetaData pmd)
@@ -112,14 +114,36 @@ void MainWindow::set_preview_photo(unsigned int id)
 
 void MainWindow::set_metadata_table(PhotoMetaData pmd)
 {
+    QString metadata_string =
+       pmd.exposure_time.pretty_print() + "s\n" +
+            "f" + pmd.fnumber.pretty_print() + "\n" +
+            QString::number(pmd.iso) + " iso\n" +
+            pmd.focal_length.pretty_print() + "mm\n" +
+            pmd.camera_model + "\n" +
+            pmd.lens_model;
+    ui->QPTE_metadata->setPlainText(metadata_string);
+    /*
     ui->QTW_metadata->setItem(0,0,new QTableWidgetItem(pmd.exposure_time.pretty_print() + "s"));
     ui->QTW_metadata->setItem(1,0,new QTableWidgetItem("f" + pmd.fnumber.pretty_print()));
     ui->QTW_metadata->setItem(2,0,new QTableWidgetItem(QString::number(pmd.iso) + " iso"));
     ui->QTW_metadata->setItem(3,0,new QTableWidgetItem(pmd.focal_length.pretty_print() + "mm"));
     ui->QTW_metadata->setItem(4,0,new QTableWidgetItem(pmd.camera_model));
     ui->QTW_metadata->setItem(5,0,new QTableWidgetItem(pmd.lens_model));
+    */
 }
 
+void MainWindow::set_keywords_table(PhotoMetaData pmd)
+{
+    QObject::disconnect(ui->QTW_keywords, SIGNAL(cellChanged (int, int)),
+            this, SLOT(photo_keywords_changed(int, int)));
+    ui->QTW_keywords->clear();
+    int cnt = pmd.keywords.count();
+    ui->QTW_keywords->setRowCount(cnt+1);
+    for(int i=0;i<cnt;i++)
+        ui->QTW_keywords->setItem(i,0,new QTableWidgetItem(pmd.keywords[i]));
+    QObject::connect(ui->QTW_keywords, SIGNAL(cellChanged (int, int)),
+            this, SLOT(photo_keywords_changed(int, int)));
+}
 
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
@@ -147,6 +171,23 @@ void MainWindow::photo_date_changed()
 {
     ui->dateTimeEdit->setStyleSheet("background: lightgreen");
 }
+
+void MainWindow::photo_keywords_changed(int row, int col)
+{
+    if(row==preview.get_metadata().keywords.count()) {
+        ui->QTW_keywords->setRowCount(row+2);
+        ui->QTW_keywords->setCurrentCell(row+1,0);
+    } else if(ui->QTW_keywords->item(row,col)->text()=="") {
+        //work on deleting keywords
+    }
+    PhotoMetaData pmd = preview.get_metadata();
+    pmd.keywords.clear();
+    for(int i=0; i < ui->QTW_keywords->rowCount()-1; i++)
+        pmd.keywords << ui->QTW_keywords->item(i,0)->text();
+    preview.set_meta_data(pmd);
+    save_photo_meta_data();
+}
+
 
 //For now, save the metadata right away
 void MainWindow::save_photo_meta_data()

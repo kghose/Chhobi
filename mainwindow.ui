@@ -54,11 +54,17 @@
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <layout class="QGridLayout" name="gridLayout_2">
+      <layout class="QGridLayout" name="gridLayout">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetNoConstraint</enum>
+       </property>
        <property name="margin">
         <number>0</number>
        </property>
-       <item row="0" column="0" rowspan="5" colspan="2">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item row="0" column="0" rowspan="4">
         <widget class="QLabel" name="QL_preview">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
@@ -77,10 +83,10 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="2" rowspan="4">
-        <widget class="QTableWidget" name="tableWidget">
+       <item row="2" column="1" rowspan="2" colspan="2">
+        <widget class="QTableWidget" name="QTW_keywords">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+          <sizepolicy hsizetype="Fixed" vsizetype="MinimumExpanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -88,8 +94,11 @@
          <property name="maximumSize">
           <size>
            <width>200</width>
-           <height>16777215</height>
+           <height>10000</height>
           </size>
+         </property>
+         <property name="gridStyle">
+          <enum>Qt::SolidLine</enum>
          </property>
          <property name="rowCount">
           <number>1</number>
@@ -103,27 +112,14 @@
          <attribute name="horizontalHeaderDefaultSectionSize">
           <number>200</number>
          </attribute>
+         <attribute name="verticalHeaderVisible">
+          <bool>false</bool>
+         </attribute>
          <row/>
          <column/>
         </widget>
        </item>
-       <item row="5" column="1">
-        <widget class="QLineEdit" name="captionEdit">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>167777</width>
-           <height>16777215</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2">
+       <item row="4" column="1">
         <widget class="QDateTimeEdit" name="dateTimeEdit">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -137,17 +133,39 @@
            <height>0</height>
           </size>
          </property>
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>50</height>
+          </size>
+         </property>
          <property name="calendarPopup">
           <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
-        <widget class="QTableWidget" name="QTW_metadata">
+       <item row="4" column="0">
+        <widget class="QLineEdit" name="captionEdit">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>167777</width>
+           <height>25</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QPlainTextEdit" name="QPTE_metadata">
          <property name="maximumSize">
           <size>
            <width>200</width>
-           <height>125</height>
+           <height>100</height>
           </size>
          </property>
          <property name="font">
@@ -155,31 +173,9 @@
            <pointsize>10</pointsize>
           </font>
          </property>
-         <property name="rowCount">
-          <number>6</number>
+         <property name="readOnly">
+          <bool>true</bool>
          </property>
-         <property name="columnCount">
-          <number>1</number>
-         </property>
-         <attribute name="horizontalHeaderVisible">
-          <bool>false</bool>
-         </attribute>
-         <attribute name="horizontalHeaderDefaultSectionSize">
-          <number>199</number>
-         </attribute>
-         <attribute name="verticalHeaderVisible">
-          <bool>false</bool>
-         </attribute>
-         <attribute name="verticalHeaderDefaultSectionSize">
-          <number>20</number>
-         </attribute>
-         <row/>
-         <row/>
-         <row/>
-         <row/>
-         <row/>
-         <row/>
-         <column/>
         </widget>
        </item>
       </layout>
