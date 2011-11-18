@@ -22,7 +22,7 @@
 RibbonTile::RibbonTile(unsigned int tile_width) : QGraphicsRectItem()
 {
     state = NORMAL;
-    setRect(0,0,.85*tile_width,.25*tile_width);//Dashes are better usability
+    setRect(0,0,.85*tile_width,.85*tile_width);//Dashes are better usability
     setFlag(QGraphicsItem::ItemIsSelectable);//Vital for rubberband selection
     setAcceptHoverEvents(true);//This is how we preview
 }
@@ -51,7 +51,7 @@ void RibbonTile::hoverEnterEvent(QGraphicsSceneHoverEvent * event)
 PhotoRibbon::PhotoRibbon(QObject *parent) :
     QGraphicsScene(parent)
 {
-    tile_width = 30;
+    tile_width = 15;
     preview_tile = NULL;
     setBackgroundBrush(Qt::black);
 }
@@ -72,6 +72,7 @@ void PhotoRibbon::set_ids(QList<unsigned int> ids)
 
         x += tile_width;
     }
+    setSceneRect(-10, 0, x+20,20);
 }
 
 //Add stuff to the current list (only if they are not already present)
@@ -86,13 +87,14 @@ void PhotoRibbon::add_ids(QList<unsigned int> new_ids)
         if(!old_ids.contains(*i_new)){
             RibbonTile *rt = new RibbonTile(tile_width);
             rt->set_id(*i_new);
-            rt->setPos(x,0);
+            rt->setPos(x,15);
             addItem((QGraphicsItem *)rt);
             QObject::connect(rt, SIGNAL(preview(RibbonTile *)),
                     this, SLOT(set_preview_tile(RibbonTile *)));
             x += tile_width;
         }
     }
+    setSceneRect(-10, 0, x+20,20);
 }
 
 void PhotoRibbon::set_preview_tile(RibbonTile *prt)
