@@ -33,7 +33,7 @@ struct Rational
 struct PhotoMetaData
 {
     //Housekeeping
-    bool changed;
+    bool valid;
 
     //Read/write properties
     QString caption;//photo caption 2000 characters max

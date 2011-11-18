@@ -23,8 +23,11 @@ PhotoMetaData load_metadata(QString absolute_filename)
         Exiv2::ImageFactory::open(absolute_filename.toStdString());
         assert (image.get() != 0);
         image->readMetadata();
+        pmd.valid = true;
     } catch (Exiv2::AnyError& e) {
         qDebug() << "Caught Exiv2 exception '" << QString(e.what()) << "'";
+        pmd.valid = false;
+        pmd.rotation_angle = 0;
         return pmd;
     }
 
