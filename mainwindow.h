@@ -47,6 +47,7 @@ private:
     void setup_connections();
 
     void load_preview_photo(QString absolute_file_name);
+    void set_datetime(PhotoMetaData pmd);
     void set_metadata_table(PhotoMetaData pmd);
     void set_keywords_table(PhotoMetaData pmd);
     void test();

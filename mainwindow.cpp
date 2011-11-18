@@ -59,11 +59,9 @@ void MainWindow::setup_connections()
 
     QObject::connect(ui->captionEdit, SIGNAL(textEdited(QString)),
             this, SLOT(photo_caption_changed()));
-    QObject::connect(ui->dateTimeEdit, SIGNAL(editingFinished()),
-            this, SLOT(photo_date_changed()));
-    QObject::connect(ui->QTW_keywords, SIGNAL(cellChanged (int, int)),
-            this, SLOT(photo_keywords_changed(int, int)));
     QObject::connect(ui->captionEdit, SIGNAL(returnPressed()),
+            this, SLOT(save_photo_meta_data()));
+    QObject::connect(ui->dateTimeEdit, SIGNAL(editingFinished()),
             this, SLOT(save_photo_meta_data()));
 }
 
@@ -87,17 +85,30 @@ void MainWindow::set_preview_photo(unsigned int id)
     preview.set_photo(id);
     load_preview_photo(absolute_file_name);
 
+    PhotoMetaData pmd = preview.get_metadata();
+
     ui->QL_preview->setPixmap(preview.get_photo().scaled(ui->QL_preview->size(),
                                                           Qt::KeepAspectRatio));
-    ui->captionEdit->setText(preview.get_metadata().caption);
-    ui->dateTimeEdit->setDateTime(preview.get_metadata().photo_date);
+    ui->captionEdit->setText(pmd.caption);
+    set_datetime(pmd);
+    set_metadata_table(pmd);
+    set_keywords_table(pmd);
+}
 
-    set_metadata_table(preview.get_metadata());
-    set_keywords_table(preview.get_metadata());
+//really just needed this, since the date changed signal goes out even when we
+//first load it
+void MainWindow::set_datetime(PhotoMetaData pmd)
+{
+    QObject::disconnect(ui->dateTimeEdit, SIGNAL(dateTimeChanged (const QDateTime &)),
+            this, SLOT(photo_date_changed()));
+    ui->dateTimeEdit->setDateTime(pmd.photo_date);
+    QObject::connect(ui->dateTimeEdit, SIGNAL(dateTimeChanged (const QDateTime &)),
+            this, SLOT(photo_date_changed()));
 }
 
 void MainWindow::set_metadata_table(PhotoMetaData pmd)
 {
+    if(!pmd.valid) return;
     QString metadata_string =
        pmd.exposure_time.pretty_print() + "s\n" +
             "f" + pmd.fnumber.pretty_print() + "\n" +
