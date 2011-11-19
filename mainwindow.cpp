@@ -29,14 +29,26 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    settings_parameters();
     setup();
     setup_connections();
-    test();
+    load_photos();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+
+    //Remove in production version
+    //QSettings settings;
+    //settings.clear();
+}
+
+void MainWindow::settings_parameters()
+{
+    QCoreApplication::setOrganizationName("BengalBionics");
+    QCoreApplication::setOrganizationDomain("bengalbionics.com");
+    QCoreApplication::setApplicationName("Chhobi");
 }
 
 void MainWindow::setup()
@@ -50,6 +62,11 @@ void MainWindow::setup()
 
 void MainWindow::setup_connections()
 {
+    //Menu
+    QObject::connect(ui->actionSet_Root, SIGNAL(triggered()),
+            this, SLOT(set_photo_root()));
+
+    //Ribbon
     QObject::connect(ribbon, SIGNAL(preview_id(unsigned int)),
             this, SLOT(set_preview_photo(unsigned int)));
     QObject::connect(ribbon, SIGNAL(selectionChanged()),
@@ -57,12 +74,17 @@ void MainWindow::setup_connections()
     QObject::connect(hold_ribbon, SIGNAL(preview_id(unsigned int)),
             this, SLOT(set_preview_photo(unsigned int)));
 
+    //Editing controls
     QObject::connect(ui->captionEdit, SIGNAL(textEdited(QString)),
             this, SLOT(photo_caption_changed()));
     QObject::connect(ui->captionEdit, SIGNAL(returnPressed()),
             this, SLOT(save_photo_meta_data()));
     QObject::connect(ui->dateTimeEdit, SIGNAL(editingFinished()),
             this, SLOT(save_photo_meta_data()));
+
+    //Database crawler
+    QObject::connect(&db, SIGNAL(now_searching(QString)),
+            ui->QL_preview, SLOT(setText(QString)));
 }
 
 void MainWindow::load_preview_photo(QString absolute_file_name)
@@ -101,21 +123,27 @@ void MainWindow::set_datetime(PhotoMetaData pmd)
 {
     QObject::disconnect(ui->dateTimeEdit, SIGNAL(dateTimeChanged (const QDateTime &)),
             this, SLOT(photo_date_changed()));
-    ui->dateTimeEdit->setDateTime(pmd.photo_date);
+    if(pmd.photo_date.isValid())
+        ui->dateTimeEdit->setDateTime(pmd.photo_date);
+    else
+        ui->dateTimeEdit->setDateTime(QDateTime::currentDateTime());
     QObject::connect(ui->dateTimeEdit, SIGNAL(dateTimeChanged (const QDateTime &)),
             this, SLOT(photo_date_changed()));
 }
 
 void MainWindow::set_metadata_table(PhotoMetaData pmd)
 {
-    if(!pmd.valid) return;
-    QString metadata_string =
-       pmd.exposure_time.pretty_print() + "s\n" +
-            "f" + pmd.fnumber.pretty_print() + "\n" +
-            QString::number(pmd.iso) + " iso\n" +
-            pmd.focal_length.pretty_print() + "mm\n" +
-            pmd.camera_model + "\n" +
-            pmd.lens_model;
+    QString metadata_string;
+    if(!pmd.valid)
+        metadata_string = "";
+    else
+        metadata_string =
+           pmd.exposure_time.pretty_print() + "s\n" +
+                "f" + pmd.fnumber.pretty_print() + "\n" +
+                QString::number(pmd.iso) + " iso\n" +
+                pmd.focal_length.pretty_print() + "mm\n" +
+                pmd.camera_model + "\n" +
+                pmd.lens_model;
     ui->QPTE_metadata->setPlainText(metadata_string);
 }
 
@@ -197,6 +225,48 @@ void MainWindow::save_photo_meta_data()
 void MainWindow::show_preview_external()
 {
     QDesktopServices::openUrl(preview.get_photo_url());
+}
+
+//Funny thing - if we try to use native dialog, it screws up
+void MainWindow::set_photo_root()
+{
+    QSettings settings;
+    QString photo_root = settings.value("photo root", "/").toString();
+    QFileDialog::Options options = QFileDialog::DontResolveSymlinks | QFileDialog::ShowDirsOnly | QFileDialog::DontUseNativeDialog;
+    QString directory = QFileDialog::getExistingDirectory(this,
+                                tr("Choose photo root"),
+                                photo_root,
+                                options);
+    if (!directory.isEmpty()) {
+        settings.setValue("photo root", directory);
+        load_photos();
+    }
+}
+
+//Disable the mainwindow, open the database, import/refresh new photos, insert
+//them into the ribbon and then return control to the main window
+void MainWindow::load_photos()
+{
+    this->setEnabled(false);
+    QSettings settings;
+    if(!settings.contains("photo root")) {
+        set_photo_root();
+    } else {
+        QString photo_root = settings.value("photo root").toString();//Shouldn't need a default
+        if(!settings.contains("database file name"))
+            settings.setValue("database file name", QDir::home().absolutePath() + "/Source/Sandbox/Haba/Baba/chhobi.sqlite3");
+        QFileInfo dbpath(settings.value("database file name").toString());
+        db.open(dbpath);
+        QStringList name_filters; name_filters << "*.jpg" << "*.jpeg" << "*.png" << "*.tiff" << "*.avi";//TODO other
+        QDir dir(photo_root);
+        dir.setNameFilters(name_filters);
+        dir.setFilter(QDir::AllDirs | QDir::NoDotAndDotDot | QDir::Files);
+        dir.setSorting(QDir::Time | QDir::DirsFirst);
+        db.descend(dir, true);//true -> this is a root
+        ribbon->set_ids(db.get_all_photos());
+        ui->QL_preview->setText("Photos imported");
+        this->setEnabled(true);
+    }
 }
 
 void MainWindow::test()

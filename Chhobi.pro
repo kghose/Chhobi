@@ -18,13 +18,15 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     photoribbon.cpp \
     photo.cpp \
-    exivmanager.cpp
+    exivmanager.cpp \
+    database.cpp
 
 HEADERS  += mainwindow.h \
     photoribbon.h \
     photo.h \
     exivmanager.h \
-    imagerotate.h
+    imagerotate.h \
+    database.h
 
 FORMS    += mainwindow.ui
 

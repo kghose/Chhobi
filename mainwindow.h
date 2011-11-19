@@ -23,6 +23,7 @@
 #include <QMainWindow>
 #include "photoribbon.h"
 #include "photo.h"
+#include "database.h"
 
 namespace Ui {
     class MainWindow;
@@ -42,7 +43,9 @@ private:
 
     PhotoRibbon *ribbon, *hold_ribbon;
     Photo preview;
+    Database db;
 
+    void settings_parameters();
     void setup();
     void setup_connections();
 
@@ -50,9 +53,11 @@ private:
     void set_datetime(PhotoMetaData pmd);
     void set_metadata_table(PhotoMetaData pmd);
     void set_keywords_table(PhotoMetaData pmd);
+    void load_photos();
     void test();
 
 public slots:
+    void set_photo_root();
     void set_preview_photo(unsigned int id);
     void ribbon_selection_changed();
     void show_preview_external();
