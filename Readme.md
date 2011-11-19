@@ -23,13 +23,9 @@ which is to browse and organize large libraries of pictures.
 Usage
 =====
 The main browsing interface is the Ribbon, which represents each picture as a
-small tile. Hovering the mouse over the tile causes the picture and it's
-associated metadata to appear in the preview pane. Using the mousewheel (or the
-up and down cursors) will "zoom" in or out on the ribbon. This will not only
-change the size of the photo tiles, but it will also change what date
-information is displayed on the time line in the ribbon. At the furthest zoom,
-only years are displayed, as the zoom increases months, days and then hours are
-displayed on the timeline.
+small tile. The tiles are arranged in order from latest to oldest, from left to
+right. Hovering the mouse over the tile causes the picture and it's
+associated metadata to appear in the preview pane.
 
 The caption, date and keywords can be edited in the preview pane. Clicking on a
 tile, or selecting a bunch of tiles adds them to the holding table. The tiles on
@@ -66,6 +62,11 @@ Instantiates the UI (mainwindow.ui) and does general coordinating
 
 Coding notes
 ============
+1. Class inheritance:
+`class RibbonTile : public QObject, public QGraphicsRectItem` - we have to use the
+qualifier `public` before each parent class name, otherwise all members of the
+parent class become private (i.e. inaccessible from the inheriting class)
+
 1. To print the lens information using the helper functions from easyaccess.hpp
 do:
 
@@ -76,6 +77,8 @@ where exifData is an instance of `Exiv2::ExifData`
 If print is not passed the whole exifdata, then it just prints the id code,
 which is just a number.
 
+1. `QFileDialog::getExistingDirectory` : If we use the native file dialog we
+run into strange glitches - should mention this on the Qt mailing list
 
 
 
