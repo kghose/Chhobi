@@ -138,11 +138,13 @@ void MainWindow::set_datetime(PhotoMetaData pmd)
 
 void MainWindow::set_metadata_table(PhotoMetaData pmd)
 {
-    QString metadata_string;
+    QString metadata_string = pmd.file_name + "\n";
     if(!pmd.valid)
-        metadata_string = "";
+        metadata_string += "\n\nFILE NOT FOUND";
+    else if (pmd.type==MOVIE)
+        metadata_string += "\nMovie file";
     else
-        metadata_string =
+        metadata_string +=
            pmd.exposure_time.pretty_print() + "s\n" +
                 "f" + pmd.fnumber.pretty_print() + "\n" +
                 QString::number(pmd.iso) + " iso\n" +

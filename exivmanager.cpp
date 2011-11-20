@@ -19,6 +19,7 @@ PhotoMetaData load_metadata(QString absolute_filename)
     pmd.absolute_file_path = absolute_filename;
     pmd.valid = true;
     QFileInfo qfi(absolute_filename);
+    pmd.file_name = qfi.fileName();
 
     if(!qfi.exists()) {
         exiv_bad_metadata(pmd);
@@ -214,12 +215,14 @@ inline void load_sidecar(QString absolute_filename, PhotoMetaData &pmd, bool &re
     } else {
         QFileInfo qfi(absolute_filename);
         info["date"] = QVariant(mac_os_create_datetime(absolute_filename));
+        info["caption"] = QVariant(QString());
         info["filename"] = QVariant(absolute_filename);
         info["keywords"] = QVariant(QStringList());
         resave = true;
     }
 
     pmd.type = MOVIE;
+    pmd.caption = info["caption"].toString();
     pmd.absolute_file_path = info["filename"].toString();
     pmd.photo_date = info["date"].toDateTime();
     pmd.photo_date.setTimeSpec(Qt::UTC);//see garrulous note in exiv_load_date above
@@ -304,6 +307,7 @@ inline void save_sidecar(QString absolute_filename, PhotoMetaData &pmd)
     QFile file(absolute_filename + ".meta");
     QHash<QString,QVariant> info;
     info["date"] = QVariant(pmd.photo_date);
+    info["caption"] = QVariant(pmd.caption);
     info["filename"] = QVariant(pmd.absolute_file_path);
     info["keywords"] = QVariant(pmd.keywords);
 

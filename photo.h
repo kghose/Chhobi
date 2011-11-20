@@ -42,7 +42,7 @@ struct PhotoMetaData
 {
     //Housekeeping
     bool valid;
-    QString absolute_file_path;
+    QString absolute_file_path, file_name;
     FileType type;
 
     //Read/write properties
