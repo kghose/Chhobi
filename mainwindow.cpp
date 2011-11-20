@@ -96,9 +96,10 @@ void MainWindow::setup_connections()
 void MainWindow::set_preview_photo(PhotoInfo pi)
 {
     PhotoMetaData pmd;
+    QString absolute_file_name = photos_root.absoluteFilePath(pi.relative_file_path);
+    this->statusBar()->showMessage(absolute_file_name);
     QImage pmI;
     if(photos_root.exists(pi.relative_file_path)) {
-        QString absolute_file_name = photos_root.absoluteFilePath(pi.relative_file_path);
         pmd = load_metadata(absolute_file_name);
         pmI.load(absolute_file_name);
     } else {//Photo reference in db but not on disk
@@ -138,13 +139,13 @@ void MainWindow::set_datetime(PhotoMetaData pmd)
 
 void MainWindow::set_metadata_table(PhotoMetaData pmd)
 {
-    QString metadata_string = pmd.file_name + "\n";
+    QString metadata_string;
     if(!pmd.valid)
-        metadata_string += "\n\nFILE NOT FOUND";
+        metadata_string = "\n\nFILE NOT FOUND";
     else if (pmd.type==MOVIE)
-        metadata_string += "\nMovie file";
+        metadata_string = "\nMovie file";
     else
-        metadata_string +=
+        metadata_string =
            pmd.exposure_time.pretty_print() + "s\n" +
                 "f" + pmd.fnumber.pretty_print() + "\n" +
                 QString::number(pmd.iso) + " iso\n" +
