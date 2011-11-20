@@ -1,9 +1,17 @@
 #include "exivmanager.h"
-
 #include <exiv2/easyaccess.hpp> //for lensName and other convenience functions
 #include <cassert> //Needed for assert
+#include <sys/stat.h> //for the birthdate (needed for files w/o metadata)
 
 const QStringList sidecar_types = (QStringList("avi") << "mov");
+
+//TODO ifdef for mac
+QDateTime mac_os_create_datetime(QString absolute_file_path)
+{
+    struct stat64 the_stat;
+    stat64(absolute_file_path.toStdString().c_str(), &the_stat);
+    return QDateTime::fromTime_t(the_stat.st_birthtimespec.tv_sec);
+}
 
 PhotoMetaData load_metadata(QString absolute_filename)
 {
@@ -204,7 +212,8 @@ inline void load_sidecar(QString absolute_filename, PhotoMetaData &pmd, bool &re
         QDataStream in(&file);
         in >> info;
     } else {
-        info["date"] = QVariant(QDateTime::currentDateTime().toString("dd.MM.yyyy:hh:mm:ss"));
+        QFileInfo qfi(absolute_filename);
+        info["date"] = QVariant(mac_os_create_datetime(absolute_filename));
         info["filename"] = QVariant(absolute_filename);
         info["keywords"] = QVariant(QStringList());
         resave = true;
