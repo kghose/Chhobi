@@ -123,8 +123,9 @@ The recipe, then is (shown using the QT framework)
 
 TODO
 ====
-1. Put absolute filename in status bar
-1. Last modified for directories working correctly i.e. are changed files retrawled?
+1. [DONE] Put absolute filename in status bar
+1. [DONE] Last modified for directories working correctly i.e. are changed files retrawled?
+1. Holding table mailing + copy to separate directory + resize as needed
 1. Implement searching by caption
 1. Implement sub-selection by keywords
 1. Change to a dense panel ("lighttable") like arrangement? Need to switch to
