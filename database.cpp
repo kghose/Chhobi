@@ -120,6 +120,7 @@ parent we haven't gone narcoleptic or soem such.
 */
 void Database::descend(QDir &dir, bool isroot)
 {
+    bool modified;
     if(isroot) {
         keep_running = true;
         photos_root = dir;
@@ -129,6 +130,11 @@ void Database::descend(QDir &dir, bool isroot)
     if(!keep_running) return;//best to quit out without changing anything
     emit now_searching(photos_root.relativeFilePath(dir.path()));
     QApplication::processEvents();
+    if(QFileInfo(dir,".").lastModified() >= last_descent)
+        modified = true;
+    else
+        modified = false;
+
     QFileInfoList children = dir.entryInfoList(); //children has subdirectories and photos
     for(int n = 0; n < children.size(); n++) {
         if(!keep_running) return;
@@ -136,12 +142,12 @@ void Database::descend(QDir &dir, bool isroot)
             emit now_searching(children[n].baseName());
             QApplication::processEvents();
         }
-        if(children[n].lastModified() >= last_descent) {//this is either a subdirectory or photo that has been changed
-            if(children[n].isDir()) {//directory, recurse into
-                QDir d = dir;
-                d.setPath(children[n].filePath());
-                descend(d);
-            } else {//image file, import and synch
+        if(children[n].isDir()) {//directory, must recurse into
+            QDir d = dir;
+            d.setPath(children[n].filePath());
+            descend(d);
+        } else if(modified) {//image file in a directory that has been modifed, import and synch?
+            if(children[n].lastModified() >= last_descent) {//yup, changed
                 import_photo(children[n]);
             }
         }

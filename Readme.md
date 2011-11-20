@@ -59,6 +59,14 @@ Instantiates the UI (mainwindow.ui)
 
 Coding notes
 ============
+Tracking file system changes
+--------------------------
+Changing a file causes the modified date on the parent directory to change, but
+not in the grandparents etc. For this reason we have to recurse down every
+directory, but we save time by only going through files in a directory which
+has changed after our latest trawl.
+
+
 Class inheritance
 -----------------
 `class RibbonTile : public QObject, public QGraphicsRectItem` - we have to use the
@@ -112,3 +120,12 @@ The recipe, then is (shown using the QT framework)
         thedatetime.setTime_t(the_time.st_birthtimespec.tv_sec);
         qDebug() << thedatetime;
     }
+
+TODO
+====
+1. Put absolute filename in status bar
+1. Last modified for directories working correctly i.e. are changed files retrawled?
+1. Implement searching by caption
+1. Implement sub-selection by keywords
+1. Change to a dense panel ("lighttable") like arrangement? Need to switch to
+click to select and double click to hold model
