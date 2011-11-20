@@ -41,6 +41,7 @@ struct PhotoMetaData
 {
     //Housekeeping
     bool valid;
+    QString absolute_file_path;
 
     //Read/write properties
     QString caption;//photo caption 2000 characters max
@@ -58,7 +59,6 @@ struct PhotoMetaData
 class Photo
 {
     unsigned int unique_id;
-    QString absolute_file_path;
     QPixmap preview;
     PhotoMetaData meta_data;
 
@@ -69,9 +69,7 @@ public:
     void set_pixmap(QPixmap pm) {preview=pm;}
 
     QPixmap get_photo() {return preview;}  //return the preview pixmap
-    QString get_absolute_file_path() {return absolute_file_path;} //return where this thing is on disk
     PhotoMetaData get_metadata() {return meta_data;}
-    QUrl get_photo_url(); //return absolute file path as a URL
 };
 
 #endif // PHOTO_H

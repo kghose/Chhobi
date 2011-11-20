@@ -33,7 +33,8 @@ Photo::Photo()
 {
 }
 
+/*
 QUrl Photo::get_photo_url()
 {
     return QUrl("file://" + absolute_file_path);
-}
+}*/

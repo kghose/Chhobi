@@ -124,6 +124,8 @@ void Database::descend(QDir &dir, bool isroot)
     if(isroot) {
         keep_running = true;
         photos_root = dir;
+        QSettings settings;
+        last_descent = settings.value("last descent").toDateTime();
     }
     if(!keep_running) return;//best to quit out without changing anything
     emit now_searching(dir.path());
@@ -139,6 +141,10 @@ void Database::descend(QDir &dir, bool isroot)
                 import_photo(children[n]);
             }
         }
+    }
+    if(isroot) {//If we've got this far, we were allowed to finish our crawl
+        QSettings settings;
+        settings.setValue("last descent", QDateTime::currentDateTime());
     }
 }
 

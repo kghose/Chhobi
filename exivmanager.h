@@ -9,6 +9,6 @@
 #include "photo.h"
 
 PhotoMetaData load_metadata(QString absolute_filename);
-void save_metadata(QString absolute_filename, PhotoMetaData pmd);
+void save_metadata(PhotoMetaData pmd);
 
 #endif // EXIVMANAGER_H

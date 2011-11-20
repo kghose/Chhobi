@@ -202,7 +202,7 @@ void MainWindow::save_photo_meta_data()
     pmd.caption = ui->captionEdit->text();
     pmd.photo_date = ui->dateTimeEdit->dateTime();
     preview.set_meta_data(pmd);
-    save_metadata(preview.get_absolute_file_path(), preview.get_metadata());
+    save_metadata(preview.get_metadata());
     ui->captionEdit->setStyleSheet("");
     ui->dateTimeEdit->setStyleSheet("");
 }
@@ -210,7 +210,7 @@ void MainWindow::save_photo_meta_data()
 //Open the preview photo in a proper external viewer
 void MainWindow::show_preview_external()
 {
-    QDesktopServices::openUrl(preview.get_photo_url());
+    //QDesktopServices::openUrl(preview.get_photo_url());
 }
 
 //Funny thing - if we try to use native dialog, it screws up

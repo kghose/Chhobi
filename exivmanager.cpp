@@ -24,6 +24,7 @@ PhotoMetaData load_metadata(QString absolute_filename)
         assert (image.get() != 0);
         image->readMetadata();
         pmd.valid = true;
+        pmd.absolute_file_path = absolute_filename;
     } catch (Exiv2::AnyError& e) {
         qDebug() << "Caught Exiv2 exception '" << QString(e.what()) << "'";
         pmd.valid = false;
@@ -158,7 +159,7 @@ PhotoMetaData load_metadata(QString absolute_filename)
     pmd.lens_model = exifData[Exiv2::lensName(exifData)->key()].print(&exifData).c_str();
 
     if(resave) {
-        save_metadata(absolute_filename, pmd);
+        save_metadata(pmd);
         std::cout << "Saved WPG metadata for " << absolute_filename.toStdString() << std::endl;
     }
 
@@ -168,11 +169,11 @@ PhotoMetaData load_metadata(QString absolute_filename)
 }
 
 
-void save_metadata(QString absolute_filename, PhotoMetaData pmd)
+void save_metadata(PhotoMetaData pmd)
 {
     //TODO error handling
     Exiv2::Image::AutoPtr image =
-    Exiv2::ImageFactory::open(absolute_filename.toStdString());
+    Exiv2::ImageFactory::open(pmd.absolute_file_path.toStdString());
     assert (image.get() != 0);
 
     //read existing metadata
