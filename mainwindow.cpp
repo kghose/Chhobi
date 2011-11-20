@@ -240,6 +240,7 @@ void MainWindow::set_photo_root()
                                 options);
     if (!directory.isEmpty()) {
         settings.setValue("photo root", directory);
+        settings.remove("last descent");//need to force a re trawling
         load_photo_list();
     }
 }
