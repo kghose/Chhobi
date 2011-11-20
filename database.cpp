@@ -128,10 +128,15 @@ void Database::descend(QDir &dir, bool isroot)
         last_descent = settings.value("last descent").toDateTime();
     }
     if(!keep_running) return;//best to quit out without changing anything
-    emit now_searching(dir.path());
+    emit now_searching(photos_root.relativeFilePath(dir.path()));
+    QApplication::processEvents();
     QFileInfoList children = dir.entryInfoList(); //children has subdirectories and photos
     for(int n = 0; n < children.size(); n++) {
         if(!keep_running) return;
+        if((n % 50)==49) {//For subdir with lots files, be curteous
+            emit now_searching(children[n].baseName());
+            QApplication::processEvents();
+        }
         if(children[n].lastModified() >= last_descent) {//this is either a subdirectory or photo that has been changed
             if(children[n].isDir()) {//directory, recurse into
                 QDir d = dir;
@@ -152,14 +157,15 @@ void Database::descend(QDir &dir, bool isroot)
 void Database::import_photo(QFileInfo qfi)
 {
     bool ok = false;
+    PhotoMetaData pmd = load_metadata(qfi.absoluteFilePath());
     QString relative_file_path = photos_root.relativeFilePath(qfi.absoluteFilePath());
     QString query_str = "SELECT id FROM photos WHERE filepath LIKE '" + relative_file_path + "'";
     QSqlQuery query;
     query.exec(query_str);
     if(query.next())
         query_str = "UPDATE photos SET filepath='" + relative_file_path +
-                "', datetaken=" + QString::number(QDateTime::currentDateTime().toTime_t()) +
-                " WHERE id=" + query.value(0).toString();
+                "', datetaken='" + QString::number(pmd.photo_date.toTime_t()) +
+                "' WHERE id=" + query.value(0).toString();
     else
         query_str = "INSERT INTO photos (id, filepath) values(NULL, '" + relative_file_path +"');";
     query.exec(query_str);
