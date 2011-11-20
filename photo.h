@@ -37,11 +37,13 @@ struct Rational
     QString pretty_print();
 };
 
+enum FileType {PHOTO, MOVIE};
 struct PhotoMetaData
 {
     //Housekeeping
     bool valid;
     QString absolute_file_path;
+    FileType type;
 
     //Read/write properties
     QString caption;//photo caption 2000 characters max

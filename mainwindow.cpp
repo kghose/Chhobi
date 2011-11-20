@@ -109,8 +109,12 @@ void MainWindow::set_preview_photo(PhotoInfo pi)
     }
 
     preview.set_meta_data(pmd);
-    preview.set_pixmap(QPixmap::fromImage(
+    if(pmd.type == PHOTO)
+        preview.set_pixmap(QPixmap::fromImage(
           rotate(preview.get_metadata().rotation_angle, pmI.scaled(ui->QL_preview->size(),Qt::KeepAspectRatio))));
+    else
+        preview.set_pixmap(QPixmap(":/Images/Icons/cholochitro.png"));
+
     ui->QL_preview->setPixmap(preview.get_photo());
     ui->captionEdit->setText(pmd.caption);
     set_datetime(pmd);

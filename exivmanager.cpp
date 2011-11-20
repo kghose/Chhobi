@@ -51,6 +51,7 @@ PhotoMetaData load_metadata(QString absolute_filename)
         exiv_load_rotation(image, pmd, resave);
         exiv_load_date(image, pmd, resave);
         exiv_load_misc_ro(image, pmd, resave);
+        pmd.type = PHOTO;
     }
 
     if(resave) {
@@ -219,11 +220,11 @@ inline void load_sidecar(QString absolute_filename, PhotoMetaData &pmd, bool &re
         resave = true;
     }
 
+    pmd.type = MOVIE;
     pmd.absolute_file_path = info["filename"].toString();
     pmd.photo_date = info["date"].toDateTime();
     pmd.rotation_angle = 0;
     pmd.keywords = info["keywords"].toStringList();
-    qDebug() << info;
 }
 
 void save_metadata(PhotoMetaData pmd)
