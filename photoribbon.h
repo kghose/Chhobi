@@ -17,6 +17,17 @@
  * 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+/*
+  This contains definitions for the photo ribbon gadget.
+
+  PhotoInfo is the simplest structure to carry enough information that will
+  allow us to load the right photo from disk when a preview is requested.
+
+  RibbonTile is an element of the ribbon. Carries PhotoInfo to emit when we
+  hover over it so we can show the right preview.
+
+  PhotoRibbon is the photo ribbon gadget.
+*/
 #ifndef PHOTORIBBON_H
 #define PHOTORIBBON_H
 

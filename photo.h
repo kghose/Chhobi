@@ -17,6 +17,13 @@
  * 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
+/*
+  PhotoMetaData contains the metadata we load from disk when we pull up the
+  photo for display.
+
+  Photo contains the preview photo we are currently displaying
+
+  */
 #ifndef PHOTO_H
 #define PHOTO_H
 

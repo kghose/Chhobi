@@ -28,11 +28,14 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
-    settings_parameters();
-    setup();
+    //for our settings
+    QCoreApplication::setOrganizationName("BengalBionics");
+    QCoreApplication::setOrganizationDomain("bengalbionics.com");
+    QCoreApplication::setApplicationName("Chhobi");
+
+    setup_ui();
     setup_connections();
-    load_photos();
+    load_photo_list();
 }
 
 MainWindow::~MainWindow()
@@ -44,15 +47,10 @@ MainWindow::~MainWindow()
     //settings.clear();
 }
 
-void MainWindow::settings_parameters()
+void MainWindow::setup_ui()
 {
-    QCoreApplication::setOrganizationName("BengalBionics");
-    QCoreApplication::setOrganizationDomain("bengalbionics.com");
-    QCoreApplication::setApplicationName("Chhobi");
-}
+    ui->setupUi(this);
 
-void MainWindow::setup()
-{
     ribbon = new PhotoRibbon();
     ui->QGV_timeline->setScene(ribbon);
 
@@ -87,29 +85,18 @@ void MainWindow::setup_connections()
             ui->QL_preview, SLOT(setText(QString)));
 }
 
-void MainWindow::load_preview_photo(QString absolute_file_name)
+void MainWindow::set_preview_photo(PhotoInfo pi)
 {
-    preview.set_meta_data(load_metadata(absolute_file_name));
+    QString absolute_file_name = photos_root + "/" + pi.relative_file_path;
+    PhotoMetaData pmd = load_metadata(absolute_file_name);
+    preview.set_meta_data(pmd);
     QImage pmI(absolute_file_name);
     if(pmI.isNull())
         pmI.load(":/Images/Icons/chhobi-icon.png");
 
     preview.set_pixmap(QPixmap::fromImage(
           rotate(preview.get_metadata().rotation_angle, pmI.scaled(ui->QL_preview->size(),Qt::KeepAspectRatio))));
-
-}
-
-void MainWindow::set_preview_photo(PhotoInfo pi)
-{
-    QSettings settings;
-    QString photo_root = settings.value("photo root").toString();//Shouldn't need a default
-    QString absolute_file_name = photo_root + "/" + pi.relative_file_path;
-    load_preview_photo(absolute_file_name);
-
-    PhotoMetaData pmd = preview.get_metadata();
-
-    ui->QL_preview->setPixmap(preview.get_photo().scaled(ui->QL_preview->size(),
-                                                          Qt::KeepAspectRatio));
+    ui->QL_preview->setPixmap(preview.get_photo());
     ui->captionEdit->setText(pmd.caption);
     set_datetime(pmd);
     set_metadata_table(pmd);
@@ -230,34 +217,32 @@ void MainWindow::show_preview_external()
 void MainWindow::set_photo_root()
 {
     QSettings settings;
-    QString photo_root = settings.value("photo root", "/").toString();
     QFileDialog::Options options = QFileDialog::DontResolveSymlinks | QFileDialog::ShowDirsOnly | QFileDialog::DontUseNativeDialog;
     QString directory = QFileDialog::getExistingDirectory(this,
                                 tr("Choose photo root"),
-                                photo_root,
+                                settings.value("photo root", "/").toString(),
                                 options);
     if (!directory.isEmpty()) {
         settings.setValue("photo root", directory);
-        load_photos();
+        load_photo_list();
     }
 }
 
 //Disable the mainwindow, open the database, import/refresh new photos, insert
 //them into the ribbon and then return control to the main window
-void MainWindow::load_photos()
+void MainWindow::load_photo_list()
 {
     this->setEnabled(false);
     QSettings settings;
     if(!settings.contains("photo root")) {
         set_photo_root();
     } else {
-        QString photo_root = settings.value("photo root").toString();//Shouldn't need a default
+        photos_root = settings.value("photo root").toString();//Shouldn't need a default
         if(!settings.contains("database file name"))
-            settings.setValue("database file name", QDir::home().absolutePath() + "/Source/Sandbox/Haba/Baba/chhobi.sqlite3");
+            settings.setValue("database file name", QDir::home().absolutePath() + db_location);
         QFileInfo dbpath(settings.value("database file name").toString());
         db.open(dbpath);
-        QStringList name_filters; name_filters << "*.jpg" << "*.jpeg" << "*.png" << "*.tiff" << "*.avi";//TODO other
-        QDir dir(photo_root);
+        QDir dir(photos_root);
         dir.setNameFilters(name_filters);
         dir.setFilter(QDir::AllDirs | QDir::NoDotAndDotDot | QDir::Files);
         dir.setSorting(QDir::Time | QDir::DirsFirst);

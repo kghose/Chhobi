@@ -25,6 +25,9 @@
 #include "photo.h"
 #include "database.h"
 
+const QString db_location = "/Source/Sandbox/Haba/Baba/chhobi.sqlite3";
+const QStringList name_filters = (QStringList() << "*.jpg" << "*.jpeg" << "*.png" << "*.tiff" << "*.avi");//TODO other
+
 namespace Ui {
     class MainWindow;
 }
@@ -43,17 +46,16 @@ private:
 
     PhotoRibbon *ribbon, *hold_ribbon;
     Photo preview;
+    QString photos_root;
     Database db;
 
-    void settings_parameters();
-    void setup();
+    void setup_ui();
     void setup_connections();
 
-    void load_preview_photo(QString absolute_file_name);
     void set_datetime(PhotoMetaData pmd);
     void set_metadata_table(PhotoMetaData pmd);
     void set_keywords_table(PhotoMetaData pmd);
-    void load_photos();
+    void load_photo_list();
     void test();
 
 public slots:
