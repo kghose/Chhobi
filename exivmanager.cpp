@@ -156,7 +156,8 @@ PhotoMetaData load_metadata(QString absolute_filename)
     pmd.focal_length.denominator = focal_len_rat.second;
 
     pmd.camera_model = QString(exifData["Exif.Image.Model"].toString().c_str());
-    pmd.lens_model = exifData[Exiv2::lensName(exifData)->key()].print(&exifData).c_str();
+    if(Exiv2::lensName(exifData) != exifData.end())
+        pmd.lens_model = Exiv2::lensName(exifData)->print(&exifData).c_str();
 
     if(resave) {
         save_metadata(pmd);

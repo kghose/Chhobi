@@ -46,7 +46,7 @@ private:
 
     PhotoRibbon *ribbon, *hold_ribbon;
     Photo preview;
-    QString photos_root;
+    QDir photos_root;
     Database db;
 
     void setup_ui();
@@ -56,7 +56,6 @@ private:
     void set_metadata_table(PhotoMetaData pmd);
     void set_keywords_table(PhotoMetaData pmd);
     void load_photo_list();
-    void test();
 
 public slots:
     void set_photo_root();

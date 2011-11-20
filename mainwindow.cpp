@@ -35,6 +35,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setup_ui();
     setup_connections();
+
+    //setup database
+    QSettings settings;
+    if(!settings.contains("database file name"))
+        settings.setValue("database file name", QDir::home().absolutePath() + db_location);
+    QFileInfo dbpath(settings.value("database file name").toString());
+    db.open(dbpath);
+
     load_photo_list();
 }
 
@@ -87,13 +95,20 @@ void MainWindow::setup_connections()
 
 void MainWindow::set_preview_photo(PhotoInfo pi)
 {
-    QString absolute_file_name = photos_root + "/" + pi.relative_file_path;
-    PhotoMetaData pmd = load_metadata(absolute_file_name);
-    preview.set_meta_data(pmd);
-    QImage pmI(absolute_file_name);
-    if(pmI.isNull())
+    PhotoMetaData pmd;
+    QImage pmI;
+    if(photos_root.exists(pi.relative_file_path)) {
+        QString absolute_file_name = photos_root.absoluteFilePath(pi.relative_file_path);
+        pmd = load_metadata(absolute_file_name);
+        pmI.load(absolute_file_name);
+    } else {//Photo reference in db but not on disk
+        pmd.valid = false;
+        pmd.rotation_angle = 0;
         pmI.load(":/Images/Icons/chhobi-icon.png");
+        db.purge_photo(pi);
+    }
 
+    preview.set_meta_data(pmd);
     preview.set_pixmap(QPixmap::fromImage(
           rotate(preview.get_metadata().rotation_angle, pmI.scaled(ui->QL_preview->size(),Qt::KeepAspectRatio))));
     ui->QL_preview->setPixmap(preview.get_photo());
@@ -199,6 +214,7 @@ void MainWindow::photo_keywords_changed(int row, int col)
 void MainWindow::save_photo_meta_data()
 {
     PhotoMetaData pmd = preview.get_metadata();
+    if(!pmd.valid) return; //in valid metadata, don't bother saving
     pmd.caption = ui->captionEdit->text();
     pmd.photo_date = ui->dateTimeEdit->dateTime();
     preview.set_meta_data(pmd);
@@ -237,11 +253,7 @@ void MainWindow::load_photo_list()
     if(!settings.contains("photo root")) {
         set_photo_root();
     } else {
-        photos_root = settings.value("photo root").toString();//Shouldn't need a default
-        if(!settings.contains("database file name"))
-            settings.setValue("database file name", QDir::home().absolutePath() + db_location);
-        QFileInfo dbpath(settings.value("database file name").toString());
-        db.open(dbpath);
+        photos_root = QDir(settings.value("photo root").toString());//Shouldn't need a default
         QDir dir(photos_root);
         dir.setNameFilters(name_filters);
         dir.setFilter(QDir::AllDirs | QDir::NoDotAndDotDot | QDir::Files);
@@ -251,13 +263,4 @@ void MainWindow::load_photo_list()
         ui->QL_preview->setText("Photos imported");
         this->setEnabled(true);
     }
-}
-
-void MainWindow::test()
-{
-    /*
-    QList<unsigned int> ids;
-    for(int n=0; n < 30000; n++)
-        ids.append(n+1);
-    ribbon->set_ids(ids);*/
 }
