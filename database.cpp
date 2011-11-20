@@ -164,10 +164,11 @@ void Database::import_photo(QFileInfo qfi)
     query.exec(query_str);
     if(query.next())
         query_str = "UPDATE photos SET filepath='" + relative_file_path +
-                "', datetaken='" + QString::number(pmd.photo_date.toTime_t()) +
-                "' WHERE id=" + query.value(0).toString();
+                "', datetaken=" + QString::number(pmd.photo_date.toTime_t()) +
+                " WHERE id=" + query.value(0).toString();
     else
-        query_str = "INSERT INTO photos (id, filepath) values(NULL, '" + relative_file_path +"');";
+        query_str = "INSERT INTO photos (id, filepath, datetaken) values(NULL, '"
+                + relative_file_path +"'," + QString::number(pmd.photo_date.toTime_t()) + ");";
     query.exec(query_str);
     int id = query.lastInsertId().toInt(&ok);
     //save_or_create_keywords(photo);
