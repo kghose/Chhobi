@@ -167,6 +167,14 @@ void Database::import_photo(QFileInfo qfi)
     //save_or_create_keywords(photo);
 }
 
+void Database::purge_photo(PhotoInfo pi)
+{
+    QString query_str = "DELETE FROM photos WHERE id=" + QString::number(pi.id);
+    QSqlQuery query;
+    query.exec(query_str);
+    //gotta get rid of keyword assocs
+}
+
 
 /*
  * sqlite escapes single quotes with another single quote

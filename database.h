@@ -64,6 +64,7 @@ public:
 
     //Misc housekeeping
     void clean_up_keywords_in_database();
+    void purge_photo(PhotoInfo);
 
     //Importing functions
     void descend(QDir &, bool isroot = false);
