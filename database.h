@@ -22,7 +22,7 @@
 
 #include <QtCore>
 #include <QtSql>//from http://doc.trolltech.com/4.3/qtsql.html#details
-
+#include "photoribbon.h"//needed for PhotoInfo
 /*
 Handles all access to the sqlite database. It uses the PhotoMetaData structure
 to pass data back and forth. All the information stored on the database is
@@ -56,11 +56,11 @@ public:
     void set_last_descent(QDateTime qdt) {last_descent = qdt;}
 
     //Retrieval functions
-    QList<unsigned int> get_all_photos();
-    QList<unsigned int> get_photos_with_caption(QString);
-    QList<unsigned int> get_photos_with_keyword(QString);
-    QList<unsigned int> get_photos_with_no_keyword();
-    QList<unsigned int> get_photos_by_sql(QString);
+    QList<PhotoInfo> get_all_photos();
+    QList<PhotoInfo> get_photos_with_caption(QString);
+    QList<PhotoInfo> get_photos_with_keyword(QString);
+    QList<PhotoInfo> get_photos_with_no_keyword();
+    QList<PhotoInfo> get_photos_by_sql(QString);
 
     //Misc housekeeping
     void clean_up_keywords_in_database();

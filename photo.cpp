@@ -33,15 +33,6 @@ Photo::Photo()
 {
 }
 
-//This should fetch us the preview and the metadata
-void Photo::set_photo(unsigned int id)
-{
-    int fno = 5661;
-    absolute_file_path = QString("/Users/kghose/Source/Sandbox/2011-10-16/DSC_")
-            + QString::number(fno+id) + QString(".JPG");
-    preview.load(absolute_file_path);
-}
-
 QUrl Photo::get_photo_url()
 {
     return QUrl("file://" + absolute_file_path);

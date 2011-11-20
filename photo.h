@@ -61,8 +61,6 @@ public:
     void set_meta_data(PhotoMetaData pmd) {meta_data = pmd;}
     void set_pixmap(QPixmap pm) {preview=pm;}
 
-    void set_photo(unsigned int id); //fetch the photo and metadata
-
     QPixmap get_photo() {return preview;}  //return the preview pixmap
     QString get_absolute_file_path() {return absolute_file_path;} //return where this thing is on disk
     PhotoMetaData get_metadata() {return meta_data;}

@@ -67,12 +67,12 @@ void MainWindow::setup_connections()
             this, SLOT(set_photo_root()));
 
     //Ribbon
-    QObject::connect(ribbon, SIGNAL(preview_id(unsigned int)),
-            this, SLOT(set_preview_photo(unsigned int)));
+    QObject::connect(ribbon, SIGNAL(preview_id(PhotoInfo)),
+            this, SLOT(set_preview_photo(PhotoInfo)));
     QObject::connect(ribbon, SIGNAL(selectionChanged()),
             this, SLOT(ribbon_selection_changed()));
-    QObject::connect(hold_ribbon, SIGNAL(preview_id(unsigned int)),
-            this, SLOT(set_preview_photo(unsigned int)));
+    QObject::connect(hold_ribbon, SIGNAL(preview_id(PhotoInfo)),
+            this, SLOT(set_preview_photo(PhotoInfo)));
 
     //Editing controls
     QObject::connect(ui->captionEdit, SIGNAL(textEdited(QString)),
@@ -99,12 +99,11 @@ void MainWindow::load_preview_photo(QString absolute_file_name)
 
 }
 
-void MainWindow::set_preview_photo(unsigned int id)
+void MainWindow::set_preview_photo(PhotoInfo pi)
 {
-    int fno = 5661;
-    QString absolute_file_name = QString("/Users/kghose/Source/Sandbox/2011-10-16/DSC_")
-            + QString::number(fno+id) + QString(".JPG");
-    preview.set_photo(id);
+    QSettings settings;
+    QString photo_root = settings.value("photo root").toString();//Shouldn't need a default
+    QString absolute_file_name = photo_root + "/" + pi.relative_file_path;
     load_preview_photo(absolute_file_name);
 
     PhotoMetaData pmd = preview.get_metadata();
@@ -271,8 +270,9 @@ void MainWindow::load_photos()
 
 void MainWindow::test()
 {
+    /*
     QList<unsigned int> ids;
     for(int n=0; n < 30000; n++)
         ids.append(n+1);
-    ribbon->set_ids(ids);
+    ribbon->set_ids(ids);*/
 }

@@ -37,7 +37,7 @@ bool Database::create_db() {
     qDebug() << "Creating brand new database " << db.databaseName();
     QSqlQuery query;
     query.exec("create table photos("
-        "id INTEGER PRIMARY KEY, caption text, filepath text);");
+        "id INTEGER PRIMARY KEY, filepath text, caption text, datetaken integer);");
     query.exec("create table keywords("
         "id INTEGER PRIMARY KEY,"
         "keyword text);");
@@ -65,33 +65,37 @@ bool Database::open(QFileInfo dbpath)//Open or create a database in dbdir
 }
 
 //Retrieval functions
-QList<unsigned int> Database::get_all_photos()
+QList<PhotoInfo> Database::get_all_photos()
 {
-    return get_photos_by_sql("SELECT * FROM photos ORDER BY date DESC");
+    return get_photos_by_sql("SELECT id,filepath FROM photos ORDER BY datetaken DESC");
 }
 
-QList<unsigned int> Database::get_photos_with_caption(QString)
+QList<PhotoInfo> Database::get_photos_with_caption(QString)
 {
-    ;//return get_photos_by_sql("SELECT * FROM photos WHERE caption LIKE '' ORDER BY date DESC");
+    ;//return get_photos_by_sql("SELECT * FROM photos WHERE caption LIKE '' ORDER BY datetaken DESC");
 }
 
-QList<unsigned int> Database::get_photos_with_keyword(QString)
-{
-    ;
-}
-
-QList<unsigned int> Database::get_photos_with_no_keyword()
+QList<PhotoInfo> Database::get_photos_with_keyword(QString)
 {
     ;
 }
 
-QList<unsigned int> Database::get_photos_by_sql(QString query_str)
+QList<PhotoInfo> Database::get_photos_with_no_keyword()
+{
+    ;
+}
+
+QList<PhotoInfo> Database::get_photos_by_sql(QString query_str)
 {
     QSqlQuery query;
-    QList<unsigned int> pl;
+    QList<PhotoInfo> pl;
     query.exec(query_str);
-    while(query.next())
-        pl.append(query.value(0).toInt());
+    while(query.next()) {
+        PhotoInfo this_pi;
+        this_pi.id = query.value(0).toInt();
+        this_pi.relative_file_path = query.value(1).toString();
+        pl.append(this_pi);
+    }
     qDebug() << pl.count();
     return pl;
 }
@@ -147,7 +151,9 @@ void Database::import_photo(QFileInfo qfi)
     QSqlQuery query;
     query.exec(query_str);
     if(query.next())
-        query_str = "UPDATE photos SET filepath='" + relative_file_path + "' WHERE id=" + query.value(0).toString();
+        query_str = "UPDATE photos SET filepath='" + relative_file_path +
+                "', datetaken=" + QString::number(QDateTime::currentDateTime().toTime_t()) +
+                " WHERE id=" + query.value(0).toString();
     else
         query_str = "INSERT INTO photos (id, filepath) values(NULL, '" + relative_file_path +"');";
     query.exec(query_str);

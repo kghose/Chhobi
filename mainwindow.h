@@ -58,7 +58,7 @@ private:
 
 public slots:
     void set_photo_root();
-    void set_preview_photo(unsigned int id);
+    void set_preview_photo(PhotoInfo);
     void ribbon_selection_changed();
     void show_preview_external();
     void photo_caption_changed();
