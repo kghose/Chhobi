@@ -112,4 +112,3 @@ The recipe, then is (shown using the QT framework)
         thedatetime.setTime_t(the_time.st_birthtimespec.tv_sec);
         qDebug() << thedatetime;
     }
-
