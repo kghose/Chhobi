@@ -155,7 +155,6 @@ inline void exiv_load_date(Exiv2::Image::AutoPtr &image, PhotoMetaData &pmd, boo
     Exiv2::ExifData exifData = image->exifData();
     //grab image take date
     QString rawDate = exifData["Exif.Photo.DateTimeOriginal"].toString().c_str();
-    qDebug() << rawDate;
     QString day_format = "yyyy:MM:dd",
             time_format = "hh:mm:ss";
     pmd.photo_date = QDateTime(QDate::fromString(rawDate.left(10), day_format),
@@ -223,6 +222,7 @@ inline void load_sidecar(QString absolute_filename, PhotoMetaData &pmd, bool &re
     pmd.type = MOVIE;
     pmd.absolute_file_path = info["filename"].toString();
     pmd.photo_date = info["date"].toDateTime();
+    pmd.photo_date.setTimeSpec(Qt::UTC);//see garrulous note in exiv_load_date above
     pmd.rotation_angle = 0;
     pmd.keywords = info["keywords"].toStringList();
 }
