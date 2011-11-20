@@ -96,7 +96,6 @@ QList<PhotoInfo> Database::get_photos_by_sql(QString query_str)
         this_pi.relative_file_path = query.value(1).toString();
         pl.append(this_pi);
     }
-    qDebug() << pl.count();
     return pl;
 }
 

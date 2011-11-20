@@ -3,12 +3,16 @@
 #include <exiv2/easyaccess.hpp> //for lensName and other convenience functions
 #include <cassert> //Needed for assert
 
+const QStringList sidecar_types = (QStringList("avi") << "mov");
+
 PhotoMetaData load_metadata(QString absolute_filename)
 {
     PhotoMetaData pmd;
     pmd.absolute_file_path = absolute_filename;
     pmd.valid = true;
-    if(!QFileInfo(absolute_filename).exists()) {
+    QFileInfo qfi(absolute_filename);
+
+    if(!qfi.exists()) {
         exiv_bad_metadata(pmd);
         return pmd;
     }
@@ -20,22 +24,26 @@ PhotoMetaData load_metadata(QString absolute_filename)
     //to IPTC standard - we need to resave it
     bool resave = false;
 
-    try {
-        image =
-        Exiv2::ImageFactory::open(absolute_filename.toStdString());
-        assert (image.get() != 0);
-        image->readMetadata();
-    } catch (Exiv2::AnyError& e) {
-        qDebug() << "Caught Exiv2 exception '" << QString(e.what()) << "'";
-        exiv_bad_metadata(pmd);
-        return pmd;
-    }
+    if(sidecar_types.contains(qfi.suffix(), Qt::CaseInsensitive)) {//exiv2 can't read/write metadata
+        load_sidecar(absolute_filename, pmd, resave);
+    } else {//exiv2 can r/w metadata
+        try {
+            image =
+            Exiv2::ImageFactory::open(absolute_filename.toStdString());
+            assert (image.get() != 0);
+            image->readMetadata();
+        } catch (Exiv2::AnyError& e) {
+            qDebug() << "Caught Exiv2 exception '" << QString(e.what()) << "'";
+            exiv_bad_metadata(pmd);
+            return pmd;
+        }
 
-    image->readMetadata();
-    ipct_load_caption_and_keywords(image, pmd, resave);
-    exiv_load_rotation(image, pmd, resave);
-    exiv_load_date(image, pmd, resave);
-    exiv_load_misc_ro(image, pmd, resave);
+        image->readMetadata();
+        ipct_load_caption_and_keywords(image, pmd, resave);
+        exiv_load_rotation(image, pmd, resave);
+        exiv_load_date(image, pmd, resave);
+        exiv_load_misc_ro(image, pmd, resave);
+    }
 
     if(resave) {
         save_metadata(pmd);
@@ -190,11 +198,33 @@ inline void exiv_load_misc_ro(Exiv2::Image::AutoPtr &image, PhotoMetaData &pmd, 
 //For movie and other files that don't have metadata on file
 inline void load_sidecar(QString absolute_filename, PhotoMetaData &pmd, bool &resave)
 {
+    QFile file(absolute_filename + ".meta");
+    QHash<QString,QVariant> info;
+    if(file.open(QIODevice::ReadOnly)) {
+        QDataStream in(&file);
+        in >> info;
+    } else {
+        info["date"] = QVariant(QDateTime::currentDateTime().toString("dd.MM.yyyy:hh:mm:ss"));
+        info["filename"] = QVariant(absolute_filename);
+        info["keywords"] = QVariant(QStringList());
+        resave = true;
+    }
 
+    pmd.absolute_file_path = info["filename"].toString();
+    pmd.photo_date = info["date"].toDateTime();
+    pmd.rotation_angle = 0;
+    pmd.keywords = info["keywords"].toStringList();
+    qDebug() << info;
 }
 
 void save_metadata(PhotoMetaData pmd)
 {
+    QFileInfo qfi(pmd.absolute_file_path);
+    if(sidecar_types.contains(qfi.suffix(), Qt::CaseInsensitive)) {//exiv2 can't read/write metadata
+        save_sidecar(qfi.absoluteFilePath(), pmd);
+        return;
+    }
+
     //TODO error handling
     Exiv2::Image::AutoPtr image =
     Exiv2::ImageFactory::open(pmd.absolute_file_path.toStdString());
@@ -259,7 +289,18 @@ void save_metadata(PhotoMetaData pmd)
     //return true;
 }
 
-inline void save_sidecar(QString absolute_filename, PhotoMetaData pmd)
+inline void save_sidecar(QString absolute_filename, PhotoMetaData &pmd)
 {
+    QFile file(absolute_filename + ".meta");
+    QHash<QString,QVariant> info;
+    info["date"] = QVariant(pmd.photo_date);
+    info["filename"] = QVariant(pmd.absolute_file_path);
+    info["keywords"] = QVariant(pmd.keywords);
 
+    if(file.open(QIODevice::WriteOnly)) {
+        QDataStream out(&file);
+        out << info;
+    } else {
+        qDebug() << "Error saving metadata";
+    }
 }
