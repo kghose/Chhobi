@@ -138,7 +138,7 @@ void Database::descend(QDir &dir, bool isroot)
     QFileInfoList children = dir.entryInfoList(); //children has subdirectories and photos
     for(int n = 0; n < children.size(); n++) {
         if(!keep_running) return;
-        if((n % 50)==49) {//For subdir with lots files, be curteous
+        if((n % 50)==49) {//For subdir with lots files, be courteous
             emit now_searching(children[n].baseName());
             QApplication::processEvents();
         }
