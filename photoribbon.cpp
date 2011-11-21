@@ -22,7 +22,7 @@
 RibbonTile::RibbonTile(unsigned int tile_width) : QGraphicsRectItem()
 {
     state = NORMAL;
-    setRect(0,0,.85*tile_width,.85*tile_width);//Dashes are better usability
+    setRect(0,0,.95*tile_width,5*tile_width);//Dashes are better usability
     setFlag(QGraphicsItem::ItemIsSelectable);//Vital for rubberband selection
     setAcceptHoverEvents(true);//This is how we preview
 }
@@ -51,7 +51,7 @@ void RibbonTile::hoverEnterEvent(QGraphicsSceneHoverEvent * event)
 PhotoRibbon::PhotoRibbon(QObject *parent) :
     QGraphicsScene(parent)
 {
-    tile_width = 15;
+    tile_width = 5;
     preview_tile = NULL;
     setBackgroundBrush(Qt::black);
 }
