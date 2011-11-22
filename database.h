@@ -62,13 +62,10 @@ public:
     QList<PhotoInfo> get_photos_with_no_keyword();
     QList<PhotoInfo> get_photos_by_sql(QString);
 
-    //Misc housekeeping
-    void clean_up_keywords_in_database();
-    void purge_photo(PhotoInfo);
-
-    //Importing functions
+    //Importing and other functions
     void descend(QDir &, bool isroot = false);
     void import_photo(QFileInfo );
+    void purge_photo(PhotoInfo);
 
 signals:
     void now_searching(const QString &);//keep informed of current search
@@ -78,6 +75,10 @@ public slots:
 
 private:
     bool create_db(); //create a new empty database
+
+    //Misc housekeeping
+    void clean_up_keywords_in_database();
+    void insert_keywords(QStringList);
 };
 
 QString sqlite_escape(QString strin);

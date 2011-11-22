@@ -37,13 +37,10 @@ bool Database::create_db() {
     qDebug() << "Creating brand new database " << db.databaseName();
     QSqlQuery query;
     query.exec("create table photos("
-        "id INTEGER PRIMARY KEY, filepath text, caption text, datetaken integer);");
+        "id INTEGER PRIMARY KEY, filepath text, caption text, keywords text, datetaken integer, tile_color integer);");
     query.exec("create table keywords("
         "id INTEGER PRIMARY KEY,"
         "keyword text);");
-    query.exec("create table photos_keywords("
-        "photo_id integer,"
-        "keyword_id integer);");
     //TODO: error checking
     return true;
 }
@@ -88,6 +85,7 @@ QList<PhotoInfo> Database::get_photos_with_no_keyword()
 QList<PhotoInfo> Database::get_photos_by_sql(QString query_str)
 {
     QSqlQuery query;
+    query.setForwardOnly(true);//should save memory
     QList<PhotoInfo> pl;
     query.exec(query_str);
     while(query.next()) {
@@ -163,20 +161,32 @@ void Database::import_photo(QFileInfo qfi)
 {
     bool ok = false;
     PhotoMetaData pmd = load_metadata(qfi.absoluteFilePath());
+    int cnt = pmd.keywords.count();
+    QString kwds;
+    for(int i=0; i<cnt; i++)
+        kwds += "<" + pmd.keywords[i] + ">";
+
     QString relative_file_path = photos_root.relativeFilePath(qfi.absoluteFilePath());
     QString query_str = "SELECT id FROM photos WHERE filepath LIKE '" + relative_file_path + "'";
     QSqlQuery query;
     query.exec(query_str);
     if(query.next())
-        query_str = "UPDATE photos SET filepath='" + relative_file_path +
-                "', datetaken=" + QString::number(pmd.photo_date.toTime_t()) +
+        query_str = "UPDATE photos SET "
+                "filepath='" + relative_file_path + "',"
+                "caption='" + pmd.caption + "',"
+                "keywords='" + kwds + "',"
+                "datetaken=" + QString::number(pmd.photo_date.toTime_t()) +
                 " WHERE id=" + query.value(0).toString();
     else
-        query_str = "INSERT INTO photos (id, filepath, datetaken) values(NULL, '"
-                + relative_file_path +"'," + QString::number(pmd.photo_date.toTime_t()) + ");";
+        query_str = "INSERT INTO photos (id, filepath, caption, keywords, datetaken) VALUES("
+                "NULL,"
+                "'" + relative_file_path +"',"
+                "'" + pmd.caption +"',"
+                "'" + kwds +"'," +
+                QString::number(pmd.photo_date.toTime_t()) +");";
     query.exec(query_str);
-    int id = query.lastInsertId().toInt(&ok);
-    //save_or_create_keywords(photo);
+    //int id = query.lastInsertId().toInt(&ok);
+    insert_keywords(pmd.keywords);
 }
 
 void Database::purge_photo(PhotoInfo pi)
@@ -184,9 +194,23 @@ void Database::purge_photo(PhotoInfo pi)
     QString query_str = "DELETE FROM photos WHERE id=" + QString::number(pi.id);
     QSqlQuery query;
     query.exec(query_str);
-    //gotta get rid of keyword assocs
+    //gotta get rid of keyword assocs?
 }
 
+void Database::insert_keywords(QStringList kwl)
+{
+    int cnt = kwl.count();
+    QSqlQuery query;
+    QString query_str;
+    for(int i=0; i<cnt; i++) {
+        query_str = "SELECT id FROM keywords WHERE keyword LIKE '" + kwl[i] + "'";
+        query.exec(query_str);
+        if(!query.next()) {
+            query_str = "INSERT INTO keywords (id, keyword) VALUES(NULL, '" + kwl[i] + "')";
+            query.exec(query_str);
+        }
+    }
+}
 
 /*
  * sqlite escapes single quotes with another single quote
