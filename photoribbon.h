@@ -70,7 +70,7 @@ class PhotoRibbon : public QGraphicsScene
 {
     Q_OBJECT
 
-    unsigned int item_count, tile_width;
+    unsigned int item_count, tile_size, columns;
     RibbonTile *preview_tile;
 
 public:

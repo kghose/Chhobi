@@ -22,7 +22,7 @@
 RibbonTile::RibbonTile(unsigned int tile_width) : QGraphicsRectItem()
 {
     state = NORMAL;
-    setRect(0,0,.95*tile_width,5*tile_width);//Dashes are better usability
+    setRect(0,0,.95*tile_width,.95*tile_width);//Dashes are better usability
     setFlag(QGraphicsItem::ItemIsSelectable);//Vital for rubberband selection
     setAcceptHoverEvents(true);//This is how we preview
 }
@@ -32,11 +32,11 @@ void RibbonTile::paint(QPainter *painter,
            QWidget *widget)
 {
     if(isSelected())
-        setBrush(Qt::white);
+        setPen(QPen(Qt::white));
     else if(state==PREVIEW)
-        setBrush(Qt::blue);
+        setPen(QPen(Qt::blue));
     else
-        setBrush(Qt::gray);
+        setPen(QPen(Qt::gray));
     //we'll do our own painting of the selection indicator thank you.
     QStyleOptionGraphicsItem myoption = (*option);
     myoption.state &= !QStyle::State_Selected;
@@ -51,7 +51,8 @@ void RibbonTile::hoverEnterEvent(QGraphicsSceneHoverEvent * event)
 PhotoRibbon::PhotoRibbon(QObject *parent) :
     QGraphicsScene(parent)
 {
-    tile_width = 5;
+    tile_size = 10;
+    columns = 16; //do this from measurement of view port? or set this?
     preview_tile = NULL;
     setBackgroundBrush(Qt::black);
 }
@@ -61,18 +62,25 @@ void PhotoRibbon::set_ids(QList<PhotoInfo> ids)
 {
     clear();//memory leak or not?
     QList<PhotoInfo>::iterator i;
-    int x = 0;
+    int x = 0, y = 0, col = 0;
     for (i = ids.begin(); i != ids.end(); ++i) {
-        RibbonTile *rt = new RibbonTile(tile_width);
+        RibbonTile *rt = new RibbonTile(tile_size);
         rt->set_pi(*i);
-        rt->setPos(x,0);
+        rt->setPos(x,y);
+        rt->setBrush(QBrush(QColor(qrand()%256,qrand()%256,qrand()%256)));
         addItem((QGraphicsItem *)rt);
         QObject::connect(rt, SIGNAL(preview(RibbonTile *)),
                 this, SLOT(set_preview_tile(RibbonTile *)));
 
-        x += tile_width;
+        x += tile_size;
+        col += 1;
+        if(col == columns) {
+            x = 0;
+            y += tile_size;
+            col = 0;
+        }
     }
-    setSceneRect(-10, 0, x+20,20);
+    setSceneRect(-5, -5, columns*tile_size+20, y+20);
 }
 
 //Add stuff to the current list (only if they are not already present)
@@ -82,20 +90,31 @@ void PhotoRibbon::add_ids(QList<PhotoInfo> new_ids)
     QList<PhotoInfo>::iterator i_old;
     QList<PhotoInfo>::iterator i_new;
 
-    int x = tile_width * old_ids.count();
+
+    int col = old_ids.count()%columns,
+        x = col*tile_size,
+        y = (old_ids.count()/columns)*tile_size;
+
     for (i_new = new_ids.begin(); i_new != new_ids.end(); ++i_new) {
         if(!old_ids.contains(*i_new)){
-            RibbonTile *rt = new RibbonTile(tile_width);
+            RibbonTile *rt = new RibbonTile(tile_size);
             rt->set_pi(*i_new);
-            rt->setPos(x,15);
+            rt->setPos(x,y);
             addItem((QGraphicsItem *)rt);
             QObject::connect(rt, SIGNAL(preview(RibbonTile *)),
                     this, SLOT(set_preview_tile(RibbonTile *)));
-            x += tile_width;
+            x += tile_size;
+            col += 1;
+            if(col == columns) {
+                x = 0;
+                y += tile_size;
+                col=0;
+            }
         }
     }
-    setSceneRect(-10, 0, x+20,20);
+    setSceneRect(-10, 0, columns*tile_size+20,y+20);
 }
+
 
 void PhotoRibbon::set_preview_tile(RibbonTile *prt)
 {
