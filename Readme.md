@@ -30,7 +30,6 @@ ways. The pictures in the set can be copied into a new folder (resized) if
 asked for, and the copies can be dropped into a mail program or other external
 application.
 
-
 License (GPL)
 =============
 Chhobi is free software; you can redistribute it and/or modify
@@ -46,6 +45,31 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with
 Chhobi; if not, write to the Free Software Foundation, Inc.,
 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+Some design choices
+===================
+Most design choices have been made that make the user experience less "slick"
+but make the code more straightforward and less complicated and thus less
+prone to bugs
+
+Changes
+-------
+When we change photos (change the caption/keywords/date) they are not immediately
+propagated (mirrored) to the database. Instead they are retrieved on the next
+load (or can be manually forced). This means that changes are visible immediately
+(since the metadata is loaded directly from the photo) but any searches/ordering
+will reflect the old data until a refresh or restart is done.
+
+This simplifies the code, speeds up the operations and is of minimal annoyance
+in day to day use.
+
+Keywords
+--------
+* No longer stored in an association table, kept in a simple text field
+* When keywords are deleted or an image is purged the keyword list is not updated.
+This leads to "empty" keywords i.e. keywords which will not fetch any results
+Again, a force "refresh" will cause this to be updated.
+
 
 Code layout
 ===========
@@ -125,6 +149,7 @@ TODO
 ====
 1. [DONE] Put absolute filename in status bar
 1. [DONE] Last modified for directories working correctly i.e. are changed files retrawled?
+1. [DONE] SQL queries bind values
 1. Holding table mailing + copy to separate directory + resize as needed
 1. Step through pictures
 1. Phonon to view videos

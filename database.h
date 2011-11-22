@@ -81,6 +81,4 @@ private:
     void insert_keywords(QStringList);
 };
 
-QString sqlite_escape(QString strin);
-
 #endif /*DATABASE_H_*/

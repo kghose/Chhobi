@@ -124,6 +124,7 @@ void Database::descend(QDir &dir, bool isroot)
         photos_root = dir;
         QSettings settings;
         last_descent = settings.value("last descent").toDateTime();
+        db.transaction();//TODO check for errors
     }
     if(!keep_running) return;//best to quit out without changing anything
     emit now_searching(photos_root.relativeFilePath(dir.path()));
@@ -150,9 +151,12 @@ void Database::descend(QDir &dir, bool isroot)
             }
         }
     }
-    if(isroot) {//If we've got this far, we were allowed to finish our crawl
-        QSettings settings;
-        settings.setValue("last descent", QDateTime::currentDateTime());
+    if(isroot) {
+        db.commit();//TODO error checking
+        if(keep_running) {//If we've got this far, we were allowed to finish our crawl
+            QSettings settings;
+            settings.setValue("last descent", QDateTime::currentDateTime());
+        }
     }
 }
 
@@ -167,33 +171,35 @@ void Database::import_photo(QFileInfo qfi)
         kwds += "<" + pmd.keywords[i] + ">";
 
     QString relative_file_path = photos_root.relativeFilePath(qfi.absoluteFilePath());
-    QString query_str = "SELECT id FROM photos WHERE filepath LIKE '" + relative_file_path + "'";
+    //QString query_str = "SELECT id FROM photos WHERE filepath LIKE '" + relative_file_path + "'";
     QSqlQuery query;
-    query.exec(query_str);
-    if(query.next())
-        query_str = "UPDATE photos SET "
-                "filepath='" + relative_file_path + "',"
-                "caption='" + pmd.caption + "',"
-                "keywords='" + kwds + "',"
-                "datetaken=" + QString::number(pmd.photo_date.toTime_t()) +
-                " WHERE id=" + query.value(0).toString();
-    else
-        query_str = "INSERT INTO photos (id, filepath, caption, keywords, datetaken) VALUES("
-                "NULL,"
-                "'" + relative_file_path +"',"
-                "'" + pmd.caption +"',"
-                "'" + kwds +"'," +
-                QString::number(pmd.photo_date.toTime_t()) +");";
-    query.exec(query_str);
+    query.prepare("SELECT id FROM photos WHERE filepath LIKE :rfp");
+    query.bindValue(":rfp", relative_file_path);
+    query.exec();
+    if(query.next()) {
+        int id = query.value(0).toInt();
+        query.prepare("UPDATE photos SET filepath=:filepath, caption=:caption, "
+                      "keywords=:keywords, datetaken=:datetaken WHERE id=:id");
+        query.bindValue(":id", id);
+    } else {
+        query.prepare("INSERT INTO photos (id, filepath, caption, keywords, datetaken) "
+                      "VALUES(NULL, :filepath, :caption, :keywords, :datetaken)");
+    }
+    query.bindValue(":filepath", relative_file_path);
+    query.bindValue(":caption", pmd.caption);
+    query.bindValue(":keywords", kwds);
+    query.bindValue(":datetaken", pmd.photo_date);
+    query.exec();
     //int id = query.lastInsertId().toInt(&ok);
     insert_keywords(pmd.keywords);
 }
 
 void Database::purge_photo(PhotoInfo pi)
 {
-    QString query_str = "DELETE FROM photos WHERE id=" + QString::number(pi.id);
     QSqlQuery query;
-    query.exec(query_str);
+    query.prepare("DELETE FROM photos WHERE id=:id");
+    query.bindValue(":id", pi.id);
+    query.exec();
     //gotta get rid of keyword assocs?
 }
 
@@ -201,21 +207,14 @@ void Database::insert_keywords(QStringList kwl)
 {
     int cnt = kwl.count();
     QSqlQuery query;
-    QString query_str;
     for(int i=0; i<cnt; i++) {
-        query_str = "SELECT id FROM keywords WHERE keyword LIKE '" + kwl[i] + "'";
-        query.exec(query_str);
+        query.prepare("SELECT id FROM keywords WHERE keyword LIKE :keyword");
+        query.bindValue(":keyword", kwl[i]);
+        query.exec();
         if(!query.next()) {
-            query_str = "INSERT INTO keywords (id, keyword) VALUES(NULL, '" + kwl[i] + "')";
-            query.exec(query_str);
+            query.prepare("INSERT INTO keywords (id, keyword) VALUES(NULL,:keyword)");
+            query.bindValue(":keyword", kwl[i]);
+            query.exec();
         }
     }
-}
-
-/*
- * sqlite escapes single quotes with another single quote
- * http://www.mail-archive.com/sqlite-users@sqlite.org/msg16753.html
- */
-QString sqlite_escape(QString strin) {
-    return strin.replace("'","''");
 }
