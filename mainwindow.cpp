@@ -101,7 +101,16 @@ void MainWindow::set_preview_photo(PhotoInfo pi)
     QImage pmI;
     if(photos_root.exists(pi.relative_file_path)) {
         pmd = load_metadata(absolute_file_name);
-        pmI.load(absolute_file_name);
+        QImageReader qir(absolute_file_name);
+        QSize orig = qir.size();
+        float ratio = 0;
+        if(orig.width() > orig.height())
+            ratio = (float)ui->QL_preview->size().width()/(float)orig.width();
+        else
+            ratio = (float)ui->QL_preview->size().height()/(float)orig.height();
+        qir.setScaledSize(ratio*orig);
+        pmI = qir.read();
+        //pmI.load(absolute_file_name);
     } else {//Photo reference in db but not on disk
         pmd.valid = false;
         pmd.rotation_angle = 0;
