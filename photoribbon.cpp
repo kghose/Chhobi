@@ -67,7 +67,10 @@ void PhotoRibbon::set_ids(QList<PhotoInfo> ids)
         RibbonTile *rt = new RibbonTile(tile_size);
         rt->set_pi(*i);
         rt->setPos(x,y);
-        rt->setBrush(QBrush(QColor(qrand()%256,qrand()%256,qrand()%256)));
+        int r = ((*i).tile_color >> 16) & 0xff,
+            g = ((*i).tile_color >> 8) & 0xff,
+            b = ((*i).tile_color) & 0xff;
+        rt->setBrush(QBrush(QColor(r,g,b)));
         addItem((QGraphicsItem *)rt);
         QObject::connect(rt, SIGNAL(preview(RibbonTile *)),
                 this, SLOT(set_preview_tile(RibbonTile *)));

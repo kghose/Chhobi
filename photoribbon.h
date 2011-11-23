@@ -36,7 +36,7 @@
 //Just a basic struct to carry some useful photo info
 struct PhotoInfo
 {
-    unsigned int id;
+    unsigned int id, tile_color;
     QString relative_file_path;
     bool operator ==(PhotoInfo o_pi) {return o_pi.id == id ? true : false;}//needed for list 'contains'
 };

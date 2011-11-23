@@ -64,7 +64,7 @@ bool Database::open(QFileInfo dbpath)//Open or create a database in dbdir
 //Retrieval functions
 QList<PhotoInfo> Database::get_all_photos()
 {
-    return get_photos_by_sql("SELECT id,filepath FROM photos ORDER BY datetaken DESC");
+    return get_photos_by_sql("SELECT id,filepath,tile_color FROM photos ORDER BY datetaken DESC");
 }
 
 QList<PhotoInfo> Database::get_photos_with_caption(QString)
@@ -92,6 +92,7 @@ QList<PhotoInfo> Database::get_photos_by_sql(QString query_str)
         PhotoInfo this_pi;
         this_pi.id = query.value(0).toInt();
         this_pi.relative_file_path = query.value(1).toString();
+        this_pi.tile_color = query.value(2).toInt();
         pl.append(this_pi);
     }
     return pl;
@@ -160,6 +161,32 @@ void Database::descend(QDir &dir, bool isroot)
     }
 }
 
+int compute_tile_color(QFileInfo qfi)
+{
+    QImage pmI(qfi.absoluteFilePath());
+    int this_rgb, mean_r = 0, mean_g = 0, mean_b = 0, N = 100;
+    for(int i=0; i<N; i++) {
+        int x = qrand()%pmI.width(), y = qrand()%pmI.height();
+        this_rgb = pmI.pixel(x,y) & 0xffffff;
+        mean_r += (this_rgb >> 16) & 0xff;
+        mean_g += (this_rgb >> 8) & 0xff;
+        mean_b += (this_rgb) & 0xff;
+    }
+    return (((mean_r/N) & 0xff) << 16)  + (((mean_g/N) & 0xff) << 8) + ((mean_b/N) & 0xff);
+
+/*
+    float et = float(pmd.exposure_time.numerator)/float(pmd.exposure_time.denominator),
+          fn = float(pmd.fnumber.numerator)/float(pmd.fnumber.denominator),
+          iso = float(pmd.iso);
+    int   r = (200./iso)*255,
+          g = (.01/et)*255,
+          b = ((1/3.4)/fn)*255;
+    r = r > 255 ? 255 : r;
+    g = g > 255 ? 255 : r;
+    b = b > 255 ? 255 : r;*/
+}
+
+
 //This is a new photo to be inserted into the database
 void Database::import_photo(QFileInfo qfi)
 {
@@ -179,16 +206,20 @@ void Database::import_photo(QFileInfo qfi)
     if(query.next()) {
         int id = query.value(0).toInt();
         query.prepare("UPDATE photos SET filepath=:filepath, caption=:caption, "
-                      "keywords=:keywords, datetaken=:datetaken WHERE id=:id");
+                      "keywords=:keywords, datetaken=:datetaken, tile_color=:tile_color WHERE id=:id");
         query.bindValue(":id", id);
     } else {
-        query.prepare("INSERT INTO photos (id, filepath, caption, keywords, datetaken) "
-                      "VALUES(NULL, :filepath, :caption, :keywords, :datetaken)");
+        query.prepare("INSERT INTO photos (id, filepath, caption, keywords, datetaken, tile_color) "
+                      "VALUES(NULL, :filepath, :caption, :keywords, :datetaken, :tile_color)");
     }
     query.bindValue(":filepath", relative_file_path);
     query.bindValue(":caption", pmd.caption);
     query.bindValue(":keywords", kwds);
     query.bindValue(":datetaken", pmd.photo_date);
+    if(pmd.type==PHOTO)
+        query.bindValue(":tile_color", compute_tile_color(qfi));
+    else
+        query.bindValue(":tile_color", 0xff00ff);
     query.exec();
     //int id = query.lastInsertId().toInt(&ok);
     insert_keywords(pmd.keywords);
