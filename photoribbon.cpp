@@ -114,12 +114,17 @@ void PhotoRibbon::add_tiles(QList<PhotoInfo> new_tiles,
 //previewed photo constant and not changing as we move the mouse
 void PhotoRibbon::toggle_preview_tile_lock()
 {
-    if(selectedItems().count() == 0) {
+    if(selectedItems().count() == 0) {//We wanna unlock things
         preview_locked = false;
         if(preview_tile != NULL)
             preview_tile->unset_preview();
-    } else
-        preview_locked = true;
+    } else {//We might wanna change the selected tile
+        if(selectedItems().count() == 1) {//Yes, we really do
+            preview_locked = false;
+            set_preview_tile((RibbonTile *)selectedItems()[0]);
+            preview_locked = true;
+        }
+    }
 }
 
 void PhotoRibbon::set_preview_tile(RibbonTile *prt)
@@ -159,4 +164,7 @@ void PhotoRibbon::keyPressEvent(QKeyEvent *keyEvent)
 {
     if(keyEvent->key() == Qt::Key_H)
         emit hold();
+    else if(keyEvent->key() == Qt::Key_Escape)
+        clearSelection();
+    QGraphicsScene::keyPressEvent(keyEvent);
 }
