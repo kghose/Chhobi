@@ -191,7 +191,7 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 //in the holding ribbon
 void MainWindow::ribbon_selection_changed()
 {
-    hold_ribbon->add_ids(ribbon->get_selected_ids());
+    hold_ribbon->append_tiles(ribbon->get_selected_tiles());
 }
 
 void MainWindow::photo_caption_changed()
@@ -276,7 +276,7 @@ void MainWindow::load_photo_list()
         dir.setFilter(QDir::AllDirs | QDir::NoDotAndDotDot | QDir::Files);
         dir.setSorting(QDir::Time | QDir::DirsFirst);
         db.descend(dir, true);//true -> this is a root
-        ribbon->set_ids(db.get_all_photos());
+        ribbon->replace_tiles(db.get_all_photos());
         ui->QL_preview->setText("Photos imported");
         this->setEnabled(true);
     }

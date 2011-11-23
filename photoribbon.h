@@ -75,10 +75,10 @@ class PhotoRibbon : public QGraphicsScene
 
 public:
     explicit PhotoRibbon(QObject *parent = 0);
-    void set_ids(QList<PhotoInfo> ids);
-    void add_ids(QList<PhotoInfo> ids);
-    QList<PhotoInfo> get_all_ids();
-    QList<PhotoInfo> get_selected_ids();
+    void replace_tiles(QList<PhotoInfo>);
+    void append_tiles(QList<PhotoInfo>);
+    QList<PhotoInfo> get_all_tiles();
+    QList<PhotoInfo> get_selected_tiles();
 
 
 signals:
@@ -86,6 +86,10 @@ signals:
 
 public slots:
     void set_preview_tile(RibbonTile *);
+
+private:
+    void add_tiles(QList<PhotoInfo> new_tiles,
+                   QList<PhotoInfo> old_tiles = QList<PhotoInfo>()); //convenience function
 };
 
 #endif // PHOTORIBBON_H
