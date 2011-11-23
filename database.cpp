@@ -163,6 +163,22 @@ void Database::descend(QDir &dir, bool isroot)
 
 int compute_tile_color(QFileInfo qfi)
 {
+    QImageReader qir(qfi.absoluteFilePath());
+    qir.setScaledSize(QSize(100,100));
+    qir.setQuality(0);
+    QImage pmI = qir.read();
+    int this_rgb, mean_r = 0, mean_g = 0, mean_b = 0;
+    for(int x=0; x<pmI.width(); x++)
+        for(int y=0; y<pmI.height(); y++){
+        this_rgb = pmI.pixel(x,y) & 0xffffff;
+        mean_r += (this_rgb >> 16) & 0xff;
+        mean_g += (this_rgb >> 8) & 0xff;
+        mean_b += (this_rgb) & 0xff;
+    }
+    int N = 10000;
+    return (((mean_r/N) & 0xff) << 16)  + (((mean_g/N) & 0xff) << 8) + ((mean_b/N) & 0xff);
+
+/*
     QImage pmI(qfi.absoluteFilePath());
     int this_rgb, mean_r = 0, mean_g = 0, mean_b = 0, N = 100;
     for(int i=0; i<N; i++) {
@@ -173,7 +189,7 @@ int compute_tile_color(QFileInfo qfi)
         mean_b += (this_rgb) & 0xff;
     }
     return (((mean_r/N) & 0xff) << 16)  + (((mean_g/N) & 0xff) << 8) + ((mean_b/N) & 0xff);
-
+*/
 /*
     float et = float(pmd.exposure_time.numerator)/float(pmd.exposure_time.denominator),
           fn = float(pmd.fnumber.numerator)/float(pmd.fnumber.denominator),
