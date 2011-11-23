@@ -54,7 +54,10 @@ PhotoRibbon::PhotoRibbon(QObject *parent) :
     tile_size = 10;
     columns = 16; //do this from measurement of view port? or set this?
     preview_tile = NULL;
+    preview_locked = false;
     setBackgroundBrush(Qt::black);
+    QObject::connect(this, SIGNAL(selectionChanged()),
+            this, SLOT(toggle_preview_tile_lock()));
 }
 
 //Replace the current list with this one
@@ -107,8 +110,21 @@ void PhotoRibbon::add_tiles(QList<PhotoInfo> new_tiles,
     setSceneRect(-5, -5, columns*tile_size+20, y+20);
 }
 
+//Call this when the selection changes, since that is when we want to keep the
+//previewed photo constant and not changing as we move the mouse
+void PhotoRibbon::toggle_preview_tile_lock()
+{
+    if(selectedItems().count() == 0) {
+        preview_locked = false;
+        if(preview_tile != NULL)
+            preview_tile->unset_preview();
+    } else
+        preview_locked = true;
+}
+
 void PhotoRibbon::set_preview_tile(RibbonTile *prt)
 {
+    if(preview_locked==true) return;
     if(preview_tile != NULL)
         preview_tile->unset_preview();
     preview_tile = prt;
@@ -127,7 +143,6 @@ QList<PhotoInfo> PhotoRibbon::get_all_tiles()
     return all_ids;
 }
 
-
 QList<PhotoInfo> PhotoRibbon::get_selected_tiles()
 {
     QList<QGraphicsItem *> selected_tiles = selectedItems();
@@ -137,4 +152,11 @@ QList<PhotoInfo> PhotoRibbon::get_selected_tiles()
         selected_ids.append(((RibbonTile*) *i)->get_id());
     }
     return selected_ids;
+}
+
+//Need to reimplement this to check if we wanna hold the photos
+void PhotoRibbon::keyPressEvent(QKeyEvent *keyEvent)
+{
+    if(keyEvent->key() == Qt::Key_H)
+        emit hold();
 }

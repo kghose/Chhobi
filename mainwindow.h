@@ -25,7 +25,7 @@
 #include "photo.h"
 #include "database.h"
 
-const QString db_location = "/Source/Sandbox/Haba/Baba/chhobi.sqlite3";
+const QString db_location = "/Source/Sandbox/ChhobiTest/chhobi.sqlite3";
 const QStringList name_filters = (QStringList() << "*.jpg" << "*.jpeg" << "*.png" << "*.tiff" << "*.avi");//TODO other
 
 namespace Ui {
@@ -60,7 +60,7 @@ private:
 public slots:
     void set_photo_root();
     void set_preview_photo(PhotoInfo);
-    void ribbon_selection_changed();
+    void send_to_holding();
     void show_preview_external();
     void photo_caption_changed();
     void photo_date_changed();

@@ -75,8 +75,8 @@ void MainWindow::setup_connections()
     //Ribbon
     QObject::connect(ribbon, SIGNAL(preview_id(PhotoInfo)),
             this, SLOT(set_preview_photo(PhotoInfo)));
-    QObject::connect(ribbon, SIGNAL(selectionChanged()),
-            this, SLOT(ribbon_selection_changed()));
+    QObject::connect(ribbon, SIGNAL(hold()),
+            this, SLOT(send_to_holding()));
     QObject::connect(hold_ribbon, SIGNAL(preview_id(PhotoInfo)),
             this, SLOT(set_preview_photo(PhotoInfo)));
 
@@ -189,7 +189,7 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 
 //Call this when we select items in the ribbon, which means we want to put them
 //in the holding ribbon
-void MainWindow::ribbon_selection_changed()
+void MainWindow::send_to_holding()
 {
     hold_ribbon->append_tiles(ribbon->get_selected_tiles());
 }

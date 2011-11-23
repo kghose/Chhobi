@@ -51,7 +51,7 @@ class RibbonTile : public QObject, public QGraphicsRectItem
 
 public:
     explicit RibbonTile(unsigned int tile_width);
-    void set_pi(PhotoInfo c_pi) {pi.id=c_pi.id;pi.relative_file_path=c_pi.relative_file_path;}
+    void set_pi(PhotoInfo c_pi) {pi.id=c_pi.id;pi.relative_file_path=c_pi.relative_file_path;pi.tile_color=c_pi.tile_color;}
     PhotoInfo get_id() {return pi;}
     void paint(QPainter *painter,
                const QStyleOptionGraphicsItem *option,
@@ -71,7 +71,8 @@ class PhotoRibbon : public QGraphicsScene
     Q_OBJECT
 
     unsigned int item_count, tile_size, columns;
-    RibbonTile *preview_tile;
+    RibbonTile *preview_tile;//This is the tile on preview
+    bool preview_locked;//Mech to prevent preview changeing when we move mouse
 
 public:
     explicit PhotoRibbon(QObject *parent = 0);
@@ -83,13 +84,16 @@ public:
 
 signals:
     void preview_id(PhotoInfo);//Emitted whenever we choose a tile
+    void hold();//Emitted whenever we want to hold the pictures
 
 public slots:
     void set_preview_tile(RibbonTile *);
+    void toggle_preview_tile_lock();
 
 private:
     void add_tiles(QList<PhotoInfo> new_tiles,
                    QList<PhotoInfo> old_tiles = QList<PhotoInfo>()); //convenience function
+    void keyPressEvent(QKeyEvent *keyEvent);
 };
 
 #endif // PHOTORIBBON_H
