@@ -68,6 +68,9 @@ void MainWindow::setup_ui()
 
 void MainWindow::setup_connections()
 {
+    //Event filter for drag on mailing label
+    ui->mailLabel->installEventFilter(this);
+
     //Menu
     QObject::connect(ui->actionSet_Root, SIGNAL(triggered()),
             this, SLOT(set_photo_root()));
@@ -87,6 +90,11 @@ void MainWindow::setup_connections()
             this, SLOT(save_photo_meta_data()));
     QObject::connect(ui->dateTimeEdit, SIGNAL(editingFinished()),
             this, SLOT(save_photo_meta_data()));
+
+    //Holding table connections
+    QObject::connect(ui->resizeButton, SIGNAL(clicked()),
+            this, SLOT(resize_photos()));
+
 
     //Database crawler
     QObject::connect(&db, SIGNAL(now_searching(QString)),
@@ -280,4 +288,88 @@ void MainWindow::load_photo_list()
         ui->QL_preview->setText("Photos imported");
         this->setEnabled(true);
     }
+}
+
+bool MainWindow::eventFilter(QObject *obj, QEvent *event)
+{
+   if(obj == (QObject*)ui->mailLabel)
+       if(event->type() == QEvent::MouseButtonPress) {
+           QMouseEvent* this_evt = (QMouseEvent *)event;
+           if (this_evt->button() == Qt::LeftButton) {
+               QDrag *drag = new QDrag(this);
+               drag->setPixmap(QPixmap(":/Images/Icons/chiti.png"));
+               drag->setHotSpot(QPoint(drag->pixmap().width()/2,
+                                       drag->pixmap().height()/2));
+               QMimeData *mimeData = new QMimeData;
+               mimeData->setUrls(resized_photos);
+               drag->setMimeData(mimeData);
+               drag->exec();
+           }
+       }
+   // standard event processing
+   return QObject::eventFilter(obj, event);
+}
+
+/*
+::mousePressEvent(QMouseEvent *event)
+{
+    QRect the_frame = ui->frame_3->geometry(),
+          the_label = ui->mailLabel->geometry();
+
+    qDebug() << the_label.topLeft();
+    qDebug() << the_frame.topLeft();
+    the_label.setTopLeft(the_label.topLeft() + the_frame.topLeft());
+    qDebug() << event->pos();
+    qDebug() << the_label;
+    if (event->button() == Qt::LeftButton &&
+            the_label.contains(event->pos())) {
+        QDrag *drag = new QDrag(this);
+        drag->setPixmap(QPixmap(":/Images/Icons/chiti.png"));
+        drag->setHotSpot(QPoint(drag->pixmap().width()/2,
+                                drag->pixmap().height()/2));
+        QMimeData *mimeData = new QMimeData;
+        mimeData->setUrls(resized_photos);
+        drag->setMimeData(mimeData);
+        drag->exec();
+    }
+}
+*/
+void MainWindow::resize_photos()
+{
+    ui->mailLabel->setEnabled(false);
+    //TODO centralize this mechanism
+    QStringList movie_types = (QStringList("avi") << "mov");
+
+    QDir save_root = QDir::temp();
+    QList<PhotoInfo> tiles = hold_ribbon->get_all_tiles();
+    QList<PhotoInfo>::iterator i;
+    resized_photos.clear();
+    ui->progressBar->setMaximum(tiles.count()-1);
+    int photo_count = 0;
+    for (i = tiles.begin(); i != tiles.end(); ++i) {
+        ui->progressBar->setValue(photo_count);
+        QApplication::processEvents();
+        if(photos_root.exists(i->relative_file_path)) {
+            photo_count++;
+            QFileInfo orig_file(photos_root.absoluteFilePath(i->relative_file_path)),
+                    resized_file(save_root.absoluteFilePath(i->relative_file_path));
+            if(!movie_types.contains(orig_file.suffix(), Qt::CaseInsensitive)) {
+                qDebug() << resized_file.absoluteFilePath();
+                QImageReader qir(orig_file.absoluteFilePath());
+                QSize orig = qir.size();
+                float ratio = 0, new_size = ui->spinBox->value();
+                if(orig.width() > orig.height())
+                    ratio = (float)new_size/(float)orig.width();
+                else
+                    ratio = (float)new_size/(float)orig.height();
+                qir.setScaledSize(ratio*orig);
+                save_root.mkpath(resized_file.absoluteDir().path());
+                qir.read().save(resized_file.absoluteFilePath());
+            } else {//Probably a movie, copy over
+                ;
+            }
+            resized_photos << QUrl(resized_file.absoluteFilePath());
+        }
+    }
+    ui->mailLabel->setEnabled(true);
 }

@@ -40,6 +40,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void resizeEvent(QResizeEvent * /* event */);
+    bool eventFilter(QObject *, QEvent *);
 
 private:
     Ui::MainWindow *ui;
@@ -48,6 +49,7 @@ private:
     Photo preview;
     QDir photos_root;
     Database db;
+    QList<QUrl> resized_photos;
 
     void setup_ui();
     void setup_connections();
@@ -66,6 +68,7 @@ public slots:
     void photo_date_changed();
     void photo_keywords_changed(int row, int col);
     void save_photo_meta_data();
+    void resize_photos();
 };
 
 #endif // MAINWINDOW_H

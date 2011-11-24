@@ -107,7 +107,7 @@
           <property name="frameShadow">
            <enum>QFrame::Raised</enum>
           </property>
-          <widget class="QPushButton" name="exportButton">
+          <widget class="QPushButton" name="resizeButton">
            <property name="geometry">
             <rect>
              <x>0</x>
@@ -117,20 +117,26 @@
             </rect>
            </property>
            <property name="text">
-            <string>Export</string>
+            <string>Resize</string>
            </property>
           </widget>
-          <widget class="QPushButton" name="mailButton">
+          <widget class="QPushButton" name="folderButton">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
            <property name="geometry">
             <rect>
              <x>90</x>
-             <y>50</y>
+             <y>110</y>
              <width>101</width>
-             <height>101</height>
+             <height>41</height>
             </rect>
            </property>
+           <property name="toolTip">
+            <string>Show folder of photos</string>
+           </property>
            <property name="text">
-            <string>Mail</string>
+            <string>Folder</string>
            </property>
           </widget>
           <widget class="QProgressBar" name="progressBar">
@@ -179,6 +185,40 @@
            </property>
            <property name="text">
             <string>Max Dimension</string>
+           </property>
+          </widget>
+          <widget class="QLabel" name="mailLabel">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="geometry">
+            <rect>
+             <x>105</x>
+             <y>55</y>
+             <width>75</width>
+             <height>55</height>
+            </rect>
+           </property>
+           <property name="toolTip">
+            <string>Drag to mail program</string>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::Panel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Sunken</enum>
+           </property>
+           <property name="lineWidth">
+            <number>3</number>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="pixmap">
+            <pixmap resource="resources.qrc">:/Images/Icons/chiti.png</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
            </property>
           </widget>
          </widget>
@@ -454,6 +494,8 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>
