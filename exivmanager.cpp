@@ -50,8 +50,8 @@ PhotoMetaData load_metadata(QString absolute_filename)
         image->readMetadata();
         ipct_load_caption_and_keywords(image, pmd, resave);
         exiv_load_rotation(image, pmd, resave);
-        exiv_load_date(image, pmd, resave);
-        exiv_load_misc_ro(image, pmd, resave);
+        exiv_load_date(image, pmd);
+        exiv_load_misc_ro(image, pmd);
         pmd.type = PHOTO;
     }
 
@@ -151,7 +151,7 @@ inline void exiv_load_rotation(Exiv2::Image::AutoPtr &image, PhotoMetaData &pmd,
     }
 }
 
-inline void exiv_load_date(Exiv2::Image::AutoPtr &image, PhotoMetaData &pmd, bool &resave)
+inline void exiv_load_date(Exiv2::Image::AutoPtr &image, PhotoMetaData &pmd)
 {
     Exiv2::ExifData exifData = image->exifData();
     //grab image take date
@@ -180,7 +180,7 @@ inline void exiv_load_date(Exiv2::Image::AutoPtr &image, PhotoMetaData &pmd, boo
     pmd.photo_date.setTimeSpec(Qt::UTC);
 }
 
-inline void exiv_load_misc_ro(Exiv2::Image::AutoPtr &image, PhotoMetaData &pmd, bool &resave)
+inline void exiv_load_misc_ro(Exiv2::Image::AutoPtr &image, PhotoMetaData &pmd)
 {
     Exiv2::ExifData exifData = image->exifData();
 

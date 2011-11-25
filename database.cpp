@@ -206,7 +206,6 @@ int compute_tile_color(QFileInfo qfi)
 //This is a new photo to be inserted into the database
 void Database::import_photo(QFileInfo qfi)
 {
-    bool ok = false;
     PhotoMetaData pmd = load_metadata(qfi.absoluteFilePath());
     int cnt = pmd.keywords.count();
     QString kwds;
