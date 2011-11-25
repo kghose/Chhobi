@@ -70,7 +70,7 @@ class PhotoRibbon : public QGraphicsScene
 {
     Q_OBJECT
 
-    unsigned int item_count, tile_size, columns;
+    int tile_size, columns;
     RibbonTile *preview_tile;//This is the tile on preview
     bool preview_locked;//Mech to prevent preview changeing when we move mouse
 
@@ -94,6 +94,7 @@ private:
     void add_tiles(QList<PhotoInfo> new_tiles,
                    QList<PhotoInfo> old_tiles = QList<PhotoInfo>()); //convenience function
     void keyPressEvent(QKeyEvent *keyEvent);
+    void select_adjacent_tile(bool backward);
 };
 
 #endif // PHOTORIBBON_H

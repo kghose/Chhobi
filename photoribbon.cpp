@@ -43,7 +43,7 @@ void RibbonTile::paint(QPainter *painter,
     QGraphicsRectItem::paint(painter, &myoption, widget);
 }
 
-void RibbonTile::hoverEnterEvent(QGraphicsSceneHoverEvent * event)
+void RibbonTile::hoverEnterEvent(QGraphicsSceneHoverEvent * /*event*/)
 {
     emit preview(this);
 }
@@ -166,5 +166,38 @@ void PhotoRibbon::keyPressEvent(QKeyEvent *keyEvent)
         emit hold();
     else if(keyEvent->key() == Qt::Key_Escape)
         clearSelection();
+    else if(keyEvent->key() == Qt::Key_Right)
+        select_adjacent_tile(false);
+    else if(keyEvent->key() == Qt::Key_Left)
+        select_adjacent_tile(true);
+
     QGraphicsScene::keyPressEvent(keyEvent);
+}
+
+//Move selection around by the keyboard
+void PhotoRibbon::select_adjacent_tile(bool backward)
+{
+    QList<QGraphicsItem *> selected_tiles = selectedItems();
+    if(selected_tiles.count()==0) return;
+    QPointF pt = selected_tiles[0]->pos();
+    QPainterPath sel_path = selected_tiles[0]->shape().translated(pt);
+    qreal x, y;
+    if(!backward) {//forward
+        if(pt.x() >= (columns-1)*tile_size) {
+            x = -pt.x();
+            y = tile_size;
+        } else {
+            x = tile_size;
+            y = 0;
+        }
+    } else {//backward
+        if(pt.x() < tile_size) {
+            x = (columns-1)*tile_size;
+            y = -tile_size;
+        } else {
+            x = -tile_size;
+            y = 0;
+        }
+    }
+    setSelectionArea(sel_path.translated(x,y));
 }
