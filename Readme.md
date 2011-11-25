@@ -151,10 +151,11 @@ TODO
 1. [DONE] Last modified for directories working correctly i.e. are changed files retrawled?
 1. [DONE] SQL queries bind values
 1. Holding table mailing + copy to separate directory + resize as needed
-1. Step through pictures
+1. [DONE] Step through pictures
 1. Phonon to view videos
-1. Keyword adn caption storing in database
+1. [DONE] Keyword adn caption storing in database
 1. Implement searching by caption
 1. Implement sub-selection by keywords
-1. Change to a dense panel ("lighttable") like arrangement? Need to switch to
+1. [DONE] Change to a dense panel ("lighttable") like arrangement? Need to switch to
 click to select and double click to hold model
+1. Refactor code to merge PhotoInfo and PhotoMetaData

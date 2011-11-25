@@ -94,6 +94,8 @@ void MainWindow::setup_connections()
     //Holding table connections
     QObject::connect(ui->resizeButton, SIGNAL(clicked()),
             this, SLOT(resize_photos()));
+    QObject::connect(ui->folderButton, SIGNAL(clicked()),
+            this, SLOT(show_resized_folder()));
 
 
     //Database crawler
@@ -310,30 +312,6 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
    return QObject::eventFilter(obj, event);
 }
 
-/*
-::mousePressEvent(QMouseEvent *event)
-{
-    QRect the_frame = ui->frame_3->geometry(),
-          the_label = ui->mailLabel->geometry();
-
-    qDebug() << the_label.topLeft();
-    qDebug() << the_frame.topLeft();
-    the_label.setTopLeft(the_label.topLeft() + the_frame.topLeft());
-    qDebug() << event->pos();
-    qDebug() << the_label;
-    if (event->button() == Qt::LeftButton &&
-            the_label.contains(event->pos())) {
-        QDrag *drag = new QDrag(this);
-        drag->setPixmap(QPixmap(":/Images/Icons/chiti.png"));
-        drag->setHotSpot(QPoint(drag->pixmap().width()/2,
-                                drag->pixmap().height()/2));
-        QMimeData *mimeData = new QMimeData;
-        mimeData->setUrls(resized_photos);
-        drag->setMimeData(mimeData);
-        drag->exec();
-    }
-}
-*/
 void MainWindow::resize_photos()
 {
     ui->mailLabel->setEnabled(false);
@@ -344,17 +322,13 @@ void MainWindow::resize_photos()
     QList<PhotoInfo> tiles = hold_ribbon->get_all_tiles();
     QList<PhotoInfo>::iterator i;
     resized_photos.clear();
-    ui->progressBar->setMaximum(tiles.count()-1);
+    ui->progressBar->setMaximum(tiles.count());
     int photo_count = 0;
     for (i = tiles.begin(); i != tiles.end(); ++i) {
-        ui->progressBar->setValue(photo_count);
-        QApplication::processEvents();
         if(photos_root.exists(i->relative_file_path)) {
-            photo_count++;
             QFileInfo orig_file(photos_root.absoluteFilePath(i->relative_file_path)),
                     resized_file(save_root.absoluteFilePath(i->relative_file_path));
             if(!movie_types.contains(orig_file.suffix(), Qt::CaseInsensitive)) {
-                qDebug() << resized_file.absoluteFilePath();
                 QImageReader qir(orig_file.absoluteFilePath());
                 QSize orig = qir.size();
                 float ratio = 0, new_size = ui->spinBox->value();
@@ -365,11 +339,22 @@ void MainWindow::resize_photos()
                 qir.setScaledSize(ratio*orig);
                 save_root.mkpath(resized_file.absoluteDir().path());
                 qir.read().save(resized_file.absoluteFilePath());
-            } else {//Probably a movie, copy over
+            } else {//Probably a movie, copy over?
                 ;
             }
             resized_photos << QUrl(resized_file.absoluteFilePath());
         }
+        photo_count++;
+        ui->progressBar->setValue(photo_count);
+        QApplication::processEvents();
     }
     ui->mailLabel->setEnabled(true);
+}
+
+//Open the folder where we've kept the resized photos
+void MainWindow::show_resized_folder()
+{
+    if(resized_photos.count() > 0)
+        QDesktopServices::openUrl(QUrl("file:///"
+            + QFileInfo(resized_photos[0].path()).absoluteDir().path()));
 }

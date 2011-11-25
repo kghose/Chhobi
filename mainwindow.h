@@ -69,6 +69,7 @@ public slots:
     void photo_keywords_changed(int row, int col);
     void save_photo_meta_data();
     void resize_photos();
+    void show_resized_folder();
 };
 
 #endif // MAINWINDOW_H
