@@ -27,16 +27,46 @@ RibbonTile::RibbonTile(unsigned int tile_width) : QGraphicsRectItem()
     setAcceptHoverEvents(true);//This is how we preview
 }
 
+/*
+ We moved the setPen commands (to draw thw ribbon tile outlines differently for
+ different item states) to the next three functions - set_preview, unset_preview
+ and itemChange - because putting the setPen in the paint function led to an
+ infinite recursion.
+*/
+void RibbonTile::set_preview()
+{
+    state=PREVIEW;
+    setPen(QPen(Qt::yellow));
+}
+
+void RibbonTile::unset_preview()
+{
+    state=NORMAL;
+    if(isSelected())
+        setPen(QPen(Qt::white));
+    else
+        setPen(QPen(Qt::black));
+}
+
+QVariant RibbonTile::itemChange(GraphicsItemChange change, const QVariant &value)
+ {
+     if (change == QGraphicsItem::ItemSelectedHasChanged) {
+         if(value.toBool())
+             setPen(QPen(Qt::white));
+         else {
+            if(state==PREVIEW)
+                setPen(QPen(Qt::yellow));
+            else
+                setPen(QPen(Qt::black));
+         }
+     }
+     return QGraphicsItem::itemChange(change, value);
+ }
+
 void RibbonTile::paint(QPainter *painter,
            const QStyleOptionGraphicsItem *option,
            QWidget *widget)
 {
-    if(isSelected())
-        setPen(QPen(Qt::white));
-    else if(state==PREVIEW)
-        setPen(QPen(Qt::yellow));
-    else
-        setPen(QPen(Qt::black));
     //we'll do our own painting of the selection indicator thank you.
     QStyleOptionGraphicsItem myoption = (*option);
     myoption.state &= !QStyle::State_Selected;

@@ -57,11 +57,12 @@ public:
     void paint(QPainter *painter,
                const QStyleOptionGraphicsItem *option,
                QWidget *widget);
-    void set_preview() {state=PREVIEW;}
-    void unset_preview() {state=NORMAL;}
+    void set_preview();
+    void unset_preview();
 
 private:
-    void hoverEnterEvent(QGraphicsSceneHoverEvent * event);
+    void hoverEnterEvent(QGraphicsSceneHoverEvent *);
+    QVariant itemChange(GraphicsItemChange, const QVariant &);
 
 signals:
     void preview(RibbonTile *);
@@ -81,7 +82,6 @@ public:
     void append_tiles(QList<PhotoInfo>);
     QList<PhotoInfo> get_all_tiles();
     QList<PhotoInfo> get_selected_tiles();
-
 
 signals:
     void preview_id(PhotoInfo);//Emitted whenever we choose a tile

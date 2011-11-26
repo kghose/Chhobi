@@ -145,6 +145,24 @@ The recipe, then is (shown using the QT framework)
         qDebug() << thedatetime;
     }
 
+For QGraphicsItem `setPen` and `setBrush` trigger a `paint` event
+-----------------------------------------------------------------
+This was fun to figure out. I used to check for the state of the RibbonTile in
+the `paint` event and use `setPen` to set the outline based on if the image was
+under preview, or selected. Then I noticed that when I just had Chhobi open it
+would be consuming 70% CPU just stitting there. I narrowed it down to a visible
+QGraphicsView. Then, by using print statements I found that the `paint` event
+was being called at regular intervals. I let that percolate in my mind for a bit
+and then it came to me: I commented out all the `setPen` lines in `paint` for
+RibbonTile and the problem went away.
+
+### Solution
+1. For the set/unset preview I just update the pen using the slots I made
+1. For the selected/unselected I discovered `QGraphicsItem::itemChange` which
+allows me to set the pen there.
+
+
+
 TODO
 ====
 1. [DONE] Put absolute filename in status bar
