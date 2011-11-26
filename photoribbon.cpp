@@ -48,6 +48,14 @@ void RibbonTile::hoverEnterEvent(QGraphicsSceneHoverEvent * /*event*/)
     emit preview(this);
 }
 
+void RibbonTile::set_pi(PhotoInfo c_pi)
+{
+    pi.id=c_pi.id;
+    pi.relative_file_path=c_pi.relative_file_path;
+    pi.tile_color=c_pi.tile_color;
+    pi.type=c_pi.type;
+}
+
 PhotoRibbon::PhotoRibbon(QObject *parent) :
     QGraphicsScene(parent)
 {

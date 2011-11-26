@@ -37,7 +37,8 @@ bool Database::create_db() {
     qDebug() << "Creating brand new database " << db.databaseName();
     QSqlQuery query;
     query.exec("create table photos("
-        "id INTEGER PRIMARY KEY, filepath text, caption text, keywords text, datetaken integer, tile_color integer);");
+        "id INTEGER PRIMARY KEY, filepath text, caption text, keywords text, "
+        "datetaken integer, tile_color integer, type integer);");
     query.exec("create table keywords("
         "id INTEGER PRIMARY KEY,"
         "keyword text);");
@@ -64,7 +65,7 @@ bool Database::open(QFileInfo dbpath)//Open or create a database in dbdir
 //Retrieval functions
 QList<PhotoInfo> Database::get_all_photos()
 {
-    return get_photos_by_sql("SELECT id,filepath,tile_color FROM photos ORDER BY datetaken DESC");
+    return get_photos_by_sql("SELECT id,filepath,tile_color,type FROM photos ORDER BY datetaken DESC");
 }
 
 QList<PhotoInfo> Database::get_photos_with_caption(QString)
@@ -93,6 +94,7 @@ QList<PhotoInfo> Database::get_photos_by_sql(QString query_str)
         this_pi.id = query.value(0).toInt();
         this_pi.relative_file_path = query.value(1).toString();
         this_pi.tile_color = query.value(2).toInt();
+        this_pi.type = (FileType) query.value(3).toInt();
         pl.append(this_pi);
     }
     return pl;
@@ -221,16 +223,18 @@ void Database::import_photo(QFileInfo qfi)
     if(query.next()) {
         int id = query.value(0).toInt();
         query.prepare("UPDATE photos SET filepath=:filepath, caption=:caption, "
-                      "keywords=:keywords, datetaken=:datetaken, tile_color=:tile_color WHERE id=:id");
+                      "keywords=:keywords, datetaken=:datetaken, tile_color=:tile_color, "
+                      "type=:type WHERE id=:id");
         query.bindValue(":id", id);
     } else {
-        query.prepare("INSERT INTO photos (id, filepath, caption, keywords, datetaken, tile_color) "
-                      "VALUES(NULL, :filepath, :caption, :keywords, :datetaken, :tile_color)");
+        query.prepare("INSERT INTO photos (id, filepath, caption, keywords, datetaken, tile_color, type) "
+                      "VALUES(NULL, :filepath, :caption, :keywords, :datetaken, :tile_color, :type)");
     }
     query.bindValue(":filepath", relative_file_path);
     query.bindValue(":caption", pmd.caption);
     query.bindValue(":keywords", kwds);
     query.bindValue(":datetaken", pmd.photo_date);
+    query.bindValue(":type", pmd.type);
     if(pmd.type==PHOTO)
         query.bindValue(":tile_color", compute_tile_color(qfi));
     else

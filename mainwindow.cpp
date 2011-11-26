@@ -315,10 +315,8 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 void MainWindow::resize_photos()
 {
     ui->mailLabel->setEnabled(false);
-    //TODO centralize this mechanism
-    QStringList movie_types = (QStringList("avi") << "mov");
 
-    QDir save_root = QDir::temp();
+    resized_root = QDir::temp();
     QList<PhotoInfo> tiles = hold_ribbon->get_all_tiles();
     QList<PhotoInfo>::iterator i;
     resized_photos.clear();
@@ -327,8 +325,8 @@ void MainWindow::resize_photos()
     for (i = tiles.begin(); i != tiles.end(); ++i) {
         if(photos_root.exists(i->relative_file_path)) {
             QFileInfo orig_file(photos_root.absoluteFilePath(i->relative_file_path)),
-                    resized_file(save_root.absoluteFilePath(i->relative_file_path));
-            if(!movie_types.contains(orig_file.suffix(), Qt::CaseInsensitive)) {
+                    resized_file(resized_root.absoluteFilePath(i->relative_file_path));
+            if(i->type == PHOTO) {
                 QImageReader qir(orig_file.absoluteFilePath());
                 QSize orig = qir.size();
                 float ratio = 0, new_size = ui->spinBox->value();
@@ -337,10 +335,10 @@ void MainWindow::resize_photos()
                 else
                     ratio = (float)new_size/(float)orig.height();
                 qir.setScaledSize(ratio*orig);
-                save_root.mkpath(resized_file.absoluteDir().path());
+                resized_root.mkpath(resized_file.absoluteDir().path());
                 qir.read().save(resized_file.absoluteFilePath());
             } else {//Probably a movie, copy over?
-                ;
+                qDebug() << i->relative_file_path;
             }
             resized_photos << QUrl(resized_file.absoluteFilePath());
         }
@@ -356,5 +354,5 @@ void MainWindow::show_resized_folder()
 {
     if(resized_photos.count() > 0)
         QDesktopServices::openUrl(QUrl("file:///"
-            + QFileInfo(resized_photos[0].path()).absoluteDir().path()));
+            + resized_root.path()));
 }

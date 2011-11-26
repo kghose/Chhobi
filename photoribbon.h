@@ -32,9 +32,10 @@
 #define PHOTORIBBON_H
 
 #include <QtGui>
+#include "photo.h"
 
 //Just a basic struct to carry some useful photo info
-struct PhotoInfo
+struct PhotoInfo : PhotoMetaData
 {
     unsigned int id, tile_color;
     QString relative_file_path;
@@ -51,7 +52,7 @@ class RibbonTile : public QObject, public QGraphicsRectItem
 
 public:
     explicit RibbonTile(unsigned int tile_width);
-    void set_pi(PhotoInfo c_pi) {pi.id=c_pi.id;pi.relative_file_path=c_pi.relative_file_path;pi.tile_color=c_pi.tile_color;}
+    void set_pi(PhotoInfo c_pi);
     PhotoInfo get_id() {return pi;}
     void paint(QPainter *painter,
                const QStyleOptionGraphicsItem *option,

@@ -50,6 +50,7 @@ private:
     QDir photos_root;
     Database db;
     QList<QUrl> resized_photos;
+    QDir resized_root;
 
     void setup_ui();
     void setup_connections();
