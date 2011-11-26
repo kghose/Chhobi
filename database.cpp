@@ -238,7 +238,7 @@ void Database::import_photo(QFileInfo qfi)
     if(pmd.type==PHOTO)
         query.bindValue(":tile_color", compute_tile_color(qfi));
     else
-        query.bindValue(":tile_color", 0xff00ff);
+        query.bindValue(":tile_color", 0x0000ff);
     query.exec();
     //int id = query.lastInsertId().toInt(&ok);
     insert_keywords(pmd.keywords);
