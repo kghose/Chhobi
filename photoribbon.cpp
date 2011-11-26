@@ -115,11 +115,13 @@ void PhotoRibbon::append_tiles(QList<PhotoInfo> new_tiles)
 void PhotoRibbon::add_tiles(QList<PhotoInfo> new_tiles,
                             QList<PhotoInfo> old_tiles)
 {
+    int current_row = 0, row_interval = 20;
     QList<PhotoInfo>::iterator i;
     int x = 0, y = 0, col = 0;
     if(!old_tiles.isEmpty()) {
         col = old_tiles.count()%columns;
         x = col*tile_size;
+        current_row = old_tiles.count()/columns;
         y = (old_tiles.count()/columns)*tile_size;
     }
 
@@ -141,8 +143,20 @@ void PhotoRibbon::add_tiles(QList<PhotoInfo> new_tiles,
         col += 1;
         if(col == columns) {
             x = 0;
-            y += tile_size;
+            current_row++;
             col = 0;
+            if(current_row%row_interval==0) {
+                QGraphicsSimpleTextItem *qgti = new QGraphicsSimpleTextItem((*i).photo_date.toString("yyyy.MM.dd"));
+                qDebug() << (*i).photo_date;//.toString("yyyy.MM.dd");
+                qgti->setPos(0,y);
+                qgti->setBrush(QBrush(Qt::white));
+                //qgti->setFont(QFont());
+                addItem(qgti);
+                y += 4 * tile_size;
+            } else {
+                y += tile_size;
+            }
+
         }
     }
     setSceneRect(-5, -5, columns*tile_size+20, y+20);
