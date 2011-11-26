@@ -91,6 +91,7 @@ PhotoRibbon::PhotoRibbon(QObject *parent) :
 {
     tile_size = 10;
     columns = 16; //do this from measurement of view port? or set this?
+    dateprint_row_interval = -1;//Means we don't print dates (e.g. in the holding table)
     preview_tile = NULL;
     preview_locked = false;
     setBackgroundBrush(Qt::black);
@@ -115,7 +116,7 @@ void PhotoRibbon::append_tiles(QList<PhotoInfo> new_tiles)
 void PhotoRibbon::add_tiles(QList<PhotoInfo> new_tiles,
                             QList<PhotoInfo> old_tiles)
 {
-    int current_row = 0, row_interval = 20;
+    int current_row = 0;
     QList<PhotoInfo>::iterator i;
     int x = 0, y = 0, col = 0;
     if(!old_tiles.isEmpty()) {
@@ -145,14 +146,14 @@ void PhotoRibbon::add_tiles(QList<PhotoInfo> new_tiles,
             x = 0;
             current_row++;
             col = 0;
-            if(current_row%row_interval==0) {
+            if((current_row%dateprint_row_interval==0) && (dateprint_row_interval>0)) {
                 QGraphicsSimpleTextItem *qgti = new QGraphicsSimpleTextItem((*i).photo_date.toString("yyyy.MM.dd"));
-                qDebug() << (*i).photo_date;//.toString("yyyy.MM.dd");
-                qgti->setPos(0,y);
+                y += 3*tile_size;
+                qgti->setPos(sceneRect().width()/2,y);
                 qgti->setBrush(QBrush(Qt::white));
                 //qgti->setFont(QFont());
                 addItem(qgti);
-                y += 4 * tile_size;
+                y += 2*tile_size;
             } else {
                 y += tile_size;
             }

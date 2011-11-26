@@ -65,7 +65,7 @@ bool Database::open(QFileInfo dbpath)//Open or create a database in dbdir
 //Retrieval functions
 QList<PhotoInfo> Database::get_all_photos()
 {
-    return get_photos_by_sql("SELECT id,filepath,tile_color,type FROM photos ORDER BY datetaken DESC");
+    return get_photos_by_sql("SELECT id,filepath,tile_color,type,datetaken FROM photos ORDER BY datetaken DESC");
 }
 
 QList<PhotoInfo> Database::get_photos_with_caption(QString)
@@ -95,6 +95,7 @@ QList<PhotoInfo> Database::get_photos_by_sql(QString query_str)
         this_pi.relative_file_path = query.value(1).toString();
         this_pi.tile_color = query.value(2).toInt();
         this_pi.type = (FileType) query.value(3).toInt();
+        this_pi.photo_date = query.value(4).toDateTime();
         pl.append(this_pi);
     }
     return pl;

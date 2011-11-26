@@ -72,12 +72,13 @@ class PhotoRibbon : public QGraphicsScene
 {
     Q_OBJECT
 
-    int tile_size, columns;
+    int tile_size, columns, dateprint_row_interval;
     RibbonTile *preview_tile;//This is the tile on preview
     bool preview_locked;//Mech to prevent preview changeing when we move mouse
 
 public:
     explicit PhotoRibbon(QObject *parent = 0);
+    void set_dateprint_row_interval(int dpri) {dateprint_row_interval=dpri;}
     void replace_tiles(QList<PhotoInfo>);
     void append_tiles(QList<PhotoInfo>);
     QList<PhotoInfo> get_all_tiles();

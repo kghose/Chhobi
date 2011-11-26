@@ -281,6 +281,8 @@ void MainWindow::load_photo_list()
         set_photo_root();
     } else {
         photos_root = QDir(settings.value("photo root").toString());//Shouldn't need a default
+        int datetime_row_interval = settings.value("date marker row interval", 100).toInt();//
+        ribbon->set_dateprint_row_interval(datetime_row_interval);
         QDir dir(photos_root);
         dir.setNameFilters(name_filters);
         dir.setFilter(QDir::AllDirs | QDir::NoDotAndDotDot | QDir::Files);
