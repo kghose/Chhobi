@@ -25,7 +25,7 @@
 #include "photo.h"
 #include "database.h"
 
-const QString db_location = "/Source/Sandbox/ChhobiTest/chhobi.sqlite3";
+const QString db_location = QDir::homePath() + "/.chhobi/chhobi.sqlite3";
 const QStringList name_filters = (QStringList() << "*.jpg" << "*.jpeg" << "*.png" << "*.tiff" << "*.avi");//TODO other
 
 namespace Ui {
@@ -39,8 +39,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void resizeEvent(QResizeEvent * /* event */);
-    bool eventFilter(QObject *, QEvent *);
+    void load_photo_list();
 
 private:
     Ui::MainWindow *ui;
@@ -55,10 +54,12 @@ private:
     void setup_ui();
     void setup_connections();
 
+    void resizeEvent(QResizeEvent * /* event */);
+    bool eventFilter(QObject *, QEvent *);
+
     void set_datetime(PhotoMetaData pmd);
     void set_metadata_table(PhotoMetaData pmd);
     void set_keywords_table(PhotoMetaData pmd);
-    void load_photo_list();
 
 public slots:
     void set_photo_root();

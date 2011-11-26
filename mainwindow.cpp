@@ -39,20 +39,14 @@ MainWindow::MainWindow(QWidget *parent) :
     //setup database
     QSettings settings;
     if(!settings.contains("database file name"))
-        settings.setValue("database file name", QDir::home().absolutePath() + db_location);
+        settings.setValue("database file name", db_location);
     QFileInfo dbpath(settings.value("database file name").toString());
     db.open(dbpath);
-
-    load_photo_list();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-
-    //Remove in production version
-    //QSettings settings;
-    //settings.clear();
 }
 
 void MainWindow::setup_ui()
