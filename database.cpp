@@ -182,29 +182,6 @@ int compute_tile_color(QFileInfo qfi)
     }
     int N = 10000;
     return (((mean_r/N) & 0xff) << 16)  + (((mean_g/N) & 0xff) << 8) + ((mean_b/N) & 0xff);
-
-/*
-    QImage pmI(qfi.absoluteFilePath());
-    int this_rgb, mean_r = 0, mean_g = 0, mean_b = 0, N = 100;
-    for(int i=0; i<N; i++) {
-        int x = qrand()%pmI.width(), y = qrand()%pmI.height();
-        this_rgb = pmI.pixel(x,y) & 0xffffff;
-        mean_r += (this_rgb >> 16) & 0xff;
-        mean_g += (this_rgb >> 8) & 0xff;
-        mean_b += (this_rgb) & 0xff;
-    }
-    return (((mean_r/N) & 0xff) << 16)  + (((mean_g/N) & 0xff) << 8) + ((mean_b/N) & 0xff);
-*/
-/*
-    float et = float(pmd.exposure_time.numerator)/float(pmd.exposure_time.denominator),
-          fn = float(pmd.fnumber.numerator)/float(pmd.fnumber.denominator),
-          iso = float(pmd.iso);
-    int   r = (200./iso)*255,
-          g = (.01/et)*255,
-          b = ((1/3.4)/fn)*255;
-    r = r > 255 ? 255 : r;
-    g = g > 255 ? 255 : r;
-    b = b > 255 ? 255 : r;*/
 }
 
 
