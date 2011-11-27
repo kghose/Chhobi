@@ -75,9 +75,10 @@ class PhotoRibbon : public QGraphicsScene
     int tile_size, columns, dateprint_row_interval;
     RibbonTile *preview_tile;//This is the tile on preview
     bool preview_locked;//Mech to prevent preview changeing when we move mouse
+    bool holding_table;//True means the contents change (can be deleted, added)
 
 public:
-    explicit PhotoRibbon(QObject *parent = 0);
+    explicit PhotoRibbon(QObject *parent = 0, bool hd = false);
     void set_dateprint_row_interval(int dpri) {dateprint_row_interval=dpri;}
     void replace_tiles(QList<PhotoInfo>);
     void append_tiles(QList<PhotoInfo>);
@@ -97,6 +98,7 @@ private:
                    QList<PhotoInfo> old_tiles = QList<PhotoInfo>()); //convenience function
     void keyPressEvent(QKeyEvent *keyEvent);
     void select_adjacent_tile(bool backward);
+    void delete_selected();//Only active for the holding table
 };
 
 #endif // PHOTORIBBON_H

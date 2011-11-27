@@ -184,4 +184,4 @@ click to select and double click to hold model
 1. Add separators every x photos with some kind of date identification to help
 us locate things faster.
 1. Put a nice border round the preview (need to subclass something)
-1.
+1. [DONE] Remove images from holding table

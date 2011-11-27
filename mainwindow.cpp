@@ -56,7 +56,7 @@ void MainWindow::setup_ui()
     ribbon = new PhotoRibbon();
     ui->QGV_timeline->setScene(ribbon);
 
-    hold_ribbon = new PhotoRibbon();
+    hold_ribbon = new PhotoRibbon(0, true);//true for holding table
     ui->QGV_hold->setScene(hold_ribbon);
 }
 

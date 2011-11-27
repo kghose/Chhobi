@@ -86,9 +86,10 @@ void RibbonTile::set_pi(PhotoInfo c_pi)
     pi.type=c_pi.type;
 }
 
-PhotoRibbon::PhotoRibbon(QObject *parent) :
+PhotoRibbon::PhotoRibbon(QObject *parent, bool hd) :
     QGraphicsScene(parent)
 {
+    holding_table = hd;
     tile_size = 10;
     columns = 16; //do this from measurement of view port? or set this?
     dateprint_row_interval = -1;//Means we don't print dates (e.g. in the holding table)
@@ -223,6 +224,8 @@ void PhotoRibbon::keyPressEvent(QKeyEvent *keyEvent)
         select_adjacent_tile(false);
     else if(keyEvent->key() == Qt::Key_Left)
         select_adjacent_tile(true);
+    else if(keyEvent->key() == Qt::Key_Backspace)
+        delete_selected();
 
     QGraphicsScene::keyPressEvent(keyEvent);
 }
@@ -253,4 +256,16 @@ void PhotoRibbon::select_adjacent_tile(bool backward)
         }
     }
     setSelectionArea(sel_path.translated(x,y));
+}
+
+void PhotoRibbon::delete_selected()
+{
+    if(!holding_table) return; //We only delete for holding table
+    QList<QGraphicsItem *> selected_tiles = selectedItems();
+    QList<QGraphicsItem *>::iterator i;
+    for (i = selected_tiles.begin(); i != selected_tiles.end(); ++i) {
+        removeItem(*i);
+        //delete *i;//presumably this will avoid leaks
+    }
+
 }
