@@ -95,6 +95,9 @@ void MainWindow::setup_connections()
     //Database crawler
     QObject::connect(&db, SIGNAL(now_searching(QString)),
             ui->QL_preview, SLOT(setText(QString)));
+    QObject::connect(this, SIGNAL(db_stop()),
+            &db, SLOT(stop()));
+
 }
 
 void MainWindow::set_preview_photo(PhotoInfo pi)

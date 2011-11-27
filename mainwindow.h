@@ -39,7 +39,6 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void load_photo_list();
 
 private:
     Ui::MainWindow *ui;
@@ -56,6 +55,7 @@ private:
 
     void resizeEvent(QResizeEvent * /* event */);
     bool eventFilter(QObject *, QEvent *);
+    void closeEvent(QCloseEvent *) {emit db_stop();}//This will tell the db to stop if needed
 
     void set_datetime(PhotoMetaData pmd);
     void set_metadata_table(PhotoMetaData pmd);
@@ -63,6 +63,7 @@ private:
 
 public slots:
     void set_photo_root();
+    void load_photo_list();
     void set_preview_photo(PhotoInfo);
     void send_to_holding();
     void show_preview_external();
@@ -72,6 +73,9 @@ public slots:
     void save_photo_meta_data();
     void resize_photos();
     void show_resized_folder();
+
+signals:
+    void db_stop();
 };
 
 #endif // MAINWINDOW_H

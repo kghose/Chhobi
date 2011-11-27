@@ -41,7 +41,7 @@ class Database : public QObject
 {
     Q_OBJECT
 
-    bool keep_running; //The slot stop() sets this to false allowing us to abort the import function
+    volatile bool keep_running; //The slot stop() sets this to false allowing us to abort the import function
     QDir photos_root; //The root from which we start looking for photos
     QDateTime last_descent; //The last time we checked for photos
     QSqlDatabase db; //Handle to our sqlite database

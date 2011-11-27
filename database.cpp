@@ -130,6 +130,7 @@ void Database::descend(QDir &dir, bool isroot)
         last_descent = settings.value("last descent").toDateTime();
         db.transaction();//TODO check for errors
     }
+
     if(!keep_running) return;//best to quit out without changing anything
     emit now_searching(photos_root.relativeFilePath(dir.path()));
     QApplication::processEvents();
@@ -160,7 +161,8 @@ void Database::descend(QDir &dir, bool isroot)
         if(keep_running) {//If we've got this far, we were allowed to finish our crawl
             QSettings settings;
             settings.setValue("last descent", QDateTime::currentDateTime());
-        }
+        } else
+            qDebug() << "Terminated";
     }
 }
 
