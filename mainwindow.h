@@ -61,6 +61,8 @@ private:
     void set_metadata_table(PhotoMetaData pmd);
     void set_keywords_table(PhotoMetaData pmd);
 
+    QImage fetch_image(QString, QSize, PhotoMetaData &);
+
 public slots:
     void set_photo_root();
     void load_photo_list();

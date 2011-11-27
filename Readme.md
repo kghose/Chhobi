@@ -162,6 +162,10 @@ RibbonTile and the problem went away.
 allows me to set the pen there.
 
 
+BUGS TO FIX
+===========
+1. Photo import (not detecting new folders)
+1. Preview image portrait orientation proper size.
 
 TODO
 ====
@@ -179,3 +183,5 @@ click to select and double click to hold model
 1. [DONE] Refactor code to merge PhotoInfo and PhotoMetaData
 1. Add separators every x photos with some kind of date identification to help
 us locate things faster.
+1. Put a nice border round the preview (need to subclass something)
+1.

@@ -100,6 +100,29 @@ void MainWindow::setup_connections()
 
 }
 
+QImage MainWindow::fetch_image(QString absolute_file_name, QSize max_size, PhotoMetaData &pmd)
+{
+    pmd = load_metadata(absolute_file_name);//The preview image needs this returned
+    QImageReader qir(absolute_file_name);
+    QSize orig = qir.size();
+    float ratio, rw, rh , width, height;
+    if(pmd.rotation_angle==0 || pmd.rotation_angle==180) {
+        width = orig.width();
+        height = orig.height();
+    } else {
+        height = orig.width();
+        width = orig.height();
+    }
+    rw = (float)max_size.width()/width;
+    rh = (float)max_size.height()/height;
+    if( rw > rh)
+        ratio = rh;
+    else
+        ratio = rw;
+    qir.setScaledSize(ratio*orig);
+    return rotate(pmd.rotation_angle, qir.read());
+}
+
 void MainWindow::set_preview_photo(PhotoInfo pi)
 {
     PhotoMetaData pmd;
@@ -107,28 +130,16 @@ void MainWindow::set_preview_photo(PhotoInfo pi)
     this->statusBar()->showMessage(absolute_file_name);
     QImage pmI;
     if(photos_root.exists(pi.relative_file_path)) {
-        pmd = load_metadata(absolute_file_name);
-        QImageReader qir(absolute_file_name);
-        QSize orig = qir.size();
-        float ratio = 0;
-        if(orig.width() > orig.height())
-            ratio = (float)ui->QL_preview->size().width()/(float)orig.width();
-        else
-            ratio = (float)ui->QL_preview->size().height()/(float)orig.height();
-        qir.setScaledSize(ratio*orig);
-        pmI = qir.read();
-        //pmI.load(absolute_file_name);
+        pmI = fetch_image(absolute_file_name, ui->QL_preview->size(), pmd);
     } else {//Photo reference in db but not on disk
         pmd.valid = false;
-        pmd.rotation_angle = 0;
         pmI.load(":/Images/Icons/chhobi-icon.png");
         db.purge_photo(pi);
     }
 
     preview.set_meta_data(pmd);
     if(pmd.type == PHOTO)
-        preview.set_pixmap(QPixmap::fromImage(
-          rotate(preview.get_metadata().rotation_angle, pmI.scaled(ui->QL_preview->size(),Qt::KeepAspectRatio))));
+        preview.set_pixmap(QPixmap::fromImage(pmI));
     else
         preview.set_pixmap(QPixmap(":/Images/Icons/cholochitro.png"));
 
@@ -315,6 +326,8 @@ void MainWindow::resize_photos()
 {
     ui->mailLabel->setEnabled(false);
 
+    PhotoMetaData dummy;
+    QSize max_size(ui->spinBox->value(), ui->spinBox->value());
     resized_root = QDir::temp();
     QList<PhotoInfo> tiles = hold_ribbon->get_all_tiles();
     QList<PhotoInfo>::iterator i;
@@ -326,16 +339,8 @@ void MainWindow::resize_photos()
             QFileInfo orig_file(photos_root.absoluteFilePath(i->relative_file_path)),
                     resized_file(resized_root.absoluteFilePath(i->relative_file_path));
             if(i->type == PHOTO) {
-                QImageReader qir(orig_file.absoluteFilePath());
-                QSize orig = qir.size();
-                float ratio = 0, new_size = ui->spinBox->value();
-                if(orig.width() > orig.height())
-                    ratio = (float)new_size/(float)orig.width();
-                else
-                    ratio = (float)new_size/(float)orig.height();
-                qir.setScaledSize(ratio*orig);
-                resized_root.mkpath(resized_file.absoluteDir().path());
-                qir.read().save(resized_file.absoluteFilePath());
+                resized_root.mkpath(resized_file.absolutePath());
+                fetch_image(orig_file.absoluteFilePath(), max_size, dummy).save(resized_file.absoluteFilePath());
             } else {//Probably a movie, copy over?
                 qDebug() << i->relative_file_path;
             }
