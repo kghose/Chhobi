@@ -97,7 +97,7 @@ If a directory is unmodified none of the enclosed files are read.
 Finally, all the child directories are listed and sequentially recursed into.
 
 After we are done, we find out the zombie directories (present in db, absent on
-disk) and remove them.
+disk) and remove them as well as their enclosed files.
 
 The last descent time is set as the start of the descent. This is because the
 descent takes time and by the time it has finished we might have made changes to

@@ -85,32 +85,68 @@ Coding notes
 ============
 Tracking file system changes
 --------------------------
-Some observations:
-1. Changing a file causes the modified date on the parent directory to change, but
-not in the grandparents etc.
-1. Adding a folder changes the last modified time on the parent folder
-1. The child folder's modified time remains unchanged (e.g. if it was copied over).
+The most common reason for changes in the pictures are that we edit the metadata
+and save the changes to pictures anywhere in the directory tree. These changes
+need to be reimported into the database and making these changes causes the
+parent directory (and only the parent directory) last modified time to be changed.
 
-This last point poses a particular problem. One elegant tracking algorithm could
-have been to descend down each directory recursively only looking at directories
-whose last changed time is less than
+The next common reason for changes is that new pictures have been downloaded from
+the camera and have been placed in a new folder at some distance under the root.
+This causes the modified time of the folder/pictures and parent folder to
+change.
 
-So, if we copy over a folder of photos from 2005 (the present being 2011) into
-our current photo root the photo root's last modified time changes, but the last
-modified time of the 2005 folder is still 2005 (or whatever). So any algorithm
-that uses a global "last tracked" time will fail, since this last tracked time
-will be greater than 2005.
+The least common reason for changes is that an old folder (or picture) is copied
+over into the directory tree. This causes the parent folder last modified time
+to change but the modified time of the folder and its files can be old (as old
+as original creation date)
 
-Requirements:
-1. Importing is a lengthy process so the import should be in a separate thread
-1. The import should detect new and changed files/folders, skipping unchanged ones
+Our job is to go through the directory tree and
+1. Import new photos
+2. Reimport changed ones
+3. Remove photos from the database that no longer exist on disk
+4. Do it as quickly as possible
 
-Algorithm:
-1. Start at the photo root and recurse into each child directory
-1. If the directory's last modified time is after the last recurse time OR the
-directory has not been imported before go through each file in the directory
-1. For each file if the last modified time is after the last recurse time OR the
-file has not been imported before
+We do this as follows:
+
+The importing function is a recursive function that starts at the photo_root
+and works its way down the tree.
+
+At each directory it pulls up the current directory entry from the database. If
+the directory is not in the database then all child files are imported.
+
+If the directory has been imported, if the last modified date is later than the
+last descent date the list of files under this directory are pulled up from the
+database. Each file on disk is checked against the database contents. If the
+file exists and its last modified date is after the last descent date it is
+reimported. If the file does not exist, it is imported. If there is a file in
+the database and not on disk, it is purged.
+
+If a directory is unmodified none of the enclosed files are read.
+
+Finally, all the child directories are listed and sequentially recursed into.
+
+After we are done, we find out the zombie directories (present in db, absent on
+disk) and remove them as well as their enclosed files.
+
+The last descent time is set as the start of the descent. This is because the
+descent takes time and by the time it has finished we might have made changes to
+some of the photos.
+
+As we descend into the file system we ocassionaly send out signals informing
+the main program of what we are up to so it knows we haven't gone narcoleptic or
+some such.
+
+
+Database features just to improve importing performance:
+1. Directories are stored in a separate table
+2. Photo entries in the photos table have a dir_id field which indicates the
+id of the enclosing directory. This allows us to pull up all the photos under a
+given directory.
+3. We load all the directories into a variable at the start (into a QSet) alongwith
+their ids so we don't need to repeatedly query the db for each directory - and
+we will recurse every directory
+4. We query the db to find what files are under current dir. We won't have to do
+this very often - only when our directory is modified.
 
 
 Class inheritance
