@@ -57,6 +57,14 @@ void MainWindow::setup_ui()
     ui->QGV_hold->setScene(hold_ribbon);
 }
 
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    emit stop_crawl();//This will tell the db to stop if needed
+    //wait until its done
+    while(disk_crawler.isRunning())
+        ;
+}
+
 void MainWindow::setup_connections()
 {
     //Event filter for drag on mailing label
@@ -112,7 +120,7 @@ void MainWindow::setup_database()
     if(!settings.contains("database file name"))
         settings.setValue("database file name", db_location);
     QFileInfo dbpath(settings.value("database file name").toString());
-    db.open(dbpath);
+    open_database(dbpath);
 }
 
 void MainWindow::setup_photo_root()
@@ -161,7 +169,7 @@ void MainWindow::set_preview_photo(PhotoInfo pi)
     } else {//Photo reference in db but not on disk
         pmd.valid = false;
         pmI.load(":/Images/Icons/chhobi-icon.png");
-        db.purge_photo(pi);
+        qDebug() << pi.relative_file_path << ": If this zombie is not purged next load, we have a coding error";
     }
 
     preview.set_meta_data(pmd);
@@ -325,7 +333,7 @@ void MainWindow::load_photo_list()
     this->setEnabled(false);
     int datetime_row_interval = settings.value("date marker row interval", 100).toInt();//
     ribbon->set_dateprint_row_interval(datetime_row_interval);
-    ribbon->replace_tiles(db.get_all_photos());
+    ribbon->replace_tiles(get_all_photos());
     ui->QL_preview->setText("Photos imported");
     setWindowTitle("Chhobi");
     this->setEnabled(true);

@@ -47,7 +47,6 @@ private:
     PhotoRibbon *ribbon, *hold_ribbon;
     Photo preview;
     QDir photos_root;
-    Database db;
     ThreadedDiskCrawler disk_crawler;
 
     QList<QUrl> resized_photos;
@@ -60,7 +59,7 @@ private:
 
     void resizeEvent(QResizeEvent * /* event */);
     bool eventFilter(QObject *, QEvent *);
-    void closeEvent(QCloseEvent *) {emit stop_crawl();}//This will tell the db to stop if needed
+    void closeEvent(QCloseEvent *);
 
     void set_datetime(PhotoMetaData pmd);
     void set_metadata_table(PhotoMetaData pmd);
