@@ -10,6 +10,11 @@
 #include <exiv2/image.hpp> //needed for exif operations
 #include <exiv2/exif.hpp>
 
+//these limits are from
+//http://www.controlledvocabulary.com/imagedatabases/iptc_naa.html#IPTCchart
+const int max_caption_characters = 2000;
+const int max_keyword_characters = 64;
+
 PhotoMetaData load_metadata(QString absolute_filename);
 void save_metadata(PhotoMetaData pmd);
 
