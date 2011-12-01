@@ -19,14 +19,16 @@ SOURCES += main.cpp\
     photoribbon.cpp \
     photo.cpp \
     exivmanager.cpp \
-    database.cpp
+    database.cpp \
+    threadeddiskcrawler.cpp
 
 HEADERS  += mainwindow.h \
     photoribbon.h \
     photo.h \
     exivmanager.h \
     imagerotate.h \
-    database.h
+    database.h \
+    threadeddiskcrawler.h
 
 FORMS    += mainwindow.ui
 
@@ -35,6 +37,8 @@ OTHER_FILES += \
 
 RESOURCES += \
     resources.qrc
+
+
 
 
 

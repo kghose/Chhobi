@@ -103,6 +103,8 @@ PhotoRibbon::PhotoRibbon(QObject *parent, bool hd) :
 //Replace the current list with this one
 void PhotoRibbon::replace_tiles(QList<PhotoInfo> new_tiles)
 {
+    clearSelection();//Some clean up we need
+    preview_tile = NULL;
     clear();//memory leak or not?
     add_tiles(new_tiles);
 }

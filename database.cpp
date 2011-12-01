@@ -36,12 +36,16 @@ Database::~Database() {
 bool Database::create_db() {
     qDebug() << "Creating brand new database " << db.databaseName();
     QSqlQuery query;
-    query.exec("create table photos("
+    query.exec("CREATE TABLE photos("
         "id INTEGER PRIMARY KEY, filepath text, caption text, keywords text, "
-        "datetaken integer, tile_color integer, type integer);");
-    query.exec("create table keywords("
+        "datetaken integer, tile_color integer, type integer, parentdir_id integer);");
+    query.exec("CREATE TABLE keywords("
         "id INTEGER PRIMARY KEY,"
         "keyword text);");
+    query.exec("CREATE TABLE directories("
+        "id INTEGER PRIMARY KEY,"
+        "relpath text);");
+
     //TODO: error checking
     return true;
 }
@@ -65,7 +69,9 @@ bool Database::open(QFileInfo dbpath)//Open or create a database in dbdir
 //Retrieval functions
 QList<PhotoInfo> Database::get_all_photos()
 {
-    return get_photos_by_sql("SELECT id,filepath,tile_color,type,datetaken FROM photos ORDER BY datetaken DESC");
+    QSqlQuery query;
+    query.prepare("SELECT id,filepath,tile_color,type,datetaken FROM photos ORDER BY datetaken DESC");
+    return get_photos_by_query(query);
 }
 
 QList<PhotoInfo> Database::get_photos_with_caption(QString)
@@ -83,12 +89,11 @@ QList<PhotoInfo> Database::get_photos_with_no_keyword()
     ;
 }
 
-QList<PhotoInfo> Database::get_photos_by_sql(QString query_str)
+QList<PhotoInfo> Database::get_photos_by_query(QSqlQuery query)
 {
-    QSqlQuery query;
     query.setForwardOnly(true);//should save memory
     QList<PhotoInfo> pl;
-    query.exec(query_str);
+    query.exec();
     while(query.next()) {
         PhotoInfo this_pi;
         this_pi.id = query.value(0).toInt();
@@ -166,6 +171,7 @@ void Database::descend(QDir &dir, bool isroot)
     }
 }
 
+/*
 int compute_tile_color(QFileInfo qfi)
 {
     QImageReader qir(qfi.absoluteFilePath());
@@ -183,7 +189,7 @@ int compute_tile_color(QFileInfo qfi)
     int N = 10000;
     return (((mean_r/N) & 0xff) << 16)  + (((mean_g/N) & 0xff) << 8) + ((mean_b/N) & 0xff);
 }
-
+*/
 
 //This is a new photo to be inserted into the database
 void Database::import_photo(QFileInfo qfi)
@@ -207,7 +213,7 @@ void Database::import_photo(QFileInfo qfi)
                       "type=:type WHERE id=:id");
         query.bindValue(":id", id);
     } else {
-        query.prepare("INSERT INTO photos (id, filepath, caption, keywords, datetaken, tile_color, type) "
+        query.prepare("INSERT INTO photos (id, filepath, caption, keywords, datetaken, tile_color, type, rowtype) "
                       "VALUES(NULL, :filepath, :caption, :keywords, :datetaken, :tile_color, :type)");
     }
     query.bindValue(":filepath", relative_file_path);
@@ -215,15 +221,16 @@ void Database::import_photo(QFileInfo qfi)
     query.bindValue(":keywords", kwds);
     query.bindValue(":datetaken", pmd.photo_date);
     query.bindValue(":type", pmd.type);
-    if(pmd.type==PHOTO)
-        query.bindValue(":tile_color", compute_tile_color(qfi));
-    else
-        query.bindValue(":tile_color", 0x0000ff);
+    //if(pmd.type==PHOTO)
+        //query.bindValue(":tile_color", compute_tile_color(qfi));
+    //else
+    //    query.bindValue(":tile_color", 0x0000ff);
     query.exec();
     //int id = query.lastInsertId().toInt(&ok);
     insert_keywords(pmd.keywords);
 }
 
+//Move into crawler
 void Database::purge_photo(PhotoInfo pi)
 {
     QSqlQuery query;

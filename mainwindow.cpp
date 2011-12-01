@@ -35,13 +35,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setup_ui();
     setup_connections();
-
-    //setup database
-    QSettings settings;
-    if(!settings.contains("database file name"))
-        settings.setValue("database file name", db_location);
-    QFileInfo dbpath(settings.value("database file name").toString());
-    db.open(dbpath);
+    setup_database();
+    setup_photo_root();
+    load_photo_list();
+    crawl();
 }
 
 MainWindow::~MainWindow()
@@ -67,7 +64,11 @@ void MainWindow::setup_connections()
 
     //Menu
     QObject::connect(ui->actionSet_Root, SIGNAL(triggered()),
-            this, SLOT(set_photo_root()));
+            this, SLOT(select_photo_root()));
+    QObject::connect(ui->actionCrawl, SIGNAL(triggered()),
+                     this, SLOT(crawl()));
+    QObject::connect(ui->actionReload, SIGNAL(triggered()),
+                     this, SLOT(load_photo_list()));
 
     //Ribbon
     QObject::connect(ribbon, SIGNAL(preview_id(PhotoInfo)),
@@ -93,11 +94,37 @@ void MainWindow::setup_connections()
 
 
     //Database crawler
-    QObject::connect(&db, SIGNAL(now_searching(QString)),
-            ui->QL_preview, SLOT(setText(QString)));
-    QObject::connect(this, SIGNAL(db_stop()),
-            &db, SLOT(stop()));
+    QObject::connect(&disk_crawler, SIGNAL(started()),
+                     this, SLOT(crawl_started()));
+    QObject::connect(&disk_crawler, SIGNAL(finished()),
+                     this, SLOT(crawl_ended()));
+    QObject::connect(&disk_crawler, SIGNAL(now_searching(const QString &)),
+                     this, SLOT(now_crawling(const QString &)));
+    QObject::connect(this, SIGNAL(stop_crawl()),
+                     &disk_crawler, SLOT(stop()));//needed for window close
 
+}
+
+void MainWindow::setup_database()
+{
+    //setup database
+    QSettings settings;
+    if(!settings.contains("database file name"))
+        settings.setValue("database file name", db_location);
+    QFileInfo dbpath(settings.value("database file name").toString());
+    db.open(dbpath);
+}
+
+void MainWindow::setup_photo_root()
+{
+    QSettings settings;
+    if(!settings.contains("photo root"))
+        select_photo_root();//if successful this call setup_photo_root again
+    else {
+        photos_root = QDir(settings.value("photo root").toString());
+        photos_root.setNameFilters(name_filters);
+        photos_root.setSorting(QDir::Time | QDir::DirsFirst);
+    }
 }
 
 QImage MainWindow::fetch_image(QString absolute_file_name, QSize max_size, PhotoMetaData &pmd)
@@ -264,7 +291,7 @@ void MainWindow::show_preview_external()
 }
 
 //Funny thing - if we try to use native dialog, it screws up
-void MainWindow::set_photo_root()
+void MainWindow::select_photo_root()
 {
     QSettings settings;
     QFileDialog::Options options = QFileDialog::DontResolveSymlinks | QFileDialog::ShowDirsOnly | QFileDialog::DontUseNativeDialog;
@@ -275,31 +302,33 @@ void MainWindow::set_photo_root()
     if (!directory.isEmpty()) {
         settings.setValue("photo root", directory);
         settings.remove("last descent");//need to force a re trawling
-        load_photo_list();
+        setup_photo_root();
+        crawl();
     }
 }
 
-//Disable the mainwindow, open the database, import/refresh new photos, insert
+void MainWindow::crawl()
+{
+    QSettings settings;
+    if(settings.contains("photo root")) {
+        emit stop_crawl();
+        disk_crawler.restart(photos_root);
+    } else
+        qDebug() << "Photo root not set";
+}
+
+//Disable the mainwindow, fetch photo list from the database, insert
 //them into the ribbon and then return control to the main window
 void MainWindow::load_photo_list()
 {
-    this->setEnabled(false);
     QSettings settings;
-    if(!settings.contains("photo root")) {
-        set_photo_root();
-    } else {
-        photos_root = QDir(settings.value("photo root").toString());//Shouldn't need a default
-        int datetime_row_interval = settings.value("date marker row interval", 100).toInt();//
-        ribbon->set_dateprint_row_interval(datetime_row_interval);
-        QDir dir(photos_root);
-        dir.setNameFilters(name_filters);
-        dir.setFilter(QDir::AllDirs | QDir::NoDotAndDotDot | QDir::Files);
-        dir.setSorting(QDir::Time | QDir::DirsFirst);
-        db.descend(dir, true);//true -> this is a root
-        ribbon->replace_tiles(db.get_all_photos());
-        ui->QL_preview->setText("Photos imported");
-        this->setEnabled(true);
-    }
+    this->setEnabled(false);
+    int datetime_row_interval = settings.value("date marker row interval", 100).toInt();//
+    ribbon->set_dateprint_row_interval(datetime_row_interval);
+    ribbon->replace_tiles(db.get_all_photos());
+    ui->QL_preview->setText("Photos imported");
+    setWindowTitle("Chhobi");
+    this->setEnabled(true);
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)

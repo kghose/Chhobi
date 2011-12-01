@@ -36,7 +36,6 @@ import the metadata for those photos into the database.
 Other functions allow us to search the database for photos meeting certain
 criteria.
  */
-
 class Database : public QObject
 {
     Q_OBJECT
@@ -60,7 +59,7 @@ public:
     QList<PhotoInfo> get_photos_with_caption(QString);
     QList<PhotoInfo> get_photos_with_keyword(QString);
     QList<PhotoInfo> get_photos_with_no_keyword();
-    QList<PhotoInfo> get_photos_by_sql(QString);
+    QList<PhotoInfo> get_photos_by_query(QSqlQuery);
 
     //Importing and other functions
     void descend(QDir &, bool isroot = false);

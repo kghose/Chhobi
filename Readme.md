@@ -200,9 +200,11 @@ because a compiler cannot optimize away the creation of a temporary object for
 BUGS TO FIX
 ===========
 1. Photo import (not detecting new folders)
+1. Directory filters to prevent loading of .meta files
 1. [DONE] Preview image portrait orientation proper size. -> Turned out to be
 interesting because the photo could need to be rotated AND the preview frame
 could be portrait or landscape sized.
+
 
 TODO
 ====

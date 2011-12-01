@@ -24,6 +24,7 @@
 #include "photoribbon.h"
 #include "photo.h"
 #include "database.h"
+#include "threadeddiskcrawler.h"
 
 const QString db_location = QDir::homePath() + "/.chhobi/chhobi.sqlite3";
 const QStringList name_filters = (QStringList() << "*.jpg" << "*.jpeg" << "*.png" << "*.tiff" << "*.avi");//TODO other
@@ -47,15 +48,19 @@ private:
     Photo preview;
     QDir photos_root;
     Database db;
+    ThreadedDiskCrawler disk_crawler;
+
     QList<QUrl> resized_photos;
     QDir resized_root;
 
     void setup_ui();
     void setup_connections();
+    void setup_database();
+    void setup_photo_root();
 
     void resizeEvent(QResizeEvent * /* event */);
     bool eventFilter(QObject *, QEvent *);
-    void closeEvent(QCloseEvent *) {emit db_stop();}//This will tell the db to stop if needed
+    void closeEvent(QCloseEvent *) {emit stop_crawl();}//This will tell the db to stop if needed
 
     void set_datetime(PhotoMetaData pmd);
     void set_metadata_table(PhotoMetaData pmd);
@@ -64,7 +69,12 @@ private:
     QImage fetch_image(QString, QSize, PhotoMetaData &);
 
 public slots:
-    void set_photo_root();
+    void select_photo_root();
+    void crawl();
+    void crawl_started() {setWindowTitle("Chhobi: Crawling");}
+    void now_crawling(const QString &f) {setWindowTitle(f);}
+    void crawl_ended() {setWindowTitle("Chhobi*");}
+
     void load_photo_list();
     void set_preview_photo(PhotoInfo);
     void send_to_holding();
@@ -77,7 +87,7 @@ public slots:
     void show_resized_folder();
 
 signals:
-    void db_stop();
+    void stop_crawl();
 };
 
 #endif // MAINWINDOW_H

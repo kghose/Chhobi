@@ -25,6 +25,5 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
-    QTimer::singleShot(0, &w, SLOT(load_photo_list()));//Queue it to start when app starts
     return a.exec();
 }

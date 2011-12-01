@@ -469,9 +469,11 @@
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>File</string>
+     <string>Photos</string>
     </property>
     <addaction name="actionSet_Root"/>
+    <addaction name="actionCrawl"/>
+    <addaction name="actionReload"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -490,6 +492,16 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionCrawl">
+   <property name="text">
+    <string>Crawl</string>
+   </property>
+  </action>
+  <action name="actionReload">
+   <property name="text">
+    <string>Reload</string>
    </property>
   </action>
  </widget>
