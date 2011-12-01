@@ -85,10 +85,32 @@ Coding notes
 ============
 Tracking file system changes
 --------------------------
-Changing a file causes the modified date on the parent directory to change, but
-not in the grandparents etc. For this reason we have to recurse down every
-directory, but we save time by only going through files in a directory which
-has changed after our latest trawl.
+Some observations:
+1. Changing a file causes the modified date on the parent directory to change, but
+not in the grandparents etc.
+1. Adding a folder changes the last modified time on the parent folder
+1. The child folder's modified time remains unchanged (e.g. if it was copied over).
+
+This last point poses a particular problem. One elegant tracking algorithm could
+have been to descend down each directory recursively only looking at directories
+whose last changed time is less than
+
+So, if we copy over a folder of photos from 2005 (the present being 2011) into
+our current photo root the photo root's last modified time changes, but the last
+modified time of the 2005 folder is still 2005 (or whatever). So any algorithm
+that uses a global "last tracked" time will fail, since this last tracked time
+will be greater than 2005.
+
+Requirements:
+1. Importing is a lengthy process so the import should be in a separate thread
+1. The import should detect new and changed files/folders, skipping unchanged ones
+
+Algorithm:
+1. Start at the photo root and recurse into each child directory
+1. If the directory's last modified time is after the last recurse time OR the
+directory has not been imported before go through each file in the directory
+1. For each file if the last modified time is after the last recurse time OR the
+file has not been imported before
 
 
 Class inheritance
@@ -161,14 +183,31 @@ RibbonTile and the problem went away.
 1. For the selected/unselected I discovered `QGraphicsItem::itemChange` which
 allows me to set the pen there.
 
+`++i` OR `i++`?
+---------------
+From discussions on stack overflow [1][1] we have:
+1. `++i` does not expect to return a value while `i++` might need to return a
+value
+2. A modern compiler, for simple data types (i.e. integer) will treat the two
+the same if the context is right e.g. in a `for` loop
+3. For an object (e.g. an interator), however, `++i` will be faster than `i++`
+because a compiler cannot optimize away the creation of a temporary object for
+`i++`
+
+[1]:http://stackoverflow.com/questions/24886/is-there-a-performance-difference-between-i-and-i-in-c
+
 
 BUGS TO FIX
 ===========
 1. Photo import (not detecting new folders)
-1. Preview image portrait orientation proper size.
+1. [DONE] Preview image portrait orientation proper size. -> Turned out to be
+interesting because the photo could need to be rotated AND the preview frame
+could be portrait or landscape sized.
 
 TODO
 ====
+1. Improve directory crawling
+1. Put directory crawling in separate thread so that Chhobi if functional during crawl
 1. [DONE] Put absolute filename in status bar
 1. [DONE] Last modified for directories working correctly i.e. are changed files retrawled?
 1. [DONE] SQL queries bind values
@@ -181,7 +220,7 @@ TODO
 1. [DONE] Change to a dense panel ("lighttable") like arrangement? Need to switch to
 click to select and double click to hold model
 1. [DONE] Refactor code to merge PhotoInfo and PhotoMetaData
-1. Add separators every x photos with some kind of date identification to help
+1. [DONE] Add separators every x photos with some kind of date identification to help
 us locate things faster.
 1. Put a nice border round the preview (need to subclass something)
 1. [DONE] Remove images from holding table
