@@ -222,7 +222,7 @@ allows me to set the pen there.
 
 `++i` OR `i++`?
 ---------------
-From discussions on stack overflow [1][1] we have:
+From discussions on [stack overflow][1] we have:
 
 1. `++i` does not expect to return a value while `i++` might need to return a
 value
