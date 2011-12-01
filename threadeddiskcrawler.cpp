@@ -3,6 +3,11 @@
 
 void ThreadedDiskCrawler::run()
 {
+    db = QSqlDatabase::database(conn_name);//conn_name is in database.h
+    if(!db.open()) {
+        qDebug() << db.lastError();
+        return;
+    }
     keep_running = true;
     QSettings settings;
     last_descent = settings.value("last descent").toDateTime();
@@ -29,7 +34,7 @@ void ThreadedDiskCrawler::restart(QDir dir)
 void ThreadedDiskCrawler::load_directories_in_database()
 {
     directories.clear();
-    QSqlQuery query;
+    QSqlQuery query(db);
     query.prepare("SELECT id, relpath FROM directories");
     query.exec();
     directories.reserve(query.size()+100);
@@ -37,9 +42,9 @@ void ThreadedDiskCrawler::load_directories_in_database()
         directories[query.value(1).toString()] = query.value(0).toInt();
 }
 
-QHash<QString,int> all_files_under_dir(int dir_id)
+QHash<QString,int> ThreadedDiskCrawler::all_files_under_dir(int dir_id)
 {
-    QSqlQuery query;
+    QSqlQuery query(db);
     query.prepare("SELECT id, filepath FROM photos WHERE parentdir_id=:parentdir_id");
     query.bindValue(":parentdir_id", dir_id);
     query.exec();
@@ -172,7 +177,7 @@ void ThreadedDiskCrawler::descend(QDir &dir)
 //use the relative path
 int ThreadedDiskCrawler::import_directory(QString relpath)
 {
-    QSqlQuery query;
+    QSqlQuery query(db);
     //We know this does not exist.
     query.prepare("INSERT INTO directories (id, relpath) VALUES (NULL, :relpath)");
     query.bindValue(":relpath", relpath);
@@ -199,7 +204,7 @@ void ThreadedDiskCrawler::import_photo(QFileInfo qfi, int parentdir_id)
         kwds += "<" + pmd.keywords[i] + ">";
 
     QString relative_file_path = photos_root.relativeFilePath(qfi.absoluteFilePath());
-    QSqlQuery query;
+    QSqlQuery query(db);
     query.prepare("SELECT id FROM photos WHERE filepath LIKE :rfp");
     query.bindValue(":rfp", relative_file_path);
     query.exec();
@@ -230,7 +235,7 @@ void ThreadedDiskCrawler::import_photo(QFileInfo qfi, int parentdir_id)
 void ThreadedDiskCrawler::insert_keywords(QStringList kwl)
 {
     int cnt = kwl.count();
-    QSqlQuery query;
+    QSqlQuery query(db);
     for(int i=0; i<cnt; i++) {
         query.prepare("SELECT id FROM keywords WHERE keyword LIKE :keyword");
         query.bindValue(":keyword", kwl[i]);
@@ -248,20 +253,25 @@ void ThreadedDiskCrawler::insert_keywords(QStringList kwl)
 //crawl and we find the file missing from disk.
 void ThreadedDiskCrawler::purge_photo(int id)
 {
-    QSqlQuery query;
+    QSqlQuery query(db);
     query.prepare("DELETE FROM photos WHERE id=:id");
     query.bindValue(":id", id);
     query.exec();
     //gotta get rid of keyword assocs?
 }
 
+//don't forget to remove all the relevant file entries too!
 void ThreadedDiskCrawler::purge_zombie_directories()
 {
-    QSqlQuery query;
+    QSqlQuery query(db);
     QHash<QString,int>::iterator zd;
     for(zd=directories.begin(); zd!= directories.end(); ++zd) {
-        query.prepare("DELETE FROM directories WHERE id=:id");
+        //don't forget to remove all the relevant file entries too!
+        query.prepare("DELETE FROM photos WHERE parentdir_id=:id");
         query.bindValue(":id", *zd);
+        query.exec();
+        //Now get rid of subdirs
+        query.prepare("DELETE FROM directories WHERE id=:id");
         query.exec();
     }
 }

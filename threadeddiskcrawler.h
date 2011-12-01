@@ -21,14 +21,7 @@
 
 #include <QThread>
 #include <QSet>
-#include "database.h" //for the RowType enum
-
-/*
-//A simple structure to allow us to nest our disk image
-struct DiskMirrorNode {
-    QSet<DiskMirrorNode> children;
-    RowType type;
-};*/
+#include "database.h"
 
 class ThreadedDiskCrawler : public QThread
 {
@@ -45,6 +38,7 @@ class ThreadedDiskCrawler : public QThread
     int import_directory(QString);
     void import_photo(QFileInfo, int);
     void insert_keywords(QStringList);
+    QHash<QString,int> all_files_under_dir(int dir_id);
 
     //Misc housekeeping
     void clean_up_keywords_in_database();
