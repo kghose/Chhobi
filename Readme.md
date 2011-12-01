@@ -223,6 +223,7 @@ allows me to set the pen there.
 `++i` OR `i++`?
 ---------------
 From discussions on stack overflow [1][1] we have:
+
 1. `++i` does not expect to return a value while `i++` might need to return a
 value
 2. A modern compiler, for simple data types (i.e. integer) will treat the two
@@ -245,7 +246,7 @@ could be portrait or landscape sized.
 
 TODO
 ====
-1. Refactor database.h/.cpp to not use classes, but just functions
+1. [DONE] Refactor database.h/.cpp to not use classes, but just functions
 1. [DONE] Improve directory crawling
 1. [DONE] Put directory crawling in separate thread so that Chhobi is functional during crawl
 1. [DONE] Put absolute filename in status bar
