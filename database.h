@@ -23,61 +23,18 @@
 #include <QtCore>
 #include <QtSql>//from http://doc.trolltech.com/4.3/qtsql.html#details
 #include "photoribbon.h"//needed for PhotoInfo
-/*
-Handles all access to the sqlite database. It uses the PhotoMetaData structure
-to pass data back and forth. All the information stored on the database is
-merely a copy of the photo metadata to speed up searches based on date, caption
-or keyword. The keywords are called "collections".
 
-This class contains functions to search through folders containing pictures,
-find the ones missing from the database, or changed since the last search, and
-import the metadata for those photos into the database.
+const QString conn_name("chhobi database");
 
-Other functions allow us to search the database for photos meeting certain
-criteria.
- */
-class Database : public QObject
-{
-    Q_OBJECT
+//Initialization functions
+bool open_database(QFileInfo dbpath); //Open or create a database in dbdir
+bool create_db(); //create a new empty database
 
-    volatile bool keep_running; //The slot stop() sets this to false allowing us to abort the import function
-    QDir photos_root; //The root from which we start looking for photos
-    QDateTime last_descent; //The last time we checked for photos
-    QSqlDatabase db; //Handle to our sqlite database
-
-public:
-    Database();
-    ~Database();
-
-    //Initialization functions
-    bool open(QFileInfo dbpath); //Open or create a database in dbdir
-    void set_photo_root(QDir root) {photos_root = root;}
-    void set_last_descent(QDateTime qdt) {last_descent = qdt;}
-
-    //Retrieval functions
-    QList<PhotoInfo> get_all_photos();
-    QList<PhotoInfo> get_photos_with_caption(QString);
-    QList<PhotoInfo> get_photos_with_keyword(QString);
-    QList<PhotoInfo> get_photos_with_no_keyword();
-    QList<PhotoInfo> get_photos_by_query(QSqlQuery);
-
-    //Importing and other functions
-    void descend(QDir &, bool isroot = false);
-    void import_photo(QFileInfo );
-    void purge_photo(PhotoInfo);
-
-signals:
-    void now_searching(const QString &);//keep informed of current search
-
-public slots:
-    void stop() {keep_running = false;}
-
-private:
-    bool create_db(); //create a new empty database
-
-    //Misc housekeeping
-    void clean_up_keywords_in_database();
-    void insert_keywords(QStringList);
-};
+//Retrieval functions
+QList<PhotoInfo> get_all_photos();
+//QList<PhotoInfo> get_photos_with_caption(QString);
+//QList<PhotoInfo> get_photos_with_keyword(QString);
+//QList<PhotoInfo> get_photos_with_no_keyword();
+QList<PhotoInfo> get_photos_by_query(QSqlQuery);
 
 #endif /*DATABASE_H_*/
