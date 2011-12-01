@@ -53,6 +53,7 @@ private:
     QDir resized_root;
 
     void setup_ui();
+    void restore_appearance();
     void setup_connections();
     void setup_database();
     void setup_photo_root();

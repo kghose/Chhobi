@@ -34,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QCoreApplication::setApplicationName("Chhobi");
 
     setup_ui();
+    restore_appearance();
     setup_connections();
     setup_database();
     setup_photo_root();
@@ -57,12 +58,22 @@ void MainWindow::setup_ui()
     ui->QGV_hold->setScene(hold_ribbon);
 }
 
+void MainWindow::restore_appearance()
+{
+    QSettings settings;
+    restoreGeometry(settings.value("geometry").toByteArray());
+    restoreState(settings.value("windowState").toByteArray());
+}
+
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     emit stop_crawl();//This will tell the db to stop if needed
-    //wait until its done
-    while(disk_crawler.isRunning())
-        ;
+    QSettings settings;
+    settings.setValue("geometry", saveGeometry());
+    settings.setValue("windowState", saveState());
+
+    while(disk_crawler.isRunning()) {;}//wait until crawler is done
+    QMainWindow::closeEvent(event);
 }
 
 void MainWindow::setup_connections()
