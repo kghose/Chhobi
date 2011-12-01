@@ -199,8 +199,8 @@ because a compiler cannot optimize away the creation of a temporary object for
 
 BUGS TO FIX
 ===========
-1. Photo import (not detecting new folders)
-1. Directory filters to prevent loading of .meta files
+1. [DONE] Photo import (not detecting new folders)
+1. [DONE] Directory filters to prevent loading of .meta files
 1. [DONE] Preview image portrait orientation proper size. -> Turned out to be
 interesting because the photo could need to be rotated AND the preview frame
 could be portrait or landscape sized.
@@ -208,8 +208,9 @@ could be portrait or landscape sized.
 
 TODO
 ====
-1. Improve directory crawling
-1. Put directory crawling in separate thread so that Chhobi if functional during crawl
+1. Refactor database.h/.cpp to not use classes, but just functions
+1. [DONE] Improve directory crawling
+1. [DONE] Put directory crawling in separate thread so that Chhobi is functional during crawl
 1. [DONE] Put absolute filename in status bar
 1. [DONE] Last modified for directories working correctly i.e. are changed files retrawled?
 1. [DONE] SQL queries bind values
