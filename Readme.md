@@ -101,6 +101,7 @@ to change but the modified time of the folder and its files can be old (as old
 as original creation date)
 
 Our job is to go through the directory tree and
+
 1. Import new photos
 2. Reimport changed ones
 3. Remove photos from the database that no longer exist on disk
@@ -108,24 +109,24 @@ Our job is to go through the directory tree and
 
 We do this as follows:
 
-The importing function is a recursive function that starts at the photo_root
+* The importing function is a recursive function that starts at the photo_root
 and works its way down the tree.
 
-At each directory it pulls up the current directory entry from the database. If
+* At each directory it pulls up the current directory entry from the database. If
 the directory is not in the database then all child files are imported.
 
-If the directory has been imported, if the last modified date is later than the
+* If the directory has been imported, if the last modified date is later than the
 last descent date the list of files under this directory are pulled up from the
 database. Each file on disk is checked against the database contents. If the
 file exists and its last modified date is after the last descent date it is
 reimported. If the file does not exist, it is imported. If there is a file in
 the database and not on disk, it is purged.
 
-If a directory is unmodified none of the enclosed files are read.
+* If a directory is unmodified none of the enclosed files are read.
 
-Finally, all the child directories are listed and sequentially recursed into.
+* Finally, all the child directories are listed and sequentially recursed into.
 
-After we are done, we find out the zombie directories (present in db, absent on
+* After we are done, we find out the zombie directories (present in db, absent on
 disk) and remove them as well as their enclosed files.
 
 The last descent time is set as the start of the descent. This is because the
