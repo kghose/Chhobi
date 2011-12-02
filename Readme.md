@@ -1,6 +1,6 @@
 Description
 ===========
-Chhobi is a photo /organizer/ program. It does not have facilites to do any
+Chhobi is a photo *organizer* program. It does not have facilites to do any
 editing of the image data itself (so no red-eye removal, contrast enhancement
 etc. etc.)
 
@@ -19,20 +19,26 @@ which is to browse and organize large libraries of pictures.
 Usage
 =====
 The main browsing interface is the Ribbon, which represents each picture as a
-small tile. The tiles are arranged in order from latest to oldest, from left to
-right. Hovering the mouse over the tile causes the picture and it's
-associated metadata to appear in the preview pane.
+small tile. The tiles are arranged in order from latest to oldest. Hovering the
+mouse over the tile causes a preview and the photo metadata to appear.
 
-The caption, date and keywords can be edited in the preview pane. Clicking on a
-tile, or selecting a bunch of tiles adds them to the holding table. The tiles on
-the holding table represent a set of pictures that can be processed in different
-ways. The pictures in the set can be copied into a new folder (resized) if
-asked for, and the copies can be dropped into a mail program or other external
-application.
+Clicking on the tile will "lock" the preview and allow you to move your mouse
+without changing the preview. The caption, date and keywords can be edited. You
+can use the left and right mouse buttons to step through the pictures. Pressing
+`h` will cause the photo to be added to the holding table. You can click and
+drag the mouse to select multiple photos.
+
+Photos on the holding table can be copied into a separate folder structure and
+resized. Dragging the `mail` icon and dropping it onto an email program or a
+browse for file field of a webpage causes the resized photos to be added to the
+upload.
+
+You can also open the folder enclosing the resized photos by clicking on the
+folder button.
 
 License (GPL)
 =============
-Chhobi is free software; you can redistribute it and/or modify
+`Chhobi is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or
 (at your option) any later version.
@@ -44,7 +50,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along with
 Chhobi; if not, write to the Free Software Foundation, Inc.,
-51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA`
 
 Some design choices
 ===================
