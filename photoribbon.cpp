@@ -163,7 +163,7 @@ void PhotoRibbon::add_tiles(QList<PhotoInfo> new_tiles,
 
         }
     }
-    setSceneRect(-5, -5, columns*tile_size+20, y+20);
+    setSceneRect(-5, -5, columns*tile_size+5, y+20);
 }
 
 //Call this when the selection changes, since that is when we want to keep the
