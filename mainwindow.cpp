@@ -313,7 +313,7 @@ void MainWindow::show_preview_external()
 void MainWindow::select_photo_root()
 {
     QSettings settings;
-    QFileDialog::Options options = QFileDialog::DontResolveSymlinks | QFileDialog::ShowDirsOnly | QFileDialog::DontUseNativeDialog;
+    QFileDialog::Options options = QFileDialog::DontResolveSymlinks | QFileDialog::ShowDirsOnly;// | QFileDialog::DontUseNativeDialog;
     QString directory = QFileDialog::getExistingDirectory(this,
                                 tr("Choose photo root"),
                                 settings.value("photo root", "/").toString(),
@@ -334,6 +334,14 @@ void MainWindow::crawl()
         disk_crawler.restart(photos_root);
     } else
         qDebug() << "Photo root not set";
+}
+
+void MainWindow::crawl_ended()
+{
+    if(disk_crawler.found_new_photos())
+        setWindowTitle("Chhobi*");
+    else
+        setWindowTitle("Chhobi");
 }
 
 //Disable the mainwindow, fetch photo list from the database, insert

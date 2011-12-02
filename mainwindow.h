@@ -73,7 +73,7 @@ public slots:
     void crawl();
     void crawl_started() {setWindowTitle("Chhobi: Crawling");}
     void now_crawling(const QString &f) {setWindowTitle(f);}
-    void crawl_ended() {setWindowTitle("Chhobi*");}
+    void crawl_ended();
 
     void load_photo_list();
     void set_preview_photo(PhotoInfo);

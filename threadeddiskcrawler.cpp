@@ -9,6 +9,7 @@ void ThreadedDiskCrawler::run()
         return;
     }
     keep_running = true;
+    any_new_photos = false;
     QSettings settings;
     last_descent = settings.value("last descent").toDateTime();
     settings.setValue("last descent", QDateTime::currentDateTime());
@@ -24,8 +25,7 @@ void ThreadedDiskCrawler::run()
 //Don't forget to put apropriate filters on dir (e.g. .jpeg .png etc)
 void ThreadedDiskCrawler::restart(QDir dir)
 {
-    while(isRunning())
-        ;
+    while(isRunning()) {;}
     photos_root = dir;
     start();
 }
@@ -194,7 +194,7 @@ int compute_tile_color(QFileInfo qfi)
     return pmI.pixel(0,0) & 0xffffff;
 }
 
-//This is a new photo to be inserted into the database
+//This is a new/modified photo to be inserted into the database
 void ThreadedDiskCrawler::import_photo(QFileInfo qfi, int parentdir_id)
 {
     PhotoMetaData pmd = load_metadata(qfi.absoluteFilePath());
@@ -215,6 +215,7 @@ void ThreadedDiskCrawler::import_photo(QFileInfo qfi, int parentdir_id)
                       "type=:type, parentdir_id=:parentdir_id WHERE id=:id");
         query.bindValue(":id", id);
     } else {
+        any_new_photos = true;
         query.prepare("INSERT INTO photos (id, filepath, caption, keywords, datetaken, tile_color, type, parentdir_id) "
                       "VALUES(NULL, :filepath, :caption, :keywords, :datetaken, :tile_color, :type, :parentdir_id)");
     }

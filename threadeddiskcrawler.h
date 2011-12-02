@@ -28,6 +28,7 @@ class ThreadedDiskCrawler : public QThread
     Q_OBJECT
 
     volatile bool keep_running; //The slot stop() sets this to false allowing us to abort the import function
+    bool any_new_photos;
     QDir photos_root; //The root from which we start looking for photos
     QDateTime last_descent; //The last time we checked for photos
     QSqlDatabase db; //Handle to our sqlite database
@@ -47,6 +48,7 @@ class ThreadedDiskCrawler : public QThread
 
 public:
     void run();
+    bool found_new_photos() {return any_new_photos;}
 
 signals:
     void now_searching(const QString &);//keep informed of current search
