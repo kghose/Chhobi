@@ -247,7 +247,7 @@ could be portrait or landscape sized.
 TODO
 ====
 1. Clicking on preview should open it in external application
-1. Temporary directory should be unique to current run of resizing
+1. [DONE] Temporary directory should be unique to current run of resizing
 1. [DONE] Refactor database.h/.cpp to not use classes, but just functions
 1. [DONE] Improve directory crawling
 1. [DONE] Put directory crawling in separate thread so that Chhobi is functional during crawl

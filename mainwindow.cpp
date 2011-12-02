@@ -376,7 +376,7 @@ void MainWindow::resize_photos()
 
     PhotoMetaData dummy;
     QSize max_size(ui->spinBox->value(), ui->spinBox->value());
-    resized_root = QDir::temp();
+    resized_root = QDir( QDir::tempPath() + "/" + QDateTime::currentDateTime().toString("yyyyMMdd_hhmmss") + "/");
     QList<PhotoInfo> tiles = hold_ribbon->get_all_tiles();
     QList<PhotoInfo>::iterator i;
     resized_photos.clear();
