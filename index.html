@@ -1,121 +1,146 @@
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-  <meta charset='utf-8'>
-
-  <title>kghose/Chhobi @ GitHub</title>
-
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>Chhobi : Photo collection management software</title>
   <style type="text/css">
-    body {
-      margin-top: 1.0em;
-      background-color: #ffffff;
-      font-family: Helvetica, Arial, FreeSans, san-serif;
-      color: #000000;
-    }
-    #container {
-      margin: 0 auto;
-      width: 700px;
-    }
-    h1 { font-size: 3.8em; color: #000000; margin-bottom: 3px; }
-    h1 .small { font-size: 0.4em; }
-    h1 a { text-decoration: none }
-    h2 { font-size: 1.5em; color: #000000; }
-    h3 { text-align: center; color: #000000; }
-    a { color: #000000; }
-    .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
-    .download { float: right; }
-    pre { background: #000; color: #fff; padding: 15px;}
-    hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
-    .footer { text-align:center; padding-top:30px; font-style: italic; }
+	body {
+	width: 20cm;
+	margin-right: auto;
+	margin-left: auto;
+	font-family: Arial;
+	}
+	
+	.icon {
+	text-align: center;
+	margin-top: 1cm;
+	}
+	.icon p {	
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center; 
+	width: 5cm; 
+	font-size: 9pt;
+	}
+	
+	.content {
+	float: left;
+	width: 10cm;
+	}
+	
+	.legalfineprint {
+	font-size: 9pt;
+	width: 10cm;
+	background-color: gray;
+	border-radius: 15px;
+	padding:20px;
+	}
+	
   </style>
+  <link rel="SHORTCUT ICON" href="/home/groups/c/ch/chhobi/htdocs/favicon.ico">
 </head>
-
 <body>
-  <a href="https://github.com/kghose/Chhobi"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
 
-  <div id="container">
+<div class="content icon">
+<img style="width: 256px; height: 256px;" alt="Chhobi icon" src="chhobi-icon.png" align="top" hspace="0" vspace="0">
+<p>
+The funny squiggle is the letter <b>chh</b> in Bengali. <b>chhobi</b> means <b>picture</b> 
+</p>
+</div>
 
-    <div class="download">
-      <a href="https://github.com/kghose/Chhobi/zipball/master">
-        <img border="0" width="90" src="https://github.com/images/modules/download/zip.png"></a>
-      <a href="https://github.com/kghose/Chhobi/tarball/master">
-        <img border="0" width="90" src="https://github.com/images/modules/download/tar.png"></a>
-    </div>
-
-    <h1><a href="https://github.com/kghose/Chhobi">Chhobi</a>
-      <span class="small">by <a href="https://github.com/kghose">kghose</a></span></h1>
-
-    <div class="description">
-      A photo collection management program
-    </div>
-
-    
-      <p>Chhobi is a photo /organizer/ program. It does not have facilites to do any
+<div class="content">      
+<h1>Chhobi</h1>
+<p>Chhobi is a photo <em>organizer</em> program. It does not have facilites to do any
 editing of the image data itself (so no red-eye removal, contrast enhancement
-etc. etc.)
+etc. etc.). It simply allows you to change captions and keywords on photos.
+The captions and keywords are stored in the EXIV metadata, so they are in a
+standard format, stored in the image file so they travel with the image
+(when you copy/move/backup them) and can be read by other programs, including
+some folder managers (e.g. Finder on Mac) and not locked up in some complex,
+properitary format that will vanish in a decade or so.</p>
 
-It simply allows you to change captions and keywords on photos. The captions and
-keywords are stored in the EXIV metadata, so they travel with the image file and
-can be read by other programs, including some folder managers e.g. Finder on Mac.
+<p>My main aim in designing and writing Chhobi was to keep the interface (and code)
+as simple and uncluttered as possible, and do one thing only, which is to browse 
+and organize large libraries of pictures.</p>
+</div>
 
-My main aim in designing and writing Chhobi was that the organization should be
-kept in a simple easily convertible format so that it can be carried forward
-over the years, and not locked up in some complex, properitary format that will
-vanish in a decade or so.
+<h2><a name="Screenshots"></a>Screenshot</h2>
+Latest:
+<p>
+<a href="Screenshots/Screen Shot 2011-12-02 at 8.29.44 AM.png">
+<img style="border: 0px solid ; width: 500px; height: 353px;" alt="Chhobi v2.0" src="Screenshots/Screen Shot 2011-12-02 at 8.29.44 AM.png"></a><br>
+</p>
+<p>
+<a href="Screenshots/">Older screen shots</a>
+</p>
 
-A secondary aim was to make it as simple as possible, and do one thing only,
-which is to browse and organize large libraries of pictures.</p>
-    
+<h1>Usage</h1>
 
-    
+<p>The main browsing interface is the Ribbon, which represents each picture as a
+small tile. The tiles are arranged in order from latest to oldest. Hovering the
+mouse over the tile causes a preview and the photo metadata to appear.</p>
 
-    
+<p>Clicking on the tile will "lock" the preview and allow you to move your mouse
+without changing the preview. The caption, date and keywords can be edited. You
+can use the left and right mouse buttons to step through the pictures. Pressing
+<code>h</code> will cause the photo to be added to the holding table. You can click and
+drag the mouse to select multiple photos.</p>
 
-    
-      <h2>License</h2>
-      <p>GPL
+<p>Click on the tabs to switch between the <code>show</code> and <code>hold</code> tables. Clicking
 
-Chhobi is free software; you can redistribute it and/or modify
+<code>resize</code> will cause the held photos to be resized and copied into a temporary
+folder. When the progress bar completes and the <code>mail</code> icon becomes enabled
+you can drag the <code>mail</code> icon and drop it onto an email program or a <code>browse for
+file</code> field of a webpage to add the resized photos.You can also open the folder
+enclosing the resized photos by clicking on the folder button. Note that the
+original folder structure of the images is maintained, so all the photos are
+not copied into a single folder.</p>
+
+<h1>License (GPL)</h1>
+<blockquote class="legalfineprint">
+<p>Chhobi is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
+(at your option) any later version.</p>
 
-Chhobi is distributed in the hope that it will be useful,
+<p>Chhobi is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+GNU General Public License for more details.</p>
 
-You should have received a copy of the GNU General Public License along with
+<p>You should have received a copy of the GNU General Public License along with
 Chhobi; if not, write to the Free Software Foundation, Inc.,
-51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA</p>
-    
+51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA`</p>
+</blockquote>
 
-    
-      <h2>Authors</h2>
-      <p>Kaushik Ghose (kaushik.ghose@gmail.com)<br/>      </p>
-    
 
-    
-      <h2>Contact</h2>
-      <p>Kaushik Ghose (kaushik.ghose@gmail.com)<br/>      </p>
-    
+<h2><a name="thanks"></a>Thanks</h2>
+Like most open source projects Chhobi builds on other open source
+endevours. Chhobi depends on, is the better for, and was easy to write
+because of these fine pieces of open source software:<br>
+<ul>
+  <li><a href="http://http://qt.nokia.com//">QT</a> -
+from the trolls at trolltech (now nokia). An amazing toolkit to write cross
+platform GUI programs for Mac, Linux and Windows.</li>
+  <li><a href="http://www.exiv2.org/">Exiv2</a>
+- a well written and well documented c++ library for manipulating photo
+metadata.</li>
+  <li><a href="http://www.sqlite.org/">sqlite</a>
+- what a database engine! tiny, fast and is suported by QT's database
+classes.<br>
+  </li>
+</ul>
 
-    <h2>Download</h2>
-    <p>
-      You can download this project in either
-      <a href="https://github.com/kghose/Chhobi/zipball/master">zip</a> or
-      <a href="https://github.com/kghose/Chhobi/tarball/master">tar formats.
-    </p>
-    <p>You can also clone the project with <a href="http://git-scm.com">Git</a>
-      by running:
-      <pre>$ git clone git://github.com/kghose/Chhobi</pre>
-    </p>
+<h2>
+Related projects on Sourceforge </h2>
+Like most open&nbsp;source projects Chhobi has many alternatives, each
+with different flavours and feels. Here are those hosted on sourceforge
+[<a href="http://sourceforge.net/search/?type_of_search=soft&amp;type_of_search=soft&amp;words=photo+organizer">go</a>].
 
-    <div class="footer">
-      get the source code on GitHub : <a href="https://github.com/kghose/Chhobi">kghose/Chhobi</a>
-    </div>
-
-  </div>
+<h2></h2>
+<div align="right">
+© 2012 Kaushik Ghose
+</div>
 
 </body>
 </html>
