@@ -11,9 +11,33 @@
 	font-family: Arial;
 	}
 	
+	.menubar{
+	width: 75%;
+	margin: auto;
+	}
+	.menuitem {
+	float: left;
+	width: 6cm;
+	color: black;
+	border: 2px solid;
+	border-radius: 5px;
+	padding:5px;
+	margin: 20px;
+	text-align: center;
+	}
+	.menubar a {
+	color: black;
+	text-align: center;
+	text-decoration: none;
+	}
+	.menubar a:hover {
+	color: gray;
+	font-weight: bold;
+	}
+		
 	.icon {
 	text-align: center;
-	margin-top: 1cm;
+	margin-top: 2cm;
 	}
 	.icon p {	
 	margin-left: auto;
@@ -25,31 +49,39 @@
 	
 	.content {
 	float: left;
-	width: 10cm;
+	width: 9cm;
 	}
 	
 	.legalfineprint {
 	font-size: 9pt;
-	width: 10cm;
+	width: 8cm;
 	background-color: gray;
 	border-radius: 15px;
 	padding:20px;
 	}
 	
   </style>
-  <link rel="SHORTCUT ICON" href="/home/groups/c/ch/chhobi/htdocs/favicon.ico">
+  <link rel="SHORTCUT ICON" href="favicon.ico">
 </head>
 <body>
 
-<div class="content icon">
-<img style="width: 256px; height: 256px;" alt="Chhobi icon" src="chhobi-icon.png" align="top" hspace="0" vspace="0">
-<p>
-The funny squiggle is the letter <b>chh</b> in Bengali. <b>chhobi</b> means <b>picture</b> 
-</p>
+<h1 style="text-align: center;">Chhobi</h1>
+
+<div class="menubar">
+<div class="menuitem">
+<a href="https://github.com/downloads/kghose/Chhobi/chhobi_1_0.dmg">Download for Mac OS</a>
+</div>
+<div class="menuitem">
+<a href="http://github.com/kghose/Chhobi">Project page (code etc.)</a>
+</div>
 </div>
 
-<div class="content">      
-<h1>Chhobi</h1>
+<div style="text-align: center;">
+<a href="Screenshots/">
+<img style="border: 0px solid ; width: 500px; height: 353px;" alt="Chhobi v2.0" src="Screenshots/Screen Shot 2011-12-02 at 8.29.44 AM.png"></a><br>
+</div>
+
+<div class="summary"> 
 <p>Chhobi is a photo <em>organizer</em> program. It does not have facilites to do any
 editing of the image data itself (so no red-eye removal, contrast enhancement
 etc. etc.). It simply allows you to change captions and keywords on photos.
@@ -62,17 +94,6 @@ properitary format that will vanish in a decade or so.</p>
 <p>My main aim in designing and writing Chhobi was to keep the interface (and code)
 as simple and uncluttered as possible, and do one thing only, which is to browse 
 and organize large libraries of pictures.</p>
-</div>
-
-<h2><a name="Screenshots"></a>Screenshot</h2>
-Latest:
-<p>
-<a href="Screenshots/Screen Shot 2011-12-02 at 8.29.44 AM.png">
-<img style="border: 0px solid ; width: 500px; height: 353px;" alt="Chhobi v2.0" src="Screenshots/Screen Shot 2011-12-02 at 8.29.44 AM.png"></a><br>
-</p>
-<p>
-<a href="Screenshots/">Older screen shots</a>
-</p>
 
 <h1>Usage</h1>
 
@@ -96,7 +117,15 @@ enclosing the resized photos by clicking on the folder button. Note that the
 original folder structure of the images is maintained, so all the photos are
 not copied into a single folder.</p>
 
-<h1>License (GPL)</h1>
+<div class="content icon">
+<img style="width: 256px; height: 256px;" alt="Chhobi icon" src="chhobi-icon.png" align="top" hspace="0" vspace="0">
+<p>
+The funny squiggle is the letter <b>chh</b> in Bengali. <b>chhobi</b> means <b>picture</b> 
+</p>
+</div>
+
+<div class="content">
+<h1 style="text-align: center;">License (GPL)</h1>
 <blockquote class="legalfineprint">
 <p>Chhobi is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -112,7 +141,7 @@ GNU General Public License for more details.</p>
 Chhobi; if not, write to the Free Software Foundation, Inc.,
 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA`</p>
 </blockquote>
-
+</div>
 
 <h2><a name="thanks"></a>Thanks</h2>
 Like most open source projects Chhobi builds on other open source
