@@ -2,19 +2,16 @@ Description
 ===========
 Chhobi is a photo *organizer* program. It does not have facilites to do any
 editing of the image data itself (so no red-eye removal, contrast enhancement
-etc. etc.)
+etc. etc.). It simply allows you to change captions and keywords on photos.
+The captions and keywords are stored in the EXIV metadata, so they are in a
+standard format, stored in the image file so they travel with the image
+(when you copy/move/backup them) and can be read by other programs, including
+some folder managers (e.g. Finder on Mac) and not locked up in some complex,
+properitary format that will vanish in a decade or so.
 
-It simply allows you to change captions and keywords on photos. The captions and
-keywords are stored in the EXIV metadata, so they travel with the image file and
-can be read by other programs, including some folder managers e.g. Finder on Mac.
-
-My main aim in designing and writing Chhobi was that the organization should be
-kept in a simple easily convertible format so that it can be carried forward
-over the years, and not locked up in some complex, properitary format that will
-vanish in a decade or so.
-
-A secondary aim was to make it as simple as possible, and do one thing only,
-which is to browse and organize large libraries of pictures.
+My main aim in designing and writing Chhobi was to keep the interface (and code)
+as simple and uncluttered as possible, and do one thing only, which is to browse 
+and organize large libraries of pictures.
 
 Usage
 =====
@@ -28,27 +25,28 @@ can use the left and right mouse buttons to step through the pictures. Pressing
 `h` will cause the photo to be added to the holding table. You can click and
 drag the mouse to select multiple photos.
 
-Photos on the holding table can be copied into a separate folder structure and
-resized. Dragging the `mail` icon and dropping it onto an email program or a
-browse for file field of a webpage causes the resized photos to be added to the
-upload.
-
-You can also open the folder enclosing the resized photos by clicking on the
-folder button.
+Click on the tabs to switch between the `show` and `hold` tables. Clicking
+`resize` will cause the held photos to be resized and copied into a temporary
+folder. When the progress bar completes and the `mail` icon becomes enabled
+you can drag the `mail` icon and drop it onto an email program or a `browse for
+file` field of a webpage to add the resized photos.You can also open the folder
+enclosing the resized photos by clicking on the folder button. Note that the
+original folder structure of the images is maintained, so all the photos are
+not copied into a single folder.
 
 License (GPL)
 =============
-`Chhobi is free software; you can redistribute it and/or modify
+> Chhobi is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 2 of the License, or
 (at your option) any later version.
-
-Chhobi is distributed in the hope that it will be useful,
+>
+> Chhobi is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License along with
+>
+> You should have received a copy of the GNU General Public License along with
 Chhobi; if not, write to the Free Software Foundation, Inc.,
 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA`
 
@@ -56,15 +54,16 @@ Some design choices
 ===================
 Most design choices have been made that make the user experience less "slick"
 but make the code more straightforward and less complicated and thus less
-prone to bugs
+prone to bugs (hopefully).
 
 Changes
 -------
 When we change photos (change the caption/keywords/date) they are not immediately
-propagated (mirrored) to the database. Instead they are retrieved on the next
-load (or can be manually forced). This means that changes are visible immediately
-(since the metadata is loaded directly from the photo) but any searches/ordering
-will reflect the old data until a refresh or restart is done.
+propagated (mirrored) to the database. Instead, on the next crawl they are
+detected as changed photos and reimported into the database.
+**This means that changes are visible immediately (since the metadata is
+loaded directly from the photo) but any searches/ordering will reflect the old
+data until a "crawl" is completed.**
 
 This simplifies the code, speeds up the operations and is of minimal annoyance
 in day to day use.
@@ -73,8 +72,7 @@ Keywords
 --------
 * No longer stored in an association table, kept in a simple text field
 * When keywords are deleted or an image is purged the keyword list is not updated.
-This leads to "empty" keywords i.e. keywords which will not fetch any results
-Again, a force "refresh" will cause this to be updated.
+This leads to "empty" keywords i.e. keywords which will not fetch any results.
 
 
 Code layout
