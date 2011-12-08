@@ -238,7 +238,8 @@ void PhotoRibbon::select_adjacent_tile(bool backward)
     QList<QGraphicsItem *> selected_tiles = selectedItems();
     if(selected_tiles.count()==0) return;
     QPointF pt = selected_tiles[0]->pos();
-    QPainterPath sel_path = selected_tiles[0]->shape().translated(pt);
+    QPainterPath sel_path = selected_tiles[0]->shape().translated(pt),
+                 old_sel_path = sel_path;
     qreal x, y;
     if(!backward) {//forward
         if(pt.x() >= (columns-1)*tile_size) {
@@ -258,16 +259,44 @@ void PhotoRibbon::select_adjacent_tile(bool backward)
         }
     }
     setSelectionArea(sel_path.translated(x,y));
+    //Check to see if we are off the reservation
+    selected_tiles = selectedItems();
+    if(selected_tiles.count()==0) //Yep, off the reservation
+        setSelectionArea(old_sel_path);
 }
 
 void PhotoRibbon::delete_selected()
 {
     if(!holding_table) return; //We only delete for holding table
     QList<QGraphicsItem *> selected_tiles = selectedItems();
+    if(selected_tiles.count()==0) return;
+    QPointF pt = selected_tiles[0]->pos();//Would like to return selection to this pos
+    QPainterPath sel_path = selected_tiles[0]->shape().translated(pt);
     QList<QGraphicsItem *>::iterator i;
     for (i = selected_tiles.begin(); i != selected_tiles.end(); ++i) {
         removeItem(*i);
         //delete *i;//presumably this will avoid leaks
     }
+    reorder_tiles();
+    setSelectionArea(sel_path);//try and set selection back to this pt
+}
 
+void PhotoRibbon::reorder_tiles()
+{
+    int current_row = 0;
+    int x = 0, y = 0, col = 0;
+    QList<QGraphicsItem *> tiles = items(Qt::AscendingOrder);
+    QList<QGraphicsItem *>::iterator i;
+    for (i = tiles.begin(); i != tiles.end(); ++i) {
+        (*i)->setPos(x,y);
+        x += tile_size;
+        col += 1;
+        if(col == columns) {
+            x = 0;
+            current_row++;
+            col = 0;
+            y += tile_size;
+        }
+    }
+    setSceneRect(-5, -5, columns*tile_size+5, y+20);
 }

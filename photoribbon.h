@@ -99,6 +99,7 @@ private:
     void keyPressEvent(QKeyEvent *keyEvent);
     void select_adjacent_tile(bool backward);
     void delete_selected();//Only active for the holding table
+    void reorder_tiles();//only needed after deleting
 };
 
 #endif // PHOTORIBBON_H
