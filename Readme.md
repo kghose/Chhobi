@@ -10,7 +10,7 @@ some folder managers (e.g. Finder on Mac) and not locked up in some complex,
 properitary format that will vanish in a decade or so.
 
 My main aim in designing and writing Chhobi was to keep the interface (and code)
-as simple and uncluttered as possible, and do one thing only, which is to browse 
+as simple and uncluttered as possible, and do one thing only, which is to browse
 and organize large libraries of pictures.
 
 Usage
@@ -250,7 +250,14 @@ could be portrait or landscape sized.
 
 TODO
 ====
+1. When we step to the end or begining of the list we should wrap around
+1. When we delete an item we should rearrange holding table items.
+1. Hint for keywords
+1. Implement searching by caption
+1. Implement sub-selection by keywords
 1. Clicking on preview should open it in external application
+1. Phonon to view videos
+1. Put a nice border round the preview (need to subclass something)
 1. [DONE] Temporary directory should be unique to current run of resizing
 1. [DONE] Refactor database.h/.cpp to not use classes, but just functions
 1. [DONE] Improve directory crawling
@@ -260,14 +267,10 @@ TODO
 1. [DONE] SQL queries bind values
 1. [DONE] Holding table mailing + copy to separate directory + resize as needed
 1. [DONE] Step through pictures
-1. Phonon to view videos
 1. [DONE] Keyword adn caption storing in database
-1. Implement searching by caption
-1. Implement sub-selection by keywords
 1. [DONE] Change to a dense panel ("lighttable") like arrangement? Need to switch to
-click to select and double click to hold model
+          click to select and double click to hold model
 1. [DONE] Refactor code to merge PhotoInfo and PhotoMetaData
 1. [DONE] Add separators every x photos with some kind of date identification to help
-us locate things faster.
-1. Put a nice border round the preview (need to subclass something)
+          us locate things faster.
 1. [DONE] Remove images from holding table
