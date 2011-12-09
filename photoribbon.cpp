@@ -320,13 +320,19 @@ void PhotoRibbon::create_date_item()
     QSettings settings;
     if(!settings.contains("hover date/font size"))
         settings.setValue("hover date/font size", 50);
+    if(!settings.contains("hover date/font outline"))
+        settings.setValue("hover date/font outline", 1);
     if(!settings.contains("hover date/font family"))
         settings.setValue("hover date/font family", QString("Helvetica"));
+    QFont the_font(settings.value("hover date/font family").toString(),
+                   settings.value("hover date/font size").toInt(),QFont::Bold);
+    the_font.setStyleStrategy(QFont::PreferAntialias);
 
     //We show the date using this
     the_date = new QGraphicsSimpleTextItem("ABCD");
     the_date->setBrush(QBrush(Qt::white));
-    the_date->setPen(QPen(QBrush(Qt::black),2));
-    the_date->setFont(QFont(settings.value("hover date/font family").toString(),
-                            settings.value("hover date/font size").toInt(),QFont::Bold));
+    int fnt_outline = settings.value("hover date/font outline").toInt();
+    if(fnt_outline)
+        the_date->setPen(QPen(QBrush(Qt::black), fnt_outline));
+    the_date->setFont(the_font);
 }
