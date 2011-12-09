@@ -82,6 +82,7 @@ void RibbonTile::set_pi(PhotoInfo c_pi)
 {
     pi.id=c_pi.id;
     pi.relative_file_path=c_pi.relative_file_path;
+    pi.photo_date=c_pi.photo_date;
     pi.tile_color=c_pi.tile_color;
     pi.type=c_pi.type;
 }
@@ -93,7 +94,8 @@ PhotoRibbon::PhotoRibbon(QObject *parent, bool hd) :
     tile_size = 10;
     columns = 16; //do this from measurement of view port? or set this?
     dateprint_row_interval = -1;//Means we don't print dates (e.g. in the holding table)
-    preview_tile = NULL;
+    preview_tile = NULL; //We check if these are NULL as a way of telling if
+    the_date = NULL;//they already exist or not
     preview_locked = false;
     setBackgroundBrush(Qt::black);
     QObject::connect(this, SIGNAL(selectionChanged()),
@@ -149,18 +151,7 @@ void PhotoRibbon::add_tiles(QList<PhotoInfo> new_tiles,
             x = 0;
             current_row++;
             col = 0;
-            if((current_row%dateprint_row_interval==0) && (dateprint_row_interval>0)) {
-                QGraphicsSimpleTextItem *qgti = new QGraphicsSimpleTextItem((*i).photo_date.toString("yyyy.MM.dd"));
-                y += 3*tile_size;
-                qgti->setPos(sceneRect().width()/2,y);
-                qgti->setBrush(QBrush(Qt::white));
-                //qgti->setFont(QFont());
-                addItem(qgti);
-                y += 2*tile_size;
-            } else {
-                y += tile_size;
-            }
-
+            y += tile_size;
         }
     }
     setSceneRect(-5, -5, columns*tile_size+5, y+20);
@@ -299,4 +290,35 @@ void PhotoRibbon::reorder_tiles()
         }
     }
     setSceneRect(-5, -5, columns*tile_size+5, y+20);
+}
+
+void PhotoRibbon::slider_value_changed(int val)
+{
+    qreal x = 0, y = val, w = tile_size, h = tile_size;
+    QList<QGraphicsItem *> tiles = items(x,y,w,h);
+    if(tiles.count() > 0) {
+        //Need to cull the_date itself from this list
+        QString date_str = ((RibbonTile*)tiles[0])->get_id().photo_date.toString("yyyy.MM.dd");
+        if(the_date == NULL) {
+            the_date = new QGraphicsSimpleTextItem();
+            the_date->setBrush(QBrush(Qt::white));
+            //the_date->setFont(QFont("Arial", 20));
+            addItem(the_date);
+            qDebug() << "Haha";
+        }
+        int half_height = views()[0]->height()/2.0;
+        the_date->setText(date_str);
+        the_date->setPos(0,y + half_height);
+    }
+}
+
+//Remove the date we show
+void PhotoRibbon::slider_released()
+{
+    if(the_date) {
+        removeItem(the_date);
+        delete the_date;
+        the_date = NULL;
+        qDebug() << "Boo!";
+    }
 }

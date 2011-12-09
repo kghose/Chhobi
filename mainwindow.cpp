@@ -96,6 +96,13 @@ void MainWindow::setup_connections()
             this, SLOT(send_to_holding()));
     QObject::connect(hold_ribbon, SIGNAL(preview_id(PhotoInfo)),
             this, SLOT(set_preview_photo(PhotoInfo)));
+    //Want to do fancy date thingy when user scrolls
+    QScrollBar *ribbon_scroll = ui->QGV_timeline->verticalScrollBar();
+    QObject::connect(ribbon_scroll, SIGNAL(sliderMoved(int)),
+            ribbon, SLOT(slider_value_changed(int)));
+    QObject::connect(ribbon_scroll, SIGNAL(sliderReleased()),
+            ribbon, SLOT(slider_released()));
+
 
     //Editing controls
     QObject::connect(ui->captionEdit, SIGNAL(textEdited(QString)),

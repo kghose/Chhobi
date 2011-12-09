@@ -74,6 +74,7 @@ class PhotoRibbon : public QGraphicsScene
 
     int tile_size, columns, dateprint_row_interval;
     RibbonTile *preview_tile;//This is the tile on preview
+    QGraphicsSimpleTextItem *the_date;//The date we show when we scroll
     bool preview_locked;//Mech to prevent preview changeing when we move mouse
     bool holding_table;//True means the contents change (can be deleted, added)
 
@@ -92,6 +93,8 @@ signals:
 public slots:
     void set_preview_tile(RibbonTile *);
     void toggle_preview_tile_lock();
+    void slider_value_changed(int);//we hook up the slider to these to display
+    void slider_released();//(and hide) the date of the photos passing by
 
 private:
     void add_tiles(QList<PhotoInfo> new_tiles,
