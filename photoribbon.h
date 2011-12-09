@@ -97,7 +97,7 @@ public slots:
     void slider_released();//(and hide) the date of the photos passing by
 
 private:
-    void add_date_item();//We create and add the date thingy on demand
+    void create_date_item();//We create and add the date thingy on demand
     void add_tiles(QList<PhotoInfo> new_tiles,
                    QList<PhotoInfo> old_tiles = QList<PhotoInfo>()); //convenience function
     void keyPressEvent(QKeyEvent *keyEvent);

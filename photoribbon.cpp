@@ -94,12 +94,12 @@ PhotoRibbon::PhotoRibbon(QObject *parent, bool is_holding_table) :
     tile_size = 10;
     columns = 16; //do this from measurement of view port? or set this?
     dateprint_row_interval = -1;//Means we don't print dates (e.g. in the holding table)
-    preview_tile = NULL; //We check if these are NULL as a way of telling if
-    the_date = NULL; //they have been initialized
+    preview_tile = NULL; //We check if this is NULL as a way of telling if it has been initialized
     preview_locked = false;
     setBackgroundBrush(Qt::black);
     QObject::connect(this, SIGNAL(selectionChanged()),
             this, SLOT(toggle_preview_tile_lock()));
+    create_date_item(); //The date text we hover while scrolling
 }
 
 //Replace the current list with this one
@@ -295,32 +295,27 @@ void PhotoRibbon::reorder_tiles()
 void PhotoRibbon::slider_value_changed(int val)
 {
     qreal w = tile_size, h = tile_size;
-    if(the_date)
-        the_date->setVisible(false);//Don't want the date thingy to be counted
+    the_date->setVisible(false);//Don't want the date thingy to be counted
+    if(the_date->scene() != this)//eg, we've done a clear()
+        addItem(the_date);
     QList<QGraphicsItem *> tiles = items(0,val,w,h);
     if(tiles.count() > 0) {
-        if(!the_date)
-            add_date_item();
         QString date_str = ((RibbonTile*)tiles[0])->get_id().photo_date.toString("MMM dd\nyyyy");
         int half_height = views()[0]->height()/2.0;
         the_date->setText(date_str);
         the_date->setPos(0, val + half_height - the_date->boundingRect().height()/2.0);
-        the_date->setVisible(true);//Set it visible again
+        the_date->setVisible(true);//Now we can see it
     }
 }
 
 //Remove the date we show
 void PhotoRibbon::slider_released()
 {
-    if(the_date) {
-        removeItem(the_date);
-        delete the_date;
-        the_date = NULL;
-    }
+    if(the_date->scene() == this)
+        the_date->setVisible(false);
 }
 
-//We need this because every time we clear() we lose this too
-void PhotoRibbon::add_date_item()
+void PhotoRibbon::create_date_item()
 {
     qDebug() << "Creating";
     //We show the date using this
@@ -328,6 +323,4 @@ void PhotoRibbon::add_date_item()
     the_date->setBrush(QBrush(Qt::white));
     the_date->setPen(QPen(QBrush(Qt::black),2));
     the_date->setFont(QFont("Helvetica", 50,QFont::Bold));
-    the_date->setVisible(false);
-    addItem(the_date);
 }
