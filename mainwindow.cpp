@@ -103,7 +103,6 @@ void MainWindow::setup_connections()
     QObject::connect(ribbon_scroll, SIGNAL(sliderReleased()),
             ribbon, SLOT(slider_released()));
 
-
     //Editing controls
     QObject::connect(ui->captionEdit, SIGNAL(textEdited(QString)),
             this, SLOT(photo_caption_changed()));

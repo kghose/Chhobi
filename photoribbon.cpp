@@ -87,15 +87,15 @@ void RibbonTile::set_pi(PhotoInfo c_pi)
     pi.type=c_pi.type;
 }
 
-PhotoRibbon::PhotoRibbon(QObject *parent, bool hd) :
+PhotoRibbon::PhotoRibbon(QObject *parent, bool is_holding_table) :
     QGraphicsScene(parent)
 {
-    holding_table = hd;
+    holding_table = is_holding_table;//if true then we are allowed to delete items
     tile_size = 10;
     columns = 16; //do this from measurement of view port? or set this?
     dateprint_row_interval = -1;//Means we don't print dates (e.g. in the holding table)
     preview_tile = NULL; //We check if these are NULL as a way of telling if
-    the_date = NULL;//they already exist or not
+    the_date = NULL; //they have been initialized
     preview_locked = false;
     setBackgroundBrush(Qt::black);
     QObject::connect(this, SIGNAL(selectionChanged()),
@@ -107,7 +107,7 @@ void PhotoRibbon::replace_tiles(QList<PhotoInfo> new_tiles)
 {
     clearSelection();//Some clean up we need
     preview_tile = NULL;
-    clear();//memory leak or not?
+    clear();
     add_tiles(new_tiles);
 }
 
@@ -294,21 +294,18 @@ void PhotoRibbon::reorder_tiles()
 
 void PhotoRibbon::slider_value_changed(int val)
 {
-    qreal x = 0, y = val, w = tile_size, h = tile_size;
-    QList<QGraphicsItem *> tiles = items(x,y,w,h);
+    qreal w = tile_size, h = tile_size;
+    if(the_date)
+        the_date->setVisible(false);//Don't want the date thingy to be counted
+    QList<QGraphicsItem *> tiles = items(0,val,w,h);
     if(tiles.count() > 0) {
-        //Need to cull the_date itself from this list
-        QString date_str = ((RibbonTile*)tiles[0])->get_id().photo_date.toString("yyyy.MM.dd");
-        if(the_date == NULL) {
-            the_date = new QGraphicsSimpleTextItem();
-            the_date->setBrush(QBrush(Qt::white));
-            //the_date->setFont(QFont("Arial", 20));
-            addItem(the_date);
-            qDebug() << "Haha";
-        }
+        if(!the_date)
+            add_date_item();
+        QString date_str = ((RibbonTile*)tiles[0])->get_id().photo_date.toString("MMM dd\nyyyy");
         int half_height = views()[0]->height()/2.0;
         the_date->setText(date_str);
-        the_date->setPos(0,y + half_height);
+        the_date->setPos(0, val + half_height - the_date->boundingRect().height()/2.0);
+        the_date->setVisible(true);//Set it visible again
     }
 }
 
@@ -319,6 +316,18 @@ void PhotoRibbon::slider_released()
         removeItem(the_date);
         delete the_date;
         the_date = NULL;
-        qDebug() << "Boo!";
     }
+}
+
+//We need this because every time we clear() we lose this too
+void PhotoRibbon::add_date_item()
+{
+    qDebug() << "Creating";
+    //We show the date using this
+    the_date = new QGraphicsSimpleTextItem("ABCD");
+    the_date->setBrush(QBrush(Qt::white));
+    the_date->setPen(QPen(QBrush(Qt::black),2));
+    the_date->setFont(QFont("Helvetica", 50,QFont::Bold));
+    the_date->setVisible(false);
+    addItem(the_date);
 }
