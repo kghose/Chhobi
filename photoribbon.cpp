@@ -300,7 +300,7 @@ void PhotoRibbon::slider_value_changed(int val)
         addItem(the_date);
     QList<QGraphicsItem *> tiles = items(0,val,w,h);
     if(tiles.count() > 0) {
-        QString date_str = ((RibbonTile*)tiles[0])->get_id().photo_date.toString("MMM dd\nyyyy");
+        QString date_str = ((RibbonTile*)tiles[0])->get_id().photo_date.toString("dd\nMMM\nyyyy");
         int half_height = views()[0]->height()/2.0;
         the_date->setText(date_str);
         the_date->setPos(0, val + half_height - the_date->boundingRect().height()/2.0);
@@ -317,10 +317,16 @@ void PhotoRibbon::slider_released()
 
 void PhotoRibbon::create_date_item()
 {
-    qDebug() << "Creating";
+    QSettings settings;
+    if(!settings.contains("hover date/font size"))
+        settings.setValue("hover date/font size", 50);
+    if(!settings.contains("hover date/font family"))
+        settings.setValue("hover date/font family", QString("Helvetica"));
+
     //We show the date using this
     the_date = new QGraphicsSimpleTextItem("ABCD");
     the_date->setBrush(QBrush(Qt::white));
     the_date->setPen(QPen(QBrush(Qt::black),2));
-    the_date->setFont(QFont("Helvetica", 50,QFont::Bold));
+    the_date->setFont(QFont(settings.value("hover date/font family").toString(),
+                            settings.value("hover date/font size").toInt(),QFont::Bold));
 }
