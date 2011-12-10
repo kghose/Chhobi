@@ -107,6 +107,8 @@ void PhotoRibbon::replace_tiles(QList<PhotoInfo> new_tiles)
 {
     clearSelection();//Some clean up we need
     preview_tile = NULL;
+    removeItem(the_date);//clear() will remove AND delete the item
+                         //by removing it, we preserve it for later
     clear();
     add_tiles(new_tiles);
 }
