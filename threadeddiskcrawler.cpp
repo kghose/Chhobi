@@ -12,13 +12,14 @@ void ThreadedDiskCrawler::run()
     any_new_photos = false;
     QSettings settings;
     last_descent = settings.value("last descent").toDateTime();
-    settings.setValue("last descent", QDateTime::currentDateTime());
-    //Last descent time should be at start of descent to be conservative
+    QDateTime time_descent_started = QDateTime::currentDateTime();
     load_directories_in_database();
     db.transaction();//TODO check for errors
     descend(photos_root);
     purge_zombie_directories();
     db.commit();//TODO error checking
+    settings.setValue("last descent", time_descent_started);
+    //Last descent time should be at start of descent to be conservative
 }
 
 //need to call stop slot before this
