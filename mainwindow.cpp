@@ -103,6 +103,11 @@ void MainWindow::setup_connections()
     QObject::connect(ribbon_scroll, SIGNAL(sliderReleased()),
             ribbon, SLOT(slider_released()));
 
+    //Database filter controls
+    QObject::connect(ui->keywordListWidget, SIGNAL(itemSelectionChanged()),
+                     this, SLOT(load_photos_with_active_keyword()));
+
+
     //Editing controls
     QObject::connect(ui->captionEdit, SIGNAL(textEdited(QString)),
             this, SLOT(photo_caption_changed()));
@@ -359,10 +364,23 @@ void MainWindow::load_photo_list()
     int datetime_row_interval = settings.value("date marker row interval", 100).toInt();//
     ribbon->set_dateprint_row_interval(datetime_row_interval);
     ribbon->replace_tiles(get_all_photos());
-    ui->QL_preview->setText("Photos imported");
+    ui->keywordListWidget->addItems(get_keywords_in_db());
+    ui->QL_preview->setText("Photos loaded");
     setWindowTitle("Chhobi");
     this->setEnabled(true);
 }
+
+
+void MainWindow::load_photos_with_active_keyword()
+{
+    QString kwd = ui->keywordListWidget->selectedItems()[0]->text();
+    this->setEnabled(false);
+    this->statusBar()->showMessage("Photos with keyword " + kwd + " loaded");
+    ribbon->replace_tiles(get_photos_with_keyword(kwd));
+    setWindowTitle("Chhobi");
+    this->setEnabled(true);
+}
+
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 {

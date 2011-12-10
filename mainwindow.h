@@ -76,6 +76,8 @@ public slots:
     void crawl_ended();
 
     void load_photo_list();
+    void load_photos_with_active_keyword();
+
     void set_preview_photo(PhotoInfo);
     void send_to_holding();
     void show_preview_external();
