@@ -30,10 +30,13 @@ const QString conn_name("chhobi database");
 bool open_database(QFileInfo dbpath); //Open or create a database in dbdir
 bool create_db(); //create a new empty database
 
+//Misc functions
+QStringList get_keywords_in_db();
+
 //Retrieval functions
 QList<PhotoInfo> get_all_photos();
 //QList<PhotoInfo> get_photos_with_caption(QString);
-//QList<PhotoInfo> get_photos_with_keyword(QString);
+QList<PhotoInfo> get_photos_with_keyword(QString);
 //QList<PhotoInfo> get_photos_with_no_keyword();
 QList<PhotoInfo> get_photos_by_query(QSqlQuery);
 

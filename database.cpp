@@ -58,6 +58,20 @@ bool create_db() {
     return true;
 }
 
+QStringList get_keywords_in_db()
+{
+    QSqlDatabase db = QSqlDatabase::database(conn_name);
+    if(!db.open())
+        qDebug() << db.lastError();
+    QSqlQuery query(db);
+    query.prepare("SELECT keyword FROM keywords ORDER BY keyword ASC");
+    query.setForwardOnly(true);//should save memory
+    QStringList kwds;
+    query.exec();
+    while(query.next()) kwds.append(query.value(0).toString());
+    return kwds;
+}
+
 QList<PhotoInfo> get_all_photos()
 {
     QSqlDatabase db = QSqlDatabase::database(conn_name);
@@ -65,6 +79,17 @@ QList<PhotoInfo> get_all_photos()
         qDebug() << db.lastError();
     QSqlQuery query(db);
     query.prepare("SELECT id,filepath,tile_color,type,datetaken FROM photos ORDER BY datetaken DESC");
+    return get_photos_by_query(query);
+}
+
+QList<PhotoInfo> get_photos_with_keyword(QString kwd)
+{
+    QSqlDatabase db = QSqlDatabase::database(conn_name);
+    if(!db.open())
+        qDebug() << db.lastError();
+    QSqlQuery query(db);
+    query.prepare("SELECT id,filepath,tile_color,type,datetaken FROM photos WHERE keywords LIKE :kwd ORDER BY datetaken DESC");
+    query.bindValue(":kwd", "%<" + kwd + ">%");
     return get_photos_by_query(query);
 }
 
