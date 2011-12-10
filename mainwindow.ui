@@ -260,11 +260,17 @@
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="styleSheet">
+       <string notr="true">border:0px</string>
+      </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
+      </property>
+      <property name="lineWidth">
+       <number>0</number>
       </property>
       <layout class="QGridLayout" name="gridLayout">
        <property name="margin">
@@ -287,7 +293,7 @@
           <bool>false</bool>
          </property>
          <property name="styleSheet">
-          <string notr="true">background: black;color: white;</string>
+          <string notr="true">border:2px solid grey; border-radius: 10px;background-color: black;</string>
          </property>
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
