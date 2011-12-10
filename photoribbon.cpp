@@ -93,7 +93,6 @@ PhotoRibbon::PhotoRibbon(QObject *parent, bool is_holding_table) :
     holding_table = is_holding_table;//if true then we are allowed to delete items
     tile_size = 10;
     columns = 16; //do this from measurement of view port? or set this?
-    dateprint_row_interval = -1;//Means we don't print dates (e.g. in the holding table)
     preview_tile = NULL; //We check if this is NULL as a way of telling if it has been initialized
     preview_locked = false;
     setBackgroundBrush(Qt::black);

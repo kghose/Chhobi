@@ -361,8 +361,6 @@ void MainWindow::load_photo_list()
 {
     QSettings settings;
     this->setEnabled(false);
-    int datetime_row_interval = settings.value("date marker row interval", 100).toInt();//
-    ribbon->set_dateprint_row_interval(datetime_row_interval);
     ribbon->replace_tiles(get_all_photos());
     ui->keywordListWidget->addItems(get_keywords_in_db());
     ui->QL_preview->setText("Photos loaded");
