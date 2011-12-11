@@ -359,11 +359,11 @@ void MainWindow::crawl_ended()
 //them into the ribbon and then return control to the main window
 void MainWindow::load_photo_list()
 {
-    QSettings settings;
     this->setEnabled(false);
     ribbon->replace_tiles(get_all_photos());
     ui->keywordListWidget->addItems(get_keywords_in_db());
-    ui->QL_preview->setText("Photos loaded");
+    //ribbon->select_first_tile();
+    QTimer::singleShot(0, ribbon, SLOT(select_first_tile()));
     setWindowTitle("Chhobi");
     this->setEnabled(true);
 }
@@ -375,6 +375,7 @@ void MainWindow::load_photos_with_active_keyword()
     this->setEnabled(false);
     this->statusBar()->showMessage("Photos with keyword " + kwd + " loaded");
     ribbon->replace_tiles(get_photos_with_keyword(kwd));
+    ribbon->select_first_tile();
     setWindowTitle("Chhobi");
     this->setEnabled(true);
 }

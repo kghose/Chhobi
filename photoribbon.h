@@ -90,6 +90,7 @@ signals:
     void hold();//Emitted whenever we want to hold the pictures
 
 public slots:
+    void select_first_tile();
     void set_preview_tile(RibbonTile *);
     void toggle_preview_tile_lock();
     void slider_value_changed(int);//we hook up the slider to these to display

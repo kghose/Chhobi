@@ -225,6 +225,16 @@ void PhotoRibbon::keyPressEvent(QKeyEvent *keyEvent)
     QGraphicsScene::keyPressEvent(keyEvent);
 }
 
+//Decided to do this so that when we loaded a photo list we would popup the
+//first one, seems more friendly than a blank screen
+void PhotoRibbon::select_first_tile()
+{
+    QPainterPath sel_path;
+    sel_path.addRect(0, 0, tile_size, tile_size);
+    setSelectionArea(sel_path);
+    clearSelection();//we don't really want to lock it
+}
+
 //Move selection around by the keyboard
 void PhotoRibbon::select_adjacent_tile(bool backward)
 {
