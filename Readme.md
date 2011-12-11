@@ -250,14 +250,14 @@ could be portrait or landscape sized.
 
 TODO
 ====
-1. When we step to the end or begining of the list we should wrap around
-1. When we delete an item we should rearrange holding table items.
 1. Hint for keywords
-1. Implement searching by caption
-1. Implement sub-selection by keywords
-1. Clicking on preview should open it in external application
 1. Phonon to view videos
+1. Clicking on preview should open it in external application
 1. Put a nice border round the preview (need to subclass something)
+1. [DONE] - now wrap, just stop When we step to the end or begining of the list we should wrap around
+1. [DONE] When we delete an item we should rearrange holding table items.
+1. [DONE] Implement searching by caption
+1. [DONE] Implement sub-selection by keywords
 1. [DONE] Temporary directory should be unique to current run of resizing
 1. [DONE] Refactor database.h/.cpp to not use classes, but just functions
 1. [DONE] Improve directory crawling
