@@ -106,6 +106,8 @@ void MainWindow::setup_connections()
     //Database filter controls
     QObject::connect(ui->keywordListWidget, SIGNAL(itemSelectionChanged()),
                      this, SLOT(load_photos_with_active_keyword()));
+    QObject::connect(ui->captionSearchLineEdit, SIGNAL(returnPressed()),
+                     this, SLOT(load_photos_with_caption()));
 
 
     //Editing controls
@@ -197,7 +199,7 @@ void MainWindow::set_preview_photo(PhotoInfo pi)
     preview.set_meta_data(pmd);
     if(pmd.type == PHOTO)
         preview.set_pixmap(QPixmap::fromImage(pmI));
-    else
+    else if(pmd.type == MOVIE)
         preview.set_pixmap(QPixmap(":/Images/Icons/cholochitro.png"));
 
     ui->QL_preview->setPixmap(preview.get_photo());
@@ -371,15 +373,28 @@ void MainWindow::load_photo_list()
 
 void MainWindow::load_photos_with_active_keyword()
 {
-    QString kwd = ui->keywordListWidget->selectedItems()[0]->text();
+    QList<QListWidgetItem *> lqwi = ui->keywordListWidget->selectedItems();
+    if(lqwi.count() == 0) return;
+    QString kwd = lqwi[0]->text();
     this->setEnabled(false);
-    this->statusBar()->showMessage("Photos with keyword " + kwd + " loaded");
     ribbon->replace_tiles(get_photos_with_keyword(kwd));
     ribbon->select_first_tile();
+    ui->captionSearchLineEdit->clear();//want to make sure user knows he's not searching by caption anymore
     setWindowTitle("Chhobi");
     this->setEnabled(true);
 }
 
+
+void MainWindow::load_photos_with_caption()
+{
+    QString caption = ui->captionSearchLineEdit->text();
+    this->setEnabled(false);
+    ribbon->replace_tiles(get_photos_with_caption(caption));
+    ribbon->select_first_tile();
+    ui->keywordListWidget->clearSelection();
+    setWindowTitle("Chhobi");
+    this->setEnabled(true);
+}
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
 {

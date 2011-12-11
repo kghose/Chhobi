@@ -77,6 +77,7 @@ public slots:
 
     void load_photo_list();
     void load_photos_with_active_keyword();
+    void load_photos_with_caption();
 
     void set_preview_photo(PhotoInfo);
     void send_to_holding();

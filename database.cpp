@@ -82,6 +82,17 @@ QList<PhotoInfo> get_all_photos()
     return get_photos_by_query(query);
 }
 
+QList<PhotoInfo> get_photos_with_caption(QString caption)
+{
+    QSqlDatabase db = QSqlDatabase::database(conn_name);
+    if(!db.open())
+        qDebug() << db.lastError();
+    QSqlQuery query(db);
+    query.prepare("SELECT id,filepath,tile_color,type,datetaken FROM photos WHERE caption LIKE :capt ORDER BY datetaken DESC");
+    query.bindValue(":capt", "%" + caption + "%");
+    return get_photos_by_query(query);
+}
+
 QList<PhotoInfo> get_photos_with_keyword(QString kwd)
 {
     QSqlDatabase db = QSqlDatabase::database(conn_name);
