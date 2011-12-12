@@ -74,6 +74,11 @@ Keywords
 * When keywords are deleted or an image is purged the keyword list is not updated.
 This leads to "empty" keywords i.e. keywords which will not fetch any results.
 
+Deployment
+==========
+For mac:
+macdeployqt-4.6 Chhobi.app  -dmg
+
 
 Code layout
 ===========
