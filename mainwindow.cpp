@@ -363,6 +363,7 @@ void MainWindow::load_photo_list()
 {
     this->setEnabled(false);
     ribbon->replace_tiles(get_all_photos());
+    ui->keywordListWidget->addItem("All Photos");//Special item, like "HOME" button
     ui->keywordListWidget->addItems(get_keywords_in_db());
     //ribbon->select_first_tile();
     QTimer::singleShot(0, ribbon, SLOT(select_first_tile()));
@@ -375,9 +376,11 @@ void MainWindow::load_photos_with_active_keyword()
 {
     QList<QListWidgetItem *> lqwi = ui->keywordListWidget->selectedItems();
     if(lqwi.count() == 0) return;
-    QString kwd = lqwi[0]->text();
     this->setEnabled(false);
-    ribbon->replace_tiles(get_photos_with_keyword(kwd));
+    if(ui->keywordListWidget->row(lqwi[0]) == 0) //Intercept, all photos
+        ribbon->replace_tiles(get_all_photos());
+    else    //regular - search for keyword
+        ribbon->replace_tiles(get_photos_with_keyword(lqwi[0]->text()));
     ribbon->select_first_tile();
     ui->captionSearchLineEdit->clear();//want to make sure user knows he's not searching by caption anymore
     setWindowTitle("Chhobi");
