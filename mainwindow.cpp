@@ -363,7 +363,8 @@ void MainWindow::load_photo_list()
 {
     this->setEnabled(false);
     ribbon->replace_tiles(get_all_photos());
-    ui->keywordListWidget->addItem("All Photos");//Special item, like "HOME" button
+    QListWidgetItem *home = new QListWidgetItem(QIcon(":/Images/Icons/allphotos.jpg"), "All Photos");
+    ui->keywordListWidget->addItem(home);//Special item, like "HOME" button
     ui->keywordListWidget->addItems(get_keywords_in_db());
     //ribbon->select_first_tile();
     QTimer::singleShot(0, ribbon, SLOT(select_first_tile()));
