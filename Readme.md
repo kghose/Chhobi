@@ -28,8 +28,13 @@ drag the mouse to select multiple photos.
 Click on the tabs to switch between the `show` and `hold` tables. Clicking
 `resize` will cause the held photos to be resized and copied into a temporary
 folder. When the progress bar completes and the `mail` icon becomes enabled
-you can drag the `mail` icon and drop it onto an email program or a `browse for
-file` field of a webpage to add the resized photos.You can also open the folder
+you can drag and drop the `mail` icon:
+
+1. Into an email program
+1. Into a `browse for file` field of a webpage
+1. Into Picasa's add photos field
+
+to add the resized photos.You can also open the folder
 enclosing the resized photos by clicking on the folder button. Note that the
 original folder structure of the images is maintained, so all the photos are
 not copied into a single folder.
@@ -255,10 +260,15 @@ could be portrait or landscape sized.
 
 TODO
 ====
+1. Change preview from QLabel to scrollview so we can zoom the image, have
+   multiple images and have a border round the image
+1. Selecting multiple photos should display the photos arranged in a grid on the
+   preview pane, and we should be able to modify captions and keywords for the
+   collection together (give them common keywords - like old Chhobi).
 1. Hint for keywords
 1. Phonon to view videos
 1. Clicking on preview should open it in external application
-1. Put a nice border round the preview (need to subclass something)
+1. [NOT DOING] Put a nice border round the preview (need to subclass something)
 1. [DONE] - now wrap, just stop When we step to the end or begining of the list we should wrap around
 1. [DONE] When we delete an item we should rearrange holding table items.
 1. [DONE] Implement searching by caption
