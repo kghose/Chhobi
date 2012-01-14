@@ -257,7 +257,6 @@ BUGS TO FIX
 interesting because the photo could need to be rotated AND the preview frame
 could be portrait or landscape sized.
 
-
 TODO
 ====
 1. Change preview from QLabel to scrollview so we can zoom the image, have
@@ -268,7 +267,10 @@ TODO
 1. Hint for keywords
 1. Phonon to view videos
 1. Clicking on preview should open it in external application
-1. [NOT DOING] Put a nice border round the preview (need to subclass something)
+1. When we unfilter if we have a tile selected we should scroll to that tile
+1. Put a nice border round the preview (need to subclass something)
+1. Make the caption/keywords/EXIV data come up in a hideable widget to increase
+   the displayed image
 1. [DONE] - now wrap, just stop When we step to the end or begining of the list we should wrap around
 1. [DONE] When we delete an item we should rearrange holding table items.
 1. [DONE] Implement searching by caption

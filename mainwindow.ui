@@ -38,6 +38,45 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Filter</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLineEdit" name="captionSearchLineEdit">
+          <property name="maximumSize">
+           <size>
+            <width>199</width>
+            <height>16777215</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QListWidget" name="keywordListWidget">
+          <property name="maximumSize">
+           <size>
+            <width>199</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="show">
        <attribute name="title">
         <string>Show</string>
@@ -276,7 +315,7 @@
        <property name="margin">
         <number>0</number>
        </property>
-       <item row="0" column="0" rowspan="6">
+       <item row="0" column="0" rowspan="5">
         <widget class="QLabel" name="QL_preview">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
@@ -315,7 +354,7 @@
          </property>
         </widget>
        </item>
-       <item row="6" column="0">
+       <item row="5" column="0">
         <widget class="QLineEdit" name="captionEdit">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -336,7 +375,7 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="1" rowspan="2">
+       <item row="4" column="1" rowspan="2">
         <widget class="QTableWidget" name="QTW_keywords">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
@@ -375,7 +414,7 @@
          <column/>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item row="3" column="1">
         <widget class="QPlainTextEdit" name="QPTE_metadata">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -399,7 +438,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="1">
+       <item row="2" column="1">
         <widget class="QDateTimeEdit" name="dateTimeEdit">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -433,25 +472,6 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QListWidget" name="keywordListWidget">
-         <property name="maximumSize">
-          <size>
-           <width>199</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-         <property name="alternatingRowColors">
-          <bool>true</bool>
-         </property>
-         <property name="selectionMode">
-          <enum>QAbstractItemView::SingleSelection</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
         <widget class="Line" name="line">
          <property name="minimumSize">
           <size>
@@ -467,16 +487,6 @@
          </property>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="captionSearchLineEdit">
-         <property name="maximumSize">
-          <size>
-           <width>199</width>
-           <height>16777215</height>
-          </size>
          </property>
         </widget>
        </item>
