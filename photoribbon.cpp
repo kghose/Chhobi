@@ -22,7 +22,8 @@
 RibbonTile::RibbonTile(unsigned int tile_width) : QGraphicsRectItem()
 {
     state = NORMAL;
-    setRect(0,0,.95*tile_width,.95*tile_width);//Dashes are better usability
+    setRect(0,0,.95*tile_width,.95*tile_width);
+    center = QPointF(.5*tile_width, .5*tile_width);
     setFlag(QGraphicsItem::ItemIsSelectable);//Vital for rubberband selection
     setAcceptHoverEvents(true);//This is how we preview
 }
@@ -71,6 +72,8 @@ void RibbonTile::paint(QPainter *painter,
     QStyleOptionGraphicsItem myoption = (*option);
     myoption.state &= !QStyle::State_Selected;
     QGraphicsRectItem::paint(painter, &myoption, widget);
+    painter->setPen(Qt::darkGray);
+    painter->drawPoint(center);
 }
 
 void RibbonTile::hoverEnterEvent(QGraphicsSceneHoverEvent * /*event*/)

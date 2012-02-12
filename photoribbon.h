@@ -49,6 +49,7 @@ class RibbonTile : public QObject, public QGraphicsRectItem
 
     PhotoInfo pi;
     RibbonTileState state;
+    QPointF center;
 
 public:
     explicit RibbonTile(unsigned int tile_width);
