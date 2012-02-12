@@ -443,6 +443,9 @@
    </widget>
   </widget>
   <widget class="QDockWidget" name="dockWidget_2">
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+   </property>
    <property name="allowedAreas">
     <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
    </property>
@@ -465,13 +468,13 @@
        <property name="minimumSize">
         <size>
          <width>75</width>
-         <height>20</height>
+         <height>25</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>200</width>
-         <height>20</height>
+         <height>25</height>
         </size>
        </property>
        <property name="font">
@@ -498,12 +501,12 @@
        <property name="maximumSize">
         <size>
          <width>200</width>
-         <height>100</height>
+         <height>110</height>
         </size>
        </property>
        <property name="font">
         <font>
-         <pointsize>10</pointsize>
+         <pointsize>11</pointsize>
         </font>
        </property>
        <property name="readOnly">
