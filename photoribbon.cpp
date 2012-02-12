@@ -266,6 +266,8 @@ void PhotoRibbon::select_adjacent_tile(bool backward)
     selected_tiles = selectedItems();
     if(selected_tiles.count()==0) //Yep, off the reservation
         setSelectionArea(old_sel_path);
+
+    views()[0]->ensureVisible(selectedItems()[0]);
 }
 
 void PhotoRibbon::delete_selected()
