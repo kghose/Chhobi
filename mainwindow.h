@@ -69,6 +69,8 @@ private:
     QImage fetch_image(QString, QSize, PhotoMetaData &);
 
 public slots:
+    void about();
+
     void select_photo_root();
     void crawl();
     void crawl_started() {setWindowTitle("Chhobi: Crawling");}

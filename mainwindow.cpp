@@ -32,6 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QCoreApplication::setOrganizationName("BengalBionics");
     QCoreApplication::setOrganizationDomain("bengalbionics.com");
     QCoreApplication::setApplicationName("Chhobi");
+    setWindowIcon(QIcon(":Images/Icons/chhobi-icon.png"));
 
     setup_ui();
     restore_appearance();
@@ -88,6 +89,11 @@ void MainWindow::setup_connections()
                      this, SLOT(crawl()));
     QObject::connect(ui->actionReload, SIGNAL(triggered()),
                      this, SLOT(load_photo_list()));
+    QObject::connect(ui->actionAbout, SIGNAL(triggered()),
+                     this, SLOT(about()));
+    QObject::connect(ui->actionAboutQT, SIGNAL(triggered()),
+                     qApp, SLOT(aboutQt()));
+
 
     //Ribbon
     QObject::connect(ribbon, SIGNAL(preview_id(PhotoInfo)),
@@ -457,4 +463,13 @@ void MainWindow::show_resized_folder()
     if(resized_photos.count() > 0)
         QDesktopServices::openUrl(QUrl("file:///"
             + resized_root.path()));
+}
+
+void MainWindow::about()
+{
+    QMessageBox::about(this, "About Chhobi",
+                       "Chhobi is a photo organizer program. "
+                       "It enables you to browse a photo collection and "
+                       "to change captions and keywords on photos.\n\n"
+                       "Compiled on " + QString(__DATE__));
 }
