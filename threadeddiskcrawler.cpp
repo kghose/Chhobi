@@ -194,7 +194,6 @@ int ThreadedDiskCrawler::import_directory(QString relpath)
 #define CHS 26
 int compute_tile_color(QFileInfo qfi, QImage *pmI)
 {
-    qDebug() << qfi.absoluteFilePath();
     QImageReader qir(qfi.absoluteFilePath());
     //Set up a cropped region within the main picture
     QSize new_size = pmI->size();
