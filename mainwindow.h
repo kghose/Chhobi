@@ -74,7 +74,7 @@ public slots:
     void select_photo_root();
     void crawl();
     void crawl_started() {setWindowTitle("Chhobi: Crawling");}
-    void now_crawling(const QString &f) {setWindowTitle(f);}
+    void now_crawling(const QString &f) {this->statusBar()->showMessage(f);} //setWindowTitle(f);}
     void crawl_ended();
 
     void load_photo_list();
