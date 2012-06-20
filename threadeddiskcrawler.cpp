@@ -10,6 +10,8 @@ void ThreadedDiskCrawler::run()
     }
     keep_running = true;
     any_new_photos = false;
+    pmI = QImage(QSize(100,100), QImage::Format_RGB32);//Set a dummy placeholder image
+
     QSettings settings;
     last_descent = settings.value("last descent").toDateTime();
     QDateTime time_descent_started = QDateTime::currentDateTime();
@@ -186,14 +188,54 @@ int ThreadedDiskCrawler::import_directory(QString relpath)
     return query.lastInsertId().toInt();
 }
 
-int compute_tile_color(QFileInfo qfi)
+/* The tile color is obtained by generating a color histogram of the resized
+   image. A central crop of the photo is used for the color histogram
+ */
+#define CHS 26
+int compute_tile_color(QFileInfo qfi, QImage *pmI)
 {
+    qDebug() << qfi.absoluteFilePath();
     QImageReader qir(qfi.absoluteFilePath());
-    qir.setScaledSize(QSize(1,1));
+    //Set up a cropped region within the main picture
+    QSize new_size = pmI->size();
+    QRect clip_rect(new_size.width() - new_size.width()/2,
+                    new_size.height() - new_size.height()/2,
+                    new_size.width(), new_size.height());
+    qir.setScaledClipRect(clip_rect);
+    qir.setScaledSize(new_size*2);
     qir.setQuality(0);
-    QImage pmI = qir.read();
-    return pmI.pixel(0,0) & 0xffffff;
+    qir.read(pmI);
+
+    unsigned int hist_bins[CHS][CHS][CHS];
+    for(int i=0; i<CHS; i++)
+        for(int j=0; j<CHS; j++)
+            for(int k=0; k<CHS; k++)
+                hist_bins[i][j][k] = 0;
+    unsigned int col, r, g, b;
+    for(int x=0; x<new_size.width(); x++)
+        for(int y=0; y<new_size.height(); y++)
+        {
+            col = pmI->pixel(x,y);
+            r = (col & 0xff0000) >> 16;
+            g = (col & 0xff00) >> 8;
+            b = (col & 0xff);
+            hist_bins[r/10][g/10][b/10] += 1;
+        }
+
+    unsigned int Ri, Gi, Bi, max = 0;
+    for(int i=0; i<CHS; i++)
+        for(int j=0; j<CHS; j++)
+            for(int k=0; k<CHS; k++)
+                if(hist_bins[i][j][k] > max) {
+                    max = hist_bins[i][j][k];
+                    Ri = i; Gi = j; Bi = k;
+                }
+    unsigned int R = (Ri + .5) * 10,
+                 G = (Gi + .5) * 10,
+                 B = (Bi + .5) * 10;
+    return (R << 16) | (G << 8) | B;
 }
+
 
 //This is a new/modified photo to be inserted into the database
 void ThreadedDiskCrawler::import_photo(QFileInfo qfi, int parentdir_id)
@@ -227,7 +269,7 @@ void ThreadedDiskCrawler::import_photo(QFileInfo qfi, int parentdir_id)
     query.bindValue(":type", pmd.type);
     query.bindValue(":parentdir_id", parentdir_id);
     if(pmd.type==PHOTO)
-        query.bindValue(":tile_color", compute_tile_color(qfi));
+        query.bindValue(":tile_color", compute_tile_color(qfi, &pmI));
     else //movie
         query.bindValue(":tile_color", 0x0000ff);
     query.exec();

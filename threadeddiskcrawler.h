@@ -34,6 +34,10 @@ class ThreadedDiskCrawler : public QThread
     QSqlDatabase db; //Handle to our sqlite database
     QHash<QString,int> directories;
 
+    QImage pmI; //This is an image placeholder for the tile color generation
+                //I believe it speeds up photo importing because we keep
+                //reusing the same photo when we load the new photo
+
     void load_directories_in_database();//Load everything from the database
     void descend(QDir &);
     int import_directory(QString);
