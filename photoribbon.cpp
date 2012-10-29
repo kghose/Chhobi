@@ -96,6 +96,7 @@ PhotoRibbon::PhotoRibbon(QObject *parent, bool is_holding_table) :
     holding_table = is_holding_table;//if true then we are allowed to delete items
     tile_size = 10;
     columns = 16; //do this from measurement of view port? or set this?
+    tile_count = 0;
     preview_tile = NULL; //We check if this is NULL as a way of telling if it has been initialized
     preview_locked = false;
     setBackgroundBrush(Qt::black);
@@ -134,7 +135,7 @@ void PhotoRibbon::add_tiles(QList<PhotoInfo> new_tiles,
         x = col*tile_size;
         current_row = old_tiles.count()/columns;
         y = (old_tiles.count()/columns)*tile_size;
-    }
+    } else {tile_count = 0;}
 
     for (i = new_tiles.begin(); i != new_tiles.end(); ++i) {
         if(old_tiles.contains(*i))
@@ -158,6 +159,7 @@ void PhotoRibbon::add_tiles(QList<PhotoInfo> new_tiles,
             col = 0;
             y += tile_size;
         }
+        tile_count++;
     }
     setSceneRect(-5, -5, columns*tile_size+5, y+20);
 }

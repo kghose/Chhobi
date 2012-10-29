@@ -374,6 +374,7 @@ void MainWindow::load_photo_list()
     ui->keywordListWidget->addItems(get_keywords_in_db());
     //ribbon->select_first_tile();
     QTimer::singleShot(0, ribbon, SLOT(select_first_tile()));
+    ui->dockWidget->setWindowTitle(QString::number(ribbon->get_tile_count()));
     setWindowTitle("Chhobi");
     this->setEnabled(true);
 }
@@ -390,6 +391,7 @@ void MainWindow::load_photos_with_active_keyword()
         ribbon->replace_tiles(get_photos_with_keyword(lqwi[0]->text()));
     ribbon->select_first_tile();
     ui->captionSearchLineEdit->clear();//want to make sure user knows he's not searching by caption anymore
+    ui->dockWidget->setWindowTitle(QString::number(ribbon->get_tile_count()));
     setWindowTitle("Chhobi");
     this->setEnabled(true);
 }
@@ -402,6 +404,7 @@ void MainWindow::load_photos_with_caption()
     ribbon->replace_tiles(get_photos_with_caption(caption));
     ribbon->select_first_tile();
     ui->keywordListWidget->clearSelection();
+    ui->dockWidget->setWindowTitle(QString::number(ribbon->get_tile_count()));
     setWindowTitle("Chhobi");
     this->setEnabled(true);
 }

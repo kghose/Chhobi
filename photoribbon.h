@@ -73,7 +73,7 @@ class PhotoRibbon : public QGraphicsScene
 {
     Q_OBJECT
 
-    int tile_size, columns;
+    int tile_size, columns, tile_count;
     RibbonTile *preview_tile;//This is the tile on preview
     QGraphicsSimpleTextItem *the_date;//The date we show when we scroll
     bool preview_locked;//Mech to prevent preview changeing when we move mouse
@@ -85,6 +85,7 @@ public:
     void append_tiles(QList<PhotoInfo>);
     QList<PhotoInfo> get_all_tiles();
     QList<PhotoInfo> get_selected_tiles();
+    int get_tile_count() {return tile_count;}
 
 signals:
     void preview_id(PhotoInfo);//Emitted whenever we choose a tile
