@@ -1,3 +1,18 @@
+============================================================================================
+Take a look at [Chhobi2] which (I think) is an interesting take on the photo organizer genre
+============================================================================================
+
+[Chhobi2]: http://kghose.github.io/Chhobi2
+
+
+
+
+
+<center>
+I am no longer developing Chhobi
+================================
+</center>
+
 Description
 ===========
 Chhobi is a photo *organizer* program. It does not have facilites to do any
