@@ -1,17 +1,12 @@
-============================================================================================
-Take a look at [Chhobi2] which (I think) is an interesting take on the photo organizer genre
-============================================================================================
+_This program is historical. I no longer work on it. Take a look at [Chhobi2] which is my latest take on this genre of software._
 
 [Chhobi2]: http://kghose.github.io/Chhobi2
 
 
 
+![](https://github.com/kghose/Chhobi/blob/gh-pages/Screenshots/Screen%20Shot%202011-12-02%20at%208.29.44%20AM.png)
 
 
-<center>
-I am no longer developing Chhobi
-================================
-</center>
 
 Description
 ===========
